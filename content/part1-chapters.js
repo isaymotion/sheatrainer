@@ -128,7 +128,14 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Paranoid spiral", def: "Escalating disengagement as the clinician pushes more, and stronger, empathy on a paranoid patient." },
         { term: "Greasing the wheels", def: "Interested, non-empathic conversational questioning that helps delusional material emerge (Robinson)." },
         { term: "Defusing statement", def: "A high-certainty statement agreeing that the patient's anger makes sense." },
-        { term: "Metaphorical paraphrase", def: "Capturing the central message of what a patient says in a single image, such as a treadmill." }
+        { term: "Metaphorical paraphrase", def: "Capturing the central message of what a patient says in a single image, such as a treadmill." },
+        { term: "Person-centered", def: "Viewing the patient as a unique intersection of biology, psychology, relationships, family, culture, and spirituality, and understanding their view of the problem before offering answers." },
+        { term: "Strategic empathy", def: "Using empathy deliberately, matched to the patient's defenses and stance, rather than the same way by habit with everyone." },
+        { term: "Interpersonal stance", def: "Where a patient falls between trusting and guarded; it predicts how empathic statements will land." },
+        { term: "Implied certainty", def: "One dial of empathic valence: how sure you sound that you know what the patient feels (\"It sounds like…\" is low)." },
+        { term: "Intuited attribution", def: "One dial of empathic valence: how much you read in beyond what the patient actually said." },
+        { term: "Generic paraphrase", def: "Restating the patient's key words with slightly new phrasing or emphasis, adding no opinion (Ivey)." },
+        { term: "Stem and check-out", def: "A lead-in before a paraphrase (\"What I'm hearing is…\") and a question after it (\"Is that close?\") (Ivey)." }
       ]
     },
 

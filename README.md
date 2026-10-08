@@ -6,12 +6,14 @@ This app was created by Isabella Navarro, MD. Last updated October 2026. isaymot
 
 ## What's inside
 
-- **Learn**: key ideas, a pocket card of pearls, and vocabulary for each chapter.
+- **Study guides**: a full reading guide per chapter (Chapter 1 so far), with a high-yield box, clickable glossary terms, section bookmarks, and links into practice. Written in our own words as a companion to the book.
+- **Learn / Quick review**: key ideas, a pocket card of pearls, and vocabulary for each chapter.
+- **Bookmarks**: saved study guide sections, kept in each user's browser.
 - **Response practice**: 87 composed clinical moments, each with three replies explained (best, workable, likely to backfire).
 - **Chapter quizzes**: 78 questions.
 - **Simulated interviews**: 16 branching cases. Part I: paranoid patient, angry patient, shut-down veteran, wandering patient, overdose verbal video, reluctant teen, culture and the quiet yes, potential violence. Part II: hidden bipolar history, dysphoric mania before an antidepressant, the window shade, alcohol withdrawal delirium, delusional disorder and dangerousness, command hallucinations, borderline differential, engaging the grandiose pole. A sunflower gauge tracks blending and a bar tracks the database gathered.
 - **Technique drills**: degree of openness, facilic gates, validity techniques, empathic valence, mood presentations, delusional disorder subtypes, first-rank symptoms, personality probes, stages of the self (80 items).
-- **Flashcards**: 158 terms.
+- **Flashcards**: 165 terms.
 - **Progress**: saved in each user's own browser (localStorage). Nothing is sent anywhere.
 
 ## Publish on GitHub Pages
@@ -49,6 +51,10 @@ Content lives in plain JavaScript files in `content/`. Each file registers itsel
    ```
 
 The app picks up new parts automatically: chapters, practice items, quizzes, simulations, drills, and flashcards all appear in their sections, and the "Coming soon" list for that part disappears.
+
+## Adding a study guide
+
+Create `content/guide-chN.js` following the schema at the top of `content/guide-ch1.js`, and add its script tag in `index.html` before `app.js`. Link glossary terms inline with `[[term]]` or `[[glossary term|shown text]]`; the term must exist in some chapter's glossary. The chapter's Learn page switches to the study guide automatically, with Quick review one tap away.
 
 ## Notes
 

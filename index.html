@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <a class="sr-only" href="#app">Skip to content</a>
@@ -26,6 +26,7 @@
         <a href="#/simulate" data-route="simulate">Interviews</a>
         <a href="#/drills" data-route="drills">Drills</a>
         <a href="#/cards/all" data-route="cards">Flashcards</a>
+        <a href="#/bookmarks" data-route="bookmarks">Bookmarks</a>
         <a href="#/progress" data-route="progress">Progress</a>
         <a href="#/about" data-route="about">About</a>
       </nav>
@@ -49,6 +50,8 @@
   <script src="content/part1-practice.js"></script>
   <script src="content/part2-chapters.js"></script>
   <script src="content/part2-practice.js"></script>
-  <script src="app.js?v=3"></script>
+  <!-- Study guides: one file per chapter. -->
+  <script src="content/guide-ch1.js"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

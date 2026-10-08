@@ -44,7 +44,7 @@
 
   /* ───────── Storage ───────── */
   var KEY = "pit.progress.v1";
-  var store = { practice: {}, quiz: {}, sims: {}, cards: {}, drills: {} };
+  var store = { practice: {}, quiz: {}, sims: {}, cards: {}, drills: {}, bookmarks: {} };
   try {
     var raw = window.localStorage.getItem(KEY);
     if (raw) {
@@ -197,14 +197,14 @@
   }
 
   /* Learn index */
-  views.learn = function (arg) {
+  views.learn = function (arg, sub) {
     setNav("learn");
-    if (arg) return views.chapter(arg);
-    var html = "<h1>Learn</h1><p class=\"lede\">Key ideas, pocket-card pearls, and vocabulary for each chapter, summarized from the study guides.</p>";
+    if (arg) return views.chapter(arg, sub);
+    var html = "<h1>Learn</h1><p class=\"lede\">Read each chapter's study guide, or review its key ideas, pocket card, and vocabulary.</p>" + bookmarkTeaser();
     parts().forEach(function (p) {
       html += '<section class="section"><h2>Part ' + esc(p.numeral) + " \u00A0" + esc(p.title) + "</h2><p class=\"muted\">" + esc(p.blurb || "") + '</p><ul class="chapter-list">';
       p.chapters.forEach(function (c) {
-        html += '<li><a href="#/learn/' + c.id + '"><span class="ch-num">' + c.num + '</span><span><span class="ch-title">' + esc(c.title) + '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + (c.concepts || []).length + " key ideas</span></a></li>";
+        html += '<li><a href="#/learn/' + c.id + '"><span class="ch-num">' + c.num + '</span><span><span class="ch-title">' + esc(c.title) + '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + (guideFor(c.id) ? '<span class="tag">Study guide</span>' : (c.concepts || []).length + " key ideas") + "</span></a></li>";
       });
       html += "</ul></section>";
     });
@@ -219,39 +219,208 @@
     app.innerHTML = html;
   };
 
-  /* Chapter page */
-  views.chapter = function (id) {
+  /* ───────── Study guide helpers ───────── */
+  function guideFor(id) { return (TR.guides || {})[id]; }
+
+  var GLOSSARY = null;
+  function glossaryIndex() {
+    if (GLOSSARY) return GLOSSARY;
+    GLOSSARY = {};
+    chapters().forEach(function (c) {
+      (c.glossary || []).forEach(function (g) { GLOSSARY[g.term.toLowerCase()] = { term: g.term, def: g.def, ch: c.num }; });
+    });
+    return GLOSSARY;
+  }
+
+  // Escapes text, then turns [[term]] or [[term|shown text]] into glossary buttons.
+  function rich(text) {
+    return esc(text).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, function (m, term, shown) {
+      return '<button type="button" class="term" data-action="term" data-term="' + term + '" aria-haspopup="dialog" aria-expanded="false">' + (shown || term) + "</button>";
+    });
+  }
+
+  var BOOKMARK_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z"/></svg>';
+
+  function guideLinkHref(l) {
+    if (l.kind === "practice") {
+      var item = allPractice().filter(function (it) { return it.id === l.id; })[0];
+      return item ? "#/practice/" + item._ch.id + "/" + l.id : "#/practice/all";
+    }
+    if (l.kind === "sim") return "#/simulate/" + l.id;
+    if (l.kind === "drill") return "#/drills/" + l.id;
+    if (l.kind === "quiz") return "#/quiz/" + l.id;
+    return "#/";
+  }
+
+  function renderBlock(b) {
+    switch (b.type) {
+      case "p": return "<p>" + rich(b.text) + "</p>";
+      case "list": return '<ul class="g-list">' + b.items.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ul>";
+      case "steps": return '<ol class="g-steps">' + b.items.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ol>";
+      case "table":
+        return '<div class="table-wrap"><table class="g-table"><thead><tr>' + b.head.map(function (h) { return '<th scope="col">' + esc(h) + "</th>"; }).join("") +
+          "</tr></thead><tbody>" + b.rows.map(function (r) { return "<tr>" + r.map(function (cell, k) { return (k === 0 ? '<th scope="row">' : "<td>") + rich(cell) + (k === 0 ? "</th>" : "</td>"); }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+      case "compare":
+        return '<div class="g-compare">' + [b.a, b.b].map(function (side) {
+          return "<div><h4>" + esc(side.title) + "</h4><ul>" + side.items.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ul></div>";
+        }).join("") + "</div>";
+      case "case":
+        return '<div class="g-case"><h4>' + esc(b.title) + "</h4><p>" + rich(b.text) + '</p><p class="g-source">Case from the chapter, summarized.</p></div>';
+      case "exchange":
+        return '<figure class="g-exchange">' + (b.title ? "<figcaption>" + esc(b.title) + "</figcaption>" : "") +
+          b.lines.map(function (ln) {
+            return '<div class="ex-line"><span class="ex-who">' + esc(ln.who) + '</span><span class="ex-t">' + rich(ln.t) + (ln.tag ? ' <span class="ex-tag">' + esc(ln.tag) + "</span>" : "") + "</span></div>";
+          }).join("") + (b.note ? '<p class="ex-note">' + rich(b.note) + "</p>" : "") + "</figure>";
+      case "pearl": return '<aside class="g-pearl"><h4>' + esc(b.title) + "</h4><p>" + rich(b.text) + "</p></aside>";
+    }
+    return "";
+  }
+
+  /* Glossary popover */
+  var termPop = null, termBtn = null;
+  function closeTerm() {
+    if (termPop) { termPop.remove(); termPop = null; }
+    if (termBtn) { termBtn.setAttribute("aria-expanded", "false"); termBtn = null; }
+  }
+  function openTerm(btn) {
+    var same = termBtn === btn;
+    closeTerm();
+    if (same) return;
+    var g = glossaryIndex()[btn.getAttribute("data-term").toLowerCase()];
+    if (!g) return;
+    termBtn = btn; btn.setAttribute("aria-expanded", "true");
+    termPop = document.createElement("div");
+    termPop.className = "term-pop"; termPop.setAttribute("role", "dialog"); termPop.setAttribute("aria-label", g.term);
+    termPop.innerHTML = '<div class="row"><strong>' + esc(g.term) + '</strong><span class="spacer"></span><button type="button" class="term-close" aria-label="Close definition">×</button></div>' +
+      "<p>" + esc(g.def) + '</p><a class="small" href="#/cards/' + chapterByNum(g.ch).id + '">Chapter ' + g.ch + " flashcards</a>";
+    document.body.appendChild(termPop);
+    var r = btn.getBoundingClientRect(), w = termPop.offsetWidth, h = termPop.offsetHeight;
+    var left = Math.max(12, Math.min(window.innerWidth - w - 12, r.left));
+    var top = r.bottom + 8;
+    if (top + h > window.innerHeight - 12 && r.top - h - 8 > 12) top = r.top - h - 8;
+    termPop.style.left = (left + window.scrollX) + "px";
+    termPop.style.top = (top + window.scrollY) + "px";
+    termPop.querySelector(".term-close").addEventListener("click", function () { var b = termBtn; closeTerm(); if (b) b.focus(); });
+  }
+  document.addEventListener("click", function (e) {
+    if (termPop && !termPop.contains(e.target) && !e.target.closest(".term")) closeTerm();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && termPop) { var b = termBtn; closeTerm(); if (b) b.focus(); }
+  });
+  window.addEventListener("resize", closeTerm);
+
+  function bookmarkTeaser() {
+    var n = Object.keys(store.bookmarks || {}).length;
+    return n ? '<p><a href="#/bookmarks">Your bookmarks (' + n + ")</a></p>" : "";
+  }
+
+  /* Chapter page: study guide, or quick review */
+  views.chapter = function (id, sub) {
     setNav("learn");
     var c = chapterById(id);
     if (!c) return notFound();
-    var sims = simulations().filter(function (s) { return s.chapters.indexOf(c.num) > -1; });
-    var concepts = c.concepts.map(function (k) { return '<div class="concept"><h3>' + esc(k.h) + "</h3><p>" + esc(k.b) + "</p></div>"; }).join("");
-    var pearls = "<ul>" + c.pearls.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul>";
-    var gloss = '<dl class="glossary">' + c.glossary.map(function (g) { return "<dt>" + esc(g.term) + "</dt><dd>" + esc(g.def) + "</dd>"; }).join("") + "</dl>";
-    var simLinks = sims.map(function (s) { return '<a class="btn secondary" href="#/simulate/' + s.id + '">Interview: ' + esc(s.title) + "</a>"; }).join("");
+    var guide = guideFor(id);
+    var mode = guide && sub !== "review" ? "guide" : "review";
     var prev = chapterByNum(c.num - 1), next = chapterByNum(c.num + 1);
 
-    app.innerHTML =
-      '<header class="learn-head"><div class="ch-num">Part ' + esc(c._part.numeral) + ", Chapter " + c.num + "</div><h1>" + esc(c.title) + '</h1><p class="lede">' + esc(c.summary) + "</p></header>" +
-      '<div class="learn-grid"><div>' + concepts +
-        '<section class="section"><h2>Vocabulary</h2>' + gloss + "</section>" +
-        '<div class="row section">' + (prev ? '<a class="btn secondary" href="#/learn/' + prev.id + '">Chapter ' + prev.num + ": " + esc(prev.title) + "</a>" : "") + '<span class="spacer"></span>' +
-        (next ? '<a class="btn secondary" href="#/learn/' + next.id + '">Chapter ' + next.num + ": " + esc(next.title) + "</a>" : "") + "</div>" +
-      "</div><aside><div class=\"aside-box\"><h3>Pocket card</h3>" + pearls + "</div>" +
-        '<div class="aside-actions"><a class="btn" href="#/practice/' + c.id + '">Practice responses</a><a class="btn secondary" href="#/quiz/' + c.id + '">Take the chapter quiz</a>' +
-        '<a class="btn secondary" href="#/cards/' + c.id + '">Flashcards</a>' + simLinks + "</div></aside></div>";
-    window.scrollTo(0, 0);
+    var head = '<header class="learn-head"><div class="ch-num">Part ' + esc(c._part.numeral) + ", Chapter " + c.num + "</div><h1>" + esc(c.title) + '</h1><p class="lede">' + esc(c.summary) + "</p>" +
+      (guide ? '<nav class="seg" aria-label="Chapter view"><a href="#/learn/' + c.id + '"' + (mode === "guide" ? ' aria-current="page"' : "") + '>Study guide</a><a href="#/learn/' + c.id + '/review"' + (mode === "review" ? ' aria-current="page"' : "") + ">Quick review</a></nav>" : "") +
+      "</header>";
+    var pager = '<div class="row section">' + (prev ? '<a class="btn secondary" href="#/learn/' + prev.id + '">Chapter ' + prev.num + ": " + esc(prev.title) + "</a>" : "") + '<span class="spacer"></span>' +
+      (next ? '<a class="btn secondary" href="#/learn/' + next.id + '">Chapter ' + next.num + ": " + esc(next.title) + "</a>" : "") + "</div>";
+
+    if (mode === "review") {
+      var sims = simulations().filter(function (s) { return s.chapters.indexOf(c.num) > -1; });
+      var concepts = c.concepts.map(function (k) { return '<div class="concept"><h3>' + esc(k.h) + "</h3><p>" + esc(k.b) + "</p></div>"; }).join("");
+      var pearls = "<ul>" + c.pearls.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul>";
+      var gloss = '<dl class="glossary">' + c.glossary.map(function (g) { return "<dt>" + esc(g.term) + "</dt><dd>" + esc(g.def) + "</dd>"; }).join("") + "</dl>";
+      var simLinks = sims.map(function (s) { return '<a class="btn secondary" href="#/simulate/' + s.id + '">Interview: ' + esc(s.title) + "</a>"; }).join("");
+      app.innerHTML = head +
+        '<div class="learn-grid"><div>' + concepts +
+          '<section class="section"><h2>Vocabulary</h2>' + gloss + "</section>" + pager +
+        "</div><aside><div class=\"aside-box\"><h3>Pocket card</h3>" + pearls + "</div>" +
+          '<div class="aside-actions"><a class="btn" href="#/practice/' + c.id + '">Practice responses</a><a class="btn secondary" href="#/quiz/' + c.id + '">Take the chapter quiz</a>' +
+          '<a class="btn secondary" href="#/cards/' + c.id + '">Flashcards</a>' + simLinks + "</div></aside></div>";
+      return;
+    }
+
+    var hy = guide.highYield;
+    var toc = '<li><a href="#/learn/' + c.id + '/high-yield" data-toc="high-yield">High-yield</a></li>' +
+      guide.sections.map(function (sec) {
+        var marked = store.bookmarks[c.id + ":" + sec.id] ? " marked" : "";
+        return '<li><a href="#/learn/' + c.id + "/" + sec.id + '" data-toc="' + sec.id + '" class="' + marked.trim() + '">' + esc(sec.title) + "</a></li>";
+      }).join("") +
+      '<li><a href="#/learn/' + c.id + '/deeper" data-toc="deeper">Go deeper in the book</a></li>';
+    var wide = window.matchMedia("(min-width: 901px)").matches;
+
+    var hyHtml = '<section class="hy guide-sec" id="sec-high-yield" aria-labelledby="hy-h"><h2 id="hy-h">High-yield</h2>' +
+      '<div class="hy-block"><h3>Must know</h3><ul>' + hy.mustKnow.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ul></div>" +
+      '<div class="hy-block"><h3>Common pitfalls</h3><ul class="hy-pitfalls">' + hy.pitfalls.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ul></div>" +
+      '<div class="hy-block"><h3>Words to use</h3><dl class="hy-phrases">' + hy.phrases.map(function (x) { return "<dt>“" + esc(x.say) + "”</dt><dd>" + rich(x.when) + "</dd>"; }).join("") + "</dl></div></section>";
+
+    var secs = guide.sections.map(function (sec) {
+      var key = c.id + ":" + sec.id, on = !!store.bookmarks[key];
+      var links = (sec.practice || []).map(function (l) { return '<a class="chip" href="' + guideLinkHref(l) + '">' + esc(l.label) + "</a>"; }).join("");
+      return '<section class="guide-sec" id="sec-' + sec.id + '" aria-labelledby="h-' + sec.id + '">' +
+        '<div class="sec-head"><h2 id="h-' + sec.id + '">' + esc(sec.title) + '</h2><button type="button" class="bm" data-action="bookmark" data-key="' + key + '" data-ch="' + c.id + '" data-sec="' + sec.id + '" data-title="' + esc(sec.title) + '" aria-pressed="' + on + '">' +
+          BOOKMARK_ICON + '<span class="bm-label">' + (on ? "Bookmarked" : "Bookmark") + "</span></button></div>" +
+        (sec.lede ? '<p class="sec-lede">' + rich(sec.lede) + "</p>" : "") +
+        sec.blocks.map(renderBlock).join("") +
+        (links ? '<div class="practice-links"><span class="small muted">Practice this</span><div class="chips">' + links + "</div></div>" : "") +
+        "</section>";
+    }).join("");
+
+    var deeper = '<section class="guide-sec deeper" id="sec-deeper"><h2>Go deeper in the book</h2><p class="muted">This guide is a companion to Shea’s chapter, not a replacement for it.</p><ul>' +
+      guide.deeper.map(function (d) { return "<li><strong>" + esc(d.title) + ".</strong> " + rich(d.text) + "</li>"; }).join("") + "</ul></section>";
+
+    app.innerHTML = head +
+      '<div class="guide-grid">' +
+        '<div class="guide-side"><details class="toc"' + (wide ? " open" : "") + '><summary>Contents</summary><ol>' + toc + "</ol>" +
+          '<p class="small"><a href="#/bookmarks">All bookmarks</a></p></details></div>' +
+        '<article class="guide-main"><p class="guide-intro">' + rich(guide.intro) + "</p>" + hyHtml + secs + deeper + pager + "</article>" +
+      "</div>";
+  };
+
+  /* Bookmarks */
+  views.bookmarks = function () {
+    setNav("bookmarks");
+    var list = Object.keys(store.bookmarks).map(function (k) { var b = store.bookmarks[k]; b.key = k; return b; })
+      .filter(function (b) { return chapterById(b.ch); })
+      .sort(function (a, b) {
+        var ca = chapterById(a.ch).num, cb = chapterById(b.ch).num;
+        if (ca !== cb) return ca - cb;
+        var g = guideFor(a.ch); var order = g ? g.sections.map(function (s) { return s.id; }) : [];
+        return order.indexOf(a.sec) - order.indexOf(b.sec);
+      });
+    var html = '<div class="narrow"><h1>Bookmarks</h1><p class="lede">Sections you have saved from the study guides. Saved in this browser only.</p>';
+    if (!list.length) {
+      var first = chapters().filter(function (c) { return guideFor(c.id); })[0];
+      html += '<div class="empty">Use the Bookmark button beside any study guide heading to save it here.' + (first ? '<p style="margin-top:1rem"><a class="btn" href="#/learn/' + first.id + '">Open the Chapter ' + first.num + " study guide</a></p>" : "") + "</div></div>";
+      app.innerHTML = html; return;
+    }
+    var lastCh = null;
+    html += '<ul class="bm-list">';
+    list.forEach(function (b) {
+      var c = chapterById(b.ch);
+      if (b.ch !== lastCh) { html += '<li class="bm-ch">Chapter ' + c.num + ": " + esc(c.title) + "</li>"; lastCh = b.ch; }
+      html += '<li class="bm-item"><a href="#/learn/' + b.ch + "/" + b.sec + '">' + esc(b.title) + '</a><button type="button" class="btn secondary" data-action="unbookmark" data-key="' + esc(b.key) + '">Remove</button></li>';
+    });
+    app.innerHTML = html + "</ul></div>";
   };
 
   /* Response practice */
-  views.practice = function (arg) {
+  views.practice = function (arg, itemId) {
     setNav("practice");
     arg = arg || "all";
     var items = arg === "all" ? allPractice() : (chapterById(arg) || {}).practice;
     if (!items) return notFound();
     if (arg !== "all") items.forEach(function (it) { it._ch = chapterById(arg); });
-    if (!session.practice || session.practice.key !== arg) {
-      session.practice = { key: arg, list: arg === "all" ? shuffle(items) : items.slice(), idx: 0, answered: null, score: { best: 0, n: 0 } };
+    if (!session.practice || session.practice.key !== arg || itemId) {
+      var list = arg === "all" ? shuffle(items) : items.slice();
+      var start = 0;
+      if (itemId) { list.forEach(function (it, k) { if (it.id === itemId) start = k; }); }
+      session.practice = { key: arg, list: list, idx: start, answered: null, score: { best: 0, n: 0 } };
     }
     renderPractice();
   };
@@ -532,9 +701,23 @@
     if (a === "card-again") { var cc = session.cards; cc.queue.push(cc.queue.shift()); cc.flipped = false; renderCards(); return; }
     if (a === "cards-restart") { var ck = session.cards.key; session.cards = null; views.cards(ck); return; }
 
+    if (a === "term") { e.preventDefault(); openTerm(el); return; }
+    if (a === "bookmark") {
+      var bkey = el.getAttribute("data-key");
+      if (store.bookmarks[bkey]) delete store.bookmarks[bkey];
+      else store.bookmarks[bkey] = { ch: el.getAttribute("data-ch"), sec: el.getAttribute("data-sec"), title: el.getAttribute("data-title"), at: Date.now() };
+      save();
+      var on = !!store.bookmarks[bkey];
+      el.setAttribute("aria-pressed", on ? "true" : "false");
+      el.querySelector(".bm-label").textContent = on ? "Bookmarked" : "Bookmark";
+      var tocItem = document.querySelector('[data-toc="' + el.getAttribute("data-sec") + '"]');
+      if (tocItem) tocItem.classList.toggle("marked", on);
+      return;
+    }
+    if (a === "unbookmark") { delete store.bookmarks[el.getAttribute("data-key")]; save(); views.bookmarks(); return; }
     if (a === "reset") {
       if (window.confirm("Reset all saved progress in this browser?")) {
-        store = { practice: {}, quiz: {}, sims: {}, cards: {}, drills: {} }; save(); views.progress();
+        store = { practice: {}, quiz: {}, sims: {}, cards: {}, drills: {}, bookmarks: {} }; save(); views.progress();
       }
     }
   });
@@ -542,9 +725,14 @@
   /* ───────── Router ───────── */
   function route() {
     var parts = (location.hash.replace(/^#\/?/, "") || "").split("/");
-    var name = parts[0] || "home", arg = parts[1];
+    var name = parts[0] || "home", arg = parts[1], sub = parts[2];
     var fn = views[name];
-    if (fn) fn(arg); else notFound();
+    closeTerm();
+    if (fn) fn(arg, sub); else notFound();
+    if (name === "learn" && sub && sub !== "review") {
+      var target = document.getElementById("sec-" + sub);
+      if (target) { target.scrollIntoView({ block: "start" }); app.focus({ preventScroll: true }); return; }
+    }
     if (name !== "simulate" || !arg) window.scrollTo(0, 0);
     app.focus({ preventScroll: true });
   }
