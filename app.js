@@ -9,12 +9,11 @@
 
   // Shown in Learn until each part's content file is added.
   var UPCOMING = [
-    { id: "part2", numeral: "II", title: "The Interview and Psychopathology: From Differential Diagnosis to Understanding",
-      chapters: [
-        [9, "Mood Disorders"], [10, "Understanding the Person Beneath the Mood Disorder"], [11, "Psychotic Disorders"],
-        [12, "Understanding the Person Beneath the Psychosis"], [13, "Personality Disorders"], [14, "Personality Disorders"],
-        [15, "Engaging People With Difficult Personality Disorders"]
-      ] }
+    { id: "part3", numeral: "III", title: "Mastering Complex Interviewing Tasks Demanded in Everyday Clinical Practice",
+      chapters: [[16, "The Mental Status"], [17, "Exploring Suicidal Ideation"], [18, "Exploring Violent and Homicidal Ideation"]] },
+    { id: "part4", numeral: "IV", title: "Specialized Topics and Advanced Interviewing",
+      chapters: [[19, "Transforming Anger, Confrontation, and Other Points of Disengagement"], [20, "Culturally Adaptive Interviewing"], [21, "Vantage Points"],
+        [22, "Motivational Interviewing"], [23, "Medication Interest Model"]] }
   ];
 
   function parts() {
@@ -118,7 +117,8 @@
 
   /* ───────── Shared bits ───────── */
   function speech(p, who) {
-    return '<p class="speech"><span class="speech-who">' + esc(who || "Patient") + "</span>\u201C" + esc(p) + "\u201D</p>";
+    var inner = String(p == null ? "" : p).replace(/"([^"]*)"/g, "\u2018$1\u2019");
+    return '<p class="speech"><span class="speech-who">' + esc(who || "Patient") + "</span>\u201C" + esc(inner) + "\u201D</p>";
   }
   function cue(c) { return c ? '<p class="cue">' + esc(c) + "</p>" : ""; }
   function chapterChips(active, base, extra) {
@@ -155,10 +155,13 @@
     session.hero = { item: item, opts: shuffle(item.opts), answered: null, value: 45 };
     var progressCount = Object.keys(store.practice).length;
 
-    var chList = chapters().map(function (c) {
-      var done = (c.practice || []).filter(function (p) { return store.practice[p.id]; }).length;
-      return '<li><a href="#/learn/' + c.id + '"><span class="ch-num">' + c.num + '</span><span><span class="ch-title">' + esc(c.title) +
-        '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + done + "/" + (c.practice || []).length + " practiced</span></a></li>";
+    var partLists = parts().map(function (p) {
+      var items = p.chapters.map(function (c) {
+        var done = (c.practice || []).filter(function (it) { return store.practice[it.id]; }).length;
+        return '<li><a href="#/learn/' + c.id + '"><span class="ch-num">' + c.num + '</span><span><span class="ch-title">' + esc(c.title) +
+          '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + done + "/" + (c.practice || []).length + " practiced</span></a></li>";
+      }).join("");
+      return '<section class="section"><h2>Part ' + esc(p.numeral) + " \u00A0" + esc(p.title) + '</h2><ul class="chapter-list">' + items + "</ul></section>";
     }).join("");
 
     app.innerHTML =
@@ -173,11 +176,10 @@
       '<section class="section"><h2>Ways to practice</h2><div class="modes">' +
         '<a class="mode" href="#/practice/all"><h3>Response practice</h3><p>One patient statement, three possible replies. Learn why each works or backfires.</p></a>' +
         '<a class="mode" href="#/simulate"><h3>Simulated interviews</h3><p>Branching cases where every choice moves engagement and the database you gather.</p></a>' +
-        '<a class="mode" href="#/drills"><h3>Technique drills</h3><p>Name the question type, gate, validity technique, or empathic valence.</p></a>' +
+        '<a class="mode" href="#/drills"><h3>Technique drills</h3><p>Name the technique, symptom, or pattern: question types, gates, validity techniques, delusions, first-rank symptoms, personality probes.</p></a>' +
         '<a class="mode" href="#/cards/all"><h3>Flashcards</h3><p>Shea\'s vocabulary, chapter by chapter.</p></a>' +
       "</div></section>" +
-      '<section class="section"><div class="row"><h2>Part I \u00A0Clinical Interviewing: The Principles Behind the Art</h2></div>' +
-        '<p class="muted">' + progressCount + " of " + pool.length + ' practice items answered so far.</p><ul class="chapter-list">' + chList + "</ul></section>";
+      '<p class="muted section">' + progressCount + " of " + pool.length + ' practice items answered so far.</p>' + partLists;
     renderHero();
     setFlower(app.querySelector("[data-flower]"), 45);
   };
@@ -410,7 +412,8 @@
     }).join("");
     var html = head + '<div class="panel" aria-live="polite"><div class="row"><span class="counter">' + (s.idx + 1) + " of " + s.list.length + '</span><span class="spacer"></span><span class="counter">' + s.correct + " correct</span></div>" +
       (it.ctx ? '<p class="context" style="margin-top:.75rem">' + esc(it.ctx) + "</p>" : '<div style="height:.75rem"></div>') +
-      speech(it.say, "Clinician") + '<p class="prompt">Which technique is this?</p><div class="options">' + opts + "</div>";
+      (set.speaker === "" ? '<p class="drill-case">' + esc(it.say) + "</p>" : speech(it.say, set.speaker || "Clinician")) +
+      '<p class="prompt">' + esc(set.prompt || "Which technique is this?") + '</p><div class="options">' + opts + "</div>";
     if (s.answered !== null) {
       html += '<div class="result ' + (s.answered === it.a ? "best" : "poor") + '"><b>' + (s.answered === it.a ? "Correct." : "It's " + esc(it.a) + ".") + "</b> " + esc(it.w) + "</div>" +
         '<div class="row" style="margin-top:1rem"><button class="btn" data-action="drill-next">' + (s.idx + 1 < s.list.length ? "Next" : "See results") + "</button></div>";
@@ -474,7 +477,7 @@
       "<h2>How to use it</h2><p>Start with a chapter in Learn, then practice its responses, take the quiz, and run the related simulated interview. Drills sharpen the vocabulary you will use in supervision. Revisit the simulated interviews and try different paths: the debriefs teach as much from a misstep as from a good choice.</p>" +
       "<h2>Source</h2><p>Content is drawn from study guides based on Shawn Christopher Shea, <i>Psychiatric Interviewing: The Art of Understanding</i>, 3rd edition. All patient statements, cases, and names are composed for teaching; they are not transcripts from the book. Read the book itself for the full discussion, video modules, and annotated interviews.</p>" +
       "<h2>A note on clinical use</h2><p>This is an educational tool, not clinical guidance. Confidentiality limits, mandated reporting, duty-to-protect obligations, and risk assessment procedures vary by institution and jurisdiction. Follow your supervisor and local policy.</p>" +
-      "<h2>What's next</h2><p>Part II, The Interview and Psychopathology, will be added chapter by chapter.</p>" +
+      "<h2>What's next</h2><p>Part III, Mastering Complex Interviewing Tasks, will be added chapter by chapter.</p>" +
       '<div class="notice section">This app was created by Isabella Navarro, MD. Last updated October 2026. <a href="mailto:isaymotion@gmail.com">isaymotion@gmail.com</a></div></div>';
   };
 
