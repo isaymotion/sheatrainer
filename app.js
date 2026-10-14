@@ -16,6 +16,13 @@
         [22, "Motivational Interviewing"], [23, "Medication Interest Model"]] }
   ];
 
+  // Chapters listed in UPCOMING that have no content file yet, for a given part id.
+  function pendingChapters(partId) {
+    var have = {};
+    chapters().forEach(function (c) { have[c.num] = 1; });
+    var u = UPCOMING.filter(function (x) { return x.id === partId; })[0];
+    return u ? u.chapters.filter(function (c) { return !have[c[0]]; }) : [];
+  }
   function parts() {
     return PART_ORDER.map(function (id) { return TR.parts[id]; }).filter(function (p) { return p && p.chapters && p.chapters.length; });
   }
@@ -125,6 +132,8 @@
     var html = '<div class="chips" role="group" aria-label="Choose chapter">';
     html += '<a class="chip" href="#/' + base + '/all" aria-pressed="' + (active === "all") + '">All chapters</a>';
     chapters().forEach(function (c) {
+      if (base === "practice" && !(c.practice || []).length) return;
+      if (base === "cards" && !(c.glossary || []).length) return;
       html += '<a class="chip" href="#/' + base + "/" + c.id + '" aria-pressed="' + (active === c.id) + '">Ch. ' + c.num + "</a>";
     });
     return html + (extra || "") + "</div>";
@@ -159,7 +168,7 @@
       var items = p.chapters.map(function (c) {
         var done = (c.practice || []).filter(function (it) { return store.practice[it.id]; }).length;
         return '<li><a href="#/learn/' + c.id + '"><span class="ch-num">' + c.num + '</span><span><span class="ch-title">' + esc(c.title) +
-          '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + done + "/" + (c.practice || []).length + " practiced</span></a></li>";
+          '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + ((c.practice || []).length ? done + "/" + c.practice.length + " practiced" : (guideFor(c.id) ? "Study guide" : "")) + "</span></a></li>";
       }).join("");
       return '<section class="section"><h2>Part ' + esc(p.numeral) + " \u00A0" + esc(p.title) + '</h2><ul class="chapter-list">' + items + "</ul></section>";
     }).join("");
@@ -205,6 +214,9 @@
       html += '<section class="section"><h2>Part ' + esc(p.numeral) + " \u00A0" + esc(p.title) + "</h2><p class=\"muted\">" + esc(p.blurb || "") + '</p><ul class="chapter-list">';
       p.chapters.forEach(function (c) {
         html += '<li><a href="#/learn/' + c.id + '"><span class="ch-num">' + c.num + '</span><span><span class="ch-title">' + esc(c.title) + '</span><span class="ch-sub">' + esc(c.sub) + '</span></span><span class="ch-meta">' + (guideFor(c.id) ? '<span class="tag">Study guide</span>' : (c.concepts || []).length + " key ideas") + "</span></a></li>";
+      });
+      pendingChapters(p.id).forEach(function (c) {
+        html += '<li class="locked"><a aria-disabled="true"><span class="ch-num">' + c[0] + '</span><span><span class="ch-title">' + esc(c[1]) + '</span></span><span class="ch-meta">Coming soon</span></a></li>';
       });
       html += "</ul></section>";
     });
@@ -340,7 +352,7 @@
         '<div class="learn-grid"><div>' + concepts +
           '<section class="section"><h2>Vocabulary</h2>' + gloss + "</section>" + pager +
         "</div><aside><div class=\"aside-box\"><h3>Pocket card</h3>" + pearls + "</div>" +
-          '<div class="aside-actions"><a class="btn" href="#/practice/' + c.id + '">Practice responses</a><a class="btn secondary" href="#/quiz/' + c.id + '">Take the chapter quiz</a>' +
+          '<div class="aside-actions">' + ((c.practice || []).length ? '<a class="btn" href="#/practice/' + c.id + '">Practice responses</a>' : "") + ((c.quiz || []).length ? '<a class="btn' + ((c.practice || []).length ? " secondary" : "") + '" href="#/quiz/' + c.id + '">Take the chapter quiz</a>' : "") +
           '<a class="btn secondary" href="#/cards/' + c.id + '">Flashcards</a>' + simLinks + "</div></aside></div>";
       return;
     }
@@ -628,7 +640,7 @@
       var best = answered.filter(function (p) { return store.practice[p.id] === "best"; }).length;
       var sims = simulations().filter(function (s) { return s.chapters[0] === c.num; });
       var simDone = sims.filter(function (s) { return store.sims[s.id]; }).length;
-      return "<tr><td><a href=\"#/learn/" + c.id + '">' + c.num + ". " + esc(c.title) + "</a></td><td>" + answered.length + "/" + items.length + "</td><td>" + (answered.length ? best + "/" + answered.length : "\u2014") +
+      return "<tr><td><a href=\"#/learn/" + c.id + '">' + c.num + ". " + esc(c.title) + "</a></td><td>" + (items.length ? answered.length + "/" + items.length : "\u2014") + "</td><td>" + (answered.length ? best + "/" + answered.length : "\u2014") +
         "</td><td>" + (store.quiz[c.id] != null ? store.quiz[c.id] + "%" : "\u2014") + "</td><td>" + (sims.length ? simDone + "/" + sims.length : "\u2014") + "</td></tr>";
     }).join("");
     var drillRows = drills().map(function (d) { return "<tr><td>" + esc(d.title) + "</td><td>" + (store.drills[d.id] != null ? store.drills[d.id] + "%" : "\u2014") + "</td></tr>"; }).join("");
@@ -763,6 +775,7 @@
         p.chapters.forEach(function (c) {
           h += '<li><a href="#/learn/' + c.id + '" data-ch="' + c.id + '"><b>' + c.num + "</b><span>" + esc(c.title) + "</span>" + (guideFor(c.id) ? '<i class="tag">Guide</i>' : "") + "</a></li>";
         });
+        pendingChapters(p.id).forEach(function (c) { h += '<li class="soon"><span class="soon-row"><b>' + c[0] + "</b><span>" + esc(c[1]) + '</span><i class="tag">Soon</i></span></li>'; });
         h += "</ul>";
       });
       UPCOMING.forEach(function (u) {
