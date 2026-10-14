@@ -62,3 +62,10 @@ Create `content/guide-chN.js` following the schema at the top of `content/guide-
 - All patient statements, cases, and names are composed for teaching; they are not transcripts from the book.
 - This is an educational tool, not clinical guidance. Confidentiality limits, reporting duties, and risk procedures vary by institution and jurisdiction.
 - Fonts (Newsreader, Atkinson Hyperlegible) load from Google Fonts, with system fallbacks if offline.
+
+
+## Navigation
+
+- **Menu (three bars, upper left):** a drawer listing every part and chapter, with a Guide badge where a study guide exists and the current chapter highlighted.
+- **Back / Forward:** arrows in the top bar; greyed out when there is nowhere to go.
+- **Search:** the Search button, or press `/` (or Ctrl/Cmd+K). It searches chapters, study-guide text, high-yield boxes, glossary terms, practice cases, interviews and drills. Arrow keys and Enter pick a result; Escape closes. The index builds itself from whatever content files are loaded, so new chapters and guides are searchable automatically.

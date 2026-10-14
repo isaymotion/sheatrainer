@@ -742,5 +742,205 @@
     if (p[0] === "simulate" && p[1] && session.sim && session.sim.sim.id === p[1] && session.sim.sim.nodes[session.sim.node].end) { session.sim = null; stableOrders = {}; }
     route();
   });
+
+  /* ───────── Navigation chrome: menu drawer, history buttons, search ───────── */
+  var chrome = (function () {
+    var body = document.body;
+    var menuBtn = document.getElementById("menu-btn"), drawer = document.getElementById("drawer"), scrim = document.getElementById("scrim");
+    var backBtn = document.getElementById("hist-back"), fwdBtn = document.getElementById("hist-fwd");
+    var searchBtns = document.querySelectorAll("[data-open-search]");
+    var panel = document.getElementById("search-panel"), input = document.getElementById("search-input"), resultsEl = document.getElementById("search-results");
+    var lastFocus = null;
+
+    /* Drawer */
+    function buildDrawer() {
+      var h = '<div class="drawer-head"><span>Contents</span><button type="button" class="icon-btn" id="drawer-close" aria-label="Close menu">&times;</button></div><nav aria-label="Chapters" class="drawer-body">';
+      h += '<ul class="drawer-links">' +
+        [["#/", "Home"], ["#/learn", "All chapters"], ["#/practice/all", "Practice"], ["#/simulate", "Interviews"], ["#/drills", "Drills"], ["#/cards/all", "Flashcards"], ["#/bookmarks", "Bookmarks"], ["#/progress", "Progress"], ["#/about", "About"]]
+          .map(function (l) { return '<li><a href="' + l[0] + '">' + l[1] + "</a></li>"; }).join("") + "</ul>";
+      parts().forEach(function (p) {
+        h += '<h2 class="drawer-part">Part ' + esc(p.numeral) + "<span>" + esc(p.title) + "</span></h2><ul class=\"drawer-ch\">";
+        p.chapters.forEach(function (c) {
+          h += '<li><a href="#/learn/' + c.id + '" data-ch="' + c.id + '"><b>' + c.num + "</b><span>" + esc(c.title) + "</span>" + (guideFor(c.id) ? '<i class="tag">Guide</i>' : "") + "</a></li>";
+        });
+        h += "</ul>";
+      });
+      UPCOMING.forEach(function (u) {
+        if (parts().some(function (p) { return p.id === u.id; })) return;
+        h += '<h2 class="drawer-part soon">Part ' + u.numeral + "<span>" + esc(u.title) + '</span></h2><ul class="drawer-ch">';
+        u.chapters.forEach(function (c) { h += '<li class="soon"><span class="soon-row"><b>' + c[0] + "</b><span>" + esc(c[1]) + '</span><i class="tag">Soon</i></span></li>'; });
+        h += "</ul>";
+      });
+      drawer.innerHTML = h + "</nav>";
+    }
+    function markDrawer() {
+      var m = location.hash.match(/^#\/(?:learn|practice|quiz)\/(ch\d+)/) || location.hash.match(/^#\/cards\/(ch\d+)/);
+      var cur = m && m[1];
+      Array.prototype.forEach.call(drawer.querySelectorAll("[data-ch]"), function (a) {
+        if (a.getAttribute("data-ch") === cur) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+      });
+    }
+    function openDrawer() {
+      closeSearch(true); buildDrawer(); markDrawer();
+      lastFocus = document.activeElement;
+      body.classList.add("drawer-open"); drawer.hidden = false; scrim.hidden = false;
+      menuBtn.setAttribute("aria-expanded", "true");
+      var cur = drawer.querySelector("[aria-current]") || drawer.querySelector("a");
+      cur.focus({ preventScroll: true }); if (cur.scrollIntoView) cur.scrollIntoView({ block: "center" });
+    }
+    function closeDrawer(noFocus) {
+      if (drawer.hidden) return;
+      body.classList.remove("drawer-open"); drawer.hidden = true; scrim.hidden = true;
+      menuBtn.setAttribute("aria-expanded", "false");
+      if (!noFocus && lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    menuBtn.addEventListener("click", function () { drawer.hidden ? openDrawer() : closeDrawer(); });
+    scrim.addEventListener("click", function () { closeDrawer(); });
+    drawer.addEventListener("click", function (e) {
+      if (e.target.closest("#drawer-close")) { closeDrawer(); return; }
+      if (e.target.closest("a")) closeDrawer(true);
+    });
+
+    /* History buttons: an in-app stack so the buttons can show when there is nowhere to go. */
+    var stack = [location.hash || "#/"], ptr = 0;
+    function track() {
+      var h = location.hash || "#/";
+      if (stack[ptr] === h) { /* same page */ }
+      else if (ptr > 0 && stack[ptr - 1] === h) ptr--;
+      else if (ptr < stack.length - 1 && stack[ptr + 1] === h) ptr++;
+      else { stack = stack.slice(0, ptr + 1); stack.push(h); ptr = stack.length - 1; }
+      backBtn.disabled = ptr === 0; fwdBtn.disabled = ptr >= stack.length - 1;
+    }
+    backBtn.addEventListener("click", function () { history.back(); });
+    fwdBtn.addEventListener("click", function () { history.forward(); });
+
+    /* Search index (built on first use) */
+    var INDEX = null;
+    function plain(s) { return String(s || "").replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, function (m, t, sh) { return sh || t; }); }
+    function blockText(b) {
+      var t = [];
+      if (b.text) t.push(b.text);
+      if (b.title) t.push(b.title);
+      (b.items || []).forEach(function (i) { t.push(i); });
+      (b.head || []).forEach(function (i) { t.push(i); });
+      (b.rows || []).forEach(function (r) { t.push(r.join(" ")); });
+      ["a", "b"].forEach(function (k) { if (b[k]) { t.push(b[k].title || ""); (b[k].items || []).forEach(function (i) { t.push(i); }); } });
+      (b.lines || []).forEach(function (l) { t.push(l.t); });
+      return t.join(" ");
+    }
+    function buildIndex() {
+      var out = [];
+      function add(kind, title, where, text, href, weight) {
+        text = plain(text);
+        out.push({ kind: kind, title: plain(title), where: where, text: text, href: href, tl: plain(title).toLowerCase(), xl: text.toLowerCase(), w: weight || 0 });
+      }
+      chapters().forEach(function (c) {
+        var cw = "Chapter " + c.num;
+        add("Chapter", "Ch " + c.num + ": " + c.title, c._part ? "Part " + c._part.numeral : "", (c.sub || "") + " " + (c.summary || ""), "#/learn/" + c.id, 3);
+        (c.concepts || []).forEach(function (k) { add("Concept", k.h, cw, k.b, "#/learn/" + c.id + "/review", 1); });
+        (c.glossary || []).forEach(function (g) { add("Glossary", g.term, cw, g.def, "#/learn/" + c.id + "/review", 2); });
+        (c.practice || []).forEach(function (p) { add("Practice", p.skill, cw, p.ctx, "#/practice/" + c.id + "/" + p.id, 0); });
+        var g = guideFor(c.id);
+        if (g) {
+          (g.sections || []).forEach(function (s) {
+            var tx = [s.lede || ""]; (s.blocks || []).forEach(function (b) { tx.push(blockText(b)); });
+            add("Study guide", s.title, cw, tx.join(" "), "#/learn/" + c.id + "/" + s.id, 2);
+          });
+          var hy = g.highYield || {}, hx = [];
+          (hy.mustKnow || []).concat(hy.pitfalls || []).forEach(function (i) { hx.push(i); });
+          (hy.phrases || []).forEach(function (p) { hx.push(p.say + " " + p.when); });
+          add("High yield", "High-yield: " + c.title, cw, hx.join(" "), "#/learn/" + c.id + "/high-yield", 2);
+        }
+      });
+      simulations().forEach(function (s) { add("Interview", s.title, "Simulated interview", (s.setting || "") + " " + (s.who || "") + " " + (s.goal || ""), "#/simulate/" + s.id, 1); });
+      drills().forEach(function (d) { add("Drill", d.title, "Chapter " + d.chapter, d.about, "#/drills/" + d.id, 1); });
+      return out;
+    }
+    function snippet(text, terms) {
+      var low = text.toLowerCase(), at = -1, i;
+      for (i = 0; i < terms.length; i++) { at = low.indexOf(terms[i]); if (at >= 0) break; }
+      if (at < 0) return esc(text.slice(0, 110)) + (text.length > 110 ? "…" : "");
+      var s = Math.max(0, at - 45), e = Math.min(text.length, at + 90);
+      var out = esc(text.slice(s, e));
+      terms.forEach(function (t) { out = out.replace(new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig"), "<mark>$1</mark>"); });
+      return (s > 0 ? "…" : "") + out + (e < text.length ? "…" : "");
+    }
+    function search(q) {
+      var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!terms.length) return [];
+      if (!INDEX) INDEX = buildIndex();
+      var hits = [];
+      INDEX.forEach(function (it) {
+        var score = it.w;
+        for (var i = 0; i < terms.length; i++) {
+          var t = terms[i], inT = it.tl.indexOf(t), inX = it.xl.indexOf(t);
+          if (inT < 0 && inX < 0) return;
+          score += inT === 0 ? 12 : inT > 0 ? 8 : 0;
+          if (inX >= 0) score += 2;
+        }
+        hits.push({ it: it, score: score });
+      });
+      hits.sort(function (a, b) { return b.score - a.score; });
+      return hits.slice(0, 30).map(function (h) { return h.it; });
+    }
+    var active = -1;
+    function render(q) {
+      var res = search(q.trim()), terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      active = -1;
+      if (!q.trim()) { resultsEl.innerHTML = '<p class="search-hint">Search chapters, study-guide sections, glossary terms, practice cases, interviews and drills.</p>'; return; }
+      if (!res.length) { resultsEl.innerHTML = '<p class="search-hint">No matches for “' + esc(q) + '”. Try a shorter word.</p>'; return; }
+      resultsEl.innerHTML = '<ul role="listbox" aria-label="Search results">' + res.map(function (r, i) {
+        return '<li role="option" id="sr-' + i + '"><a href="' + r.href + '"><span class="sr-kind">' + esc(r.kind) + "</span><span class=\"sr-title\">" + esc(r.title) + (r.where ? '<small>' + esc(r.where) + "</small>" : "") + '</span><span class="sr-snip">' + snippet(r.xl && r.kind !== "Chapter" ? r.text : r.text, terms) + "</span></a></li>";
+      }).join("") + "</ul>";
+    }
+    function move(d) {
+      var links = resultsEl.querySelectorAll("li");
+      if (!links.length) return;
+      if (active >= 0) links[active].removeAttribute("aria-selected"), links[active].classList.remove("on");
+      active = (active + d + links.length) % links.length;
+      links[active].setAttribute("aria-selected", "true"); links[active].classList.add("on");
+      input.setAttribute("aria-activedescendant", links[active].id);
+      links[active].scrollIntoView({ block: "nearest" });
+    }
+    function openSearch() {
+      closeDrawer(true);
+      lastFocus = document.activeElement;
+      panel.hidden = false; body.classList.add("search-open");
+      render(input.value); input.focus(); input.select();
+    }
+    function closeSearch(noFocus) {
+      if (panel.hidden) return;
+      panel.hidden = true; body.classList.remove("search-open");
+      if (!noFocus && lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    Array.prototype.forEach.call(searchBtns, function (b) { b.addEventListener("click", openSearch); });
+    input.addEventListener("input", function () { render(input.value); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+      else if (e.key === "Enter") {
+        var li = resultsEl.querySelector("li.on") || resultsEl.querySelector("li");
+        if (li) { e.preventDefault(); li.querySelector("a").click(); }
+      }
+    });
+    panel.addEventListener("click", function (e) {
+      if (e.target.closest("a")) { closeSearch(true); return; }
+      if (e.target.closest("[data-close-search]") || e.target === panel) closeSearch();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { if (!panel.hidden) closeSearch(); else if (!drawer.hidden) closeDrawer(); return; }
+      var tag = (e.target.tagName || "").toLowerCase();
+      var typing = tag === "input" || tag === "textarea" || tag === "select" || e.target.isContentEditable;
+      if ((e.key === "/" && !typing && !e.metaKey && !e.ctrlKey) || ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey))) { e.preventDefault(); openSearch(); }
+      if (e.key === "Tab" && !drawer.hidden) {
+        var f = drawer.querySelectorAll("a[href], button"); if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    return { onRoute: function () { track(); markDrawer(); } };
+  })();
+  window.addEventListener("hashchange", chrome.onRoute);
   route();
 })();
