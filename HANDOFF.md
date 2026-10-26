@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-26, after the feature-parity release (commit 797f3e1 on main; Ch 16 guide was b3e2d90).
+Updated 2026-10-26, after the Chapter 17 study guide (commit cbed20d on main; feature-parity release was 797f3e1).
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
@@ -20,12 +20,12 @@ Updated 2026-10-26, after the feature-parity release (commit 797f3e1 on main; Ch
 ## 3. Architecture and data formats
 ```
 index.html        header (menu button, brand, nav, back/fwd, search), drawer, search panel, footer, script tags
-app.js            router + views; script tag carries ?v=N cache-buster (now v=8)
+app.js            router + views; script tag carries ?v=N cache-buster (now v=9)
 styles.css        tokens, light/dark, guide styles (now ?v=7)
 content/part1-chapters.js, part1-practice.js   Ch 1–8 (chapters; sims/drills)
 content/part2-chapters.js, part2-practice.js   Ch 9–15
-content/part3-chapters.js                      Ch 16 only so far (parts.part3)
-content/guide-ch1.js, guide-ch2.js, guide-ch16.js   study guides (schema documented at top of guide-ch1.js)
+content/part3-chapters.js                      Ch 16–17 so far (parts.part3)
+content/guide-ch1.js, guide-ch2.js, guide-ch16.js, guide-ch17.js   study guides (schema documented at top of guide-ch1.js)
 icons/, manifest.webmanifest                    sunflower icon (?v=2)
 ```
 - Routes: `#/home`, `#/learn`, `#/learn/chN` (guide), `#/learn/chN/<sectionId>`, `#/learn/chN/review`, `#/practice/<chN|all>[/<itemId>]`, `#/quiz/chN`, `#/simulate[/<id>]`, `#/drills[/<id>]`, `#/cards/<chN|all>`, `#/bookmarks`, `#/progress`, `#/about`.
@@ -42,7 +42,7 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
    **If Ch 17–18**: add a chapter object to `content/part3-chapters.js` (concepts ~8–9, pearls ~8, `practice: []`, quiz 10, glossary ~25–35 non-duplicate terms), following ch16.
 3. Write `content/guide-chN.js`: intro, high-yield (mustKnow ~9–11, pitfalls ~7–9, phrases ~5–6), 8–10 sections, deeper list (video modules, appendices). Composed examples only; reserved section ids `high-yield`, `deeper`, `review` are not allowed.
 4. Add `<script src="content/guide-chN.js"></script>` in index.html after the other guides, before app.js (and part3-chapters.js stays after part2-practice.js). Bump `app.js?v=` (or styles) only if those files changed.
-5. Update README "Study guides" line (currently "Chapters 1–2 and 16 so far") and counts if changed.
+5. Update README "Study guides" line (currently "Chapters 1–2, 16, and 17 so far") and the intro sentence listing included chapters and counts if changed.
 6. `node tools/validate.js .` → OK; `python3 tools/check.py . --chapter chN --out /scratch/shots` → PASS; look at 2–3 screenshots (desktop + phone).
 7. `git fetch -q origin main`, commit, `git push origin HEAD:main`.
 8. Update the status table/next step in this doc (dev-tools branch and project doc `claude/handoff.md`).
@@ -55,7 +55,7 @@ pip install beautifulsoup4 --break-system-packages   # if missing
 node ../dev-tools-wt/tools/validate.js .              # expect: chapters 16, guides ch1,ch16,ch2 ... OK: no errors
 python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
 ```
-Baseline counts (2026-10-26): 16 chapters, practice 87, quiz 88, glossary 197, sims 16, drills 9.
+Baseline counts (2026-10-26): 17 chapters, practice 87, quiz 98, glossary 238, sims 16, drills 9.
 Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, items; optional `teaser` shown on Home) and bump `app.js?v=`.
 
 ## 6. Status
@@ -65,17 +65,18 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 | Part II trainer (Ch 9–15) | Done |
 | Navigation: hamburger drawer, back/forward, search (`/`, Ctrl/Cmd+K) | Done (a852eee) |
 | Standard-feature parity: theme toggle (light/dark/auto, key `sheatrainer.theme`), Alt+←/→, scroll restoration, What's New (`#/whats-new`, `WHATS_NEW` array in app.js, add new entries at top with every release), backup export/import (Progress page), Leitner spaced repetition for flashcards (`store.cards[key] = {box 0–5, due, reps}`) | Done (797f3e1) |
-| Study guides | Ch 1, 2, 16 done; 17, 18, then 3–15 remaining (15 left) |
+| Study guides | Ch 1, 2, 16, 17 done; 18, then 3–15 remaining (14 left) |
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
 | Ch 19–23 | Listed as Coming soon |
 
 ## 7. Next step
-**Chapter 17, Exploring Suicidal Ideation** (epub part0032, ~123k chars, two big sections: risk formulation [risk factors vs warning signs, static/dynamic, protective factors, mnemonics, chronic vs immediate risk, tetrad of lethality] and elicitation [roadblocks, reflected intent, validity techniques, the CASE Approach / chronological assessment of suicide events with its four regions and the "Elicitation of Suicidal Ideation Triad"]).
-- Add `ch17` object to `content/part3-chapters.js` (after ch16), new file `content/guide-ch17.js`, script tag after guide-ch16.js.
-- Likely 10–12 sections given length. Glossary: check existing terms first (e.g. Part I has validity techniques: "Shame attenuation", "Normalization", "Gentle assumption", "Behavioral incident", "Symptom amplification", "Denial of the specific", "Catch-all question" — cite them rather than duplicating).
-- Sensitive topic: keep exchanges composed, safety-focused, clinically framed.
-- Then Chapter 18 (Violent and Homicidal Ideation), then Chapter 3.
+**Chapter 18, Exploring Violent and Homicidal Ideation** (epub part0034, ~88k chars, one file).
+- Add `ch18` object to `content/part3-chapters.js` (after ch17), new file `content/guide-ch18.js`, script tag after guide-ch17.js, bump `app.js?v=` only if app.js changes (add a WHATS_NEW entry: that is an app.js change, so bump).
+- Ch 17 already defines the suicide-side terms (CASE Approach, validity techniques are in Ch 5, Alien control, Abraham syndrome, Corroborative source, Tetrad of lethality). Cite them; Ch 18 will likely add the CASE Approach adapted to violence, duty to protect / Tarasoff, domestic violence screening terms.
+- Then Chapter 3 onward (3–15).
+
+**Pitfall found in Ch 17:** the chapter spans TWO epub files (part0032 and part0033); `extract_chapter.py` only pulls the first. Check the last line of the extract for a cut-off sentence and pull the following partNNNN file with the same BeautifulSoup loop if so. Ch 18 is part0034 and appears to be a single file (part0035 starts Part IV or Ch 19; verify).
 
 ## 8. Pitfalls learned
 - Glossary syntax is `[[term|shown text]]` (term first). A guide whose chapter has no entry in a parts file renders "not found".
