@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 3 study guide: The Dynamic Structure of the Interview",
+      teaser: "New: the Chapter 3 study guide on the five phases, PACE, and the Degree of Openness Continuum, with practice links for every problem interview.",
+      items: [
+        "A full study guide for Chapter 3: the introduction and confidentiality, the opening and PACE, the Degree of Openness Continuum, transforming shut-down, wandering, and rehearsed interviews, the body's database, and the closing and termination.",
+        "Seven glossary terms added to Chapter 3 (Degree of Openness Continuum, open-ended question, closed-ended and variable verbalizations, facilitating and focusing statements, return visit)."
+      ] },
     { date: "2026-10-27", title: "Chapter 18 study guide: Exploring Violent and Homicidal Ideation",
-      teaser: "New: the Chapter 18 study guide on violence risk and the CADE Approach completes Part III, with 26 new glossary terms and a 10-question quiz.",
       items: [
         "A full study guide for Chapter 18: the three domains of violence, what structured instruments can and cannot predict, risk factors, the tetrad of lethality for violence, paranoid process and Knoll and Meloy's four steps, domestic violence caveats, and the CADE Approach region by region.",
         "Chapter 18 key ideas, pocket card, quiz, and flashcards (26 terms). Part III is now complete."

@@ -6,14 +6,14 @@ This app was created by Isabella Navarro, MD. Last updated October 2026. isaymot
 
 ## What's inside
 
-- **Study guides**: a full reading guide per chapter (Chapters 1–2 and 16–18 so far), with a high-yield box, clickable glossary terms, section bookmarks, and links into practice. Written in our own words as a companion to the book.
+- **Study guides**: a full reading guide per chapter (Chapters 1–3 and 16–18 so far), with a high-yield box, clickable glossary terms, section bookmarks, and links into practice. Written in our own words as a companion to the book.
 - **Learn / Quick review**: key ideas, a pocket card of pearls, and vocabulary for each chapter.
 - **Bookmarks**: saved study guide sections, kept in each user's browser.
 - **Response practice**: 87 composed clinical moments, each with three replies explained (best, workable, likely to backfire).
 - **Chapter quizzes**: 108 questions.
 - **Simulated interviews**: 16 branching cases. Part I: paranoid patient, angry patient, shut-down veteran, wandering patient, overdose verbal video, reluctant teen, culture and the quiet yes, potential violence. Part II: hidden bipolar history, dysphoric mania before an antidepressant, the window shade, alcohol withdrawal delirium, delusional disorder and dangerousness, command hallucinations, borderline differential, engaging the grandiose pole. A sunflower gauge tracks blending and a bar tracks the database gathered.
 - **Technique drills**: degree of openness, facilic gates, validity techniques, empathic valence, mood presentations, delusional disorder subtypes, first-rank symptoms, personality probes, stages of the self (80 items).
-- **Flashcards**: 264 terms, reviewed with spaced repetition (Leitner boxes). Rate each card Again, Good, or Easy; cards return after 1, 3, 7, 14, or 30 days. The Progress page shows cards learned and due today.
+- **Flashcards**: 271 terms, reviewed with spaced repetition (Leitner boxes). Rate each card Again, Good, or Easy; cards return after 1, 3, 7, 14, or 30 days. The Progress page shows cards learned and due today.
 - **Progress**: saved in each user's own browser (localStorage). Nothing is sent anywhere.
 - **Backup export / import**: on the Progress page, export all progress, bookmarks, and the flashcard schedule to a JSON file, and import it in another browser or device.
 - **Theme**: light, dark, or match device, from the top-bar button or Settings on the Progress page. Saved per device.

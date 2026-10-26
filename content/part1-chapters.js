@@ -349,7 +349,14 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Affective interjection", def: "Steering a rehearsed story toward an emotionally charged topic to break the script." },
         { term: "Loquacious interview", def: "A wandering variant: stays on topic but buries you in irrelevant detail." },
         { term: "Naming emotions", def: "Morrison: when a patient stalls, naming feelings that often cause it (shame, fear) and asking if any fit." },
-        { term: "Unconscious goals", def: "Psychodynamic needs the patient may not recognize, such as the need to feel important or in control." }
+        { term: "Unconscious goals", def: "Psychodynamic needs the patient may not recognize, such as the need to feel important or in control." },
+        { term: "Degree of Openness Continuum", def: "DOC: Shea's supervision language that sorts every clinician verbalization into nine types across three bands: open-ended (open-ended questions, gentle commands), variable (swing, qualitative, statements of inquiry, empathic, facilitating), and closed-ended (closed questions, closed statements)." },
+        { term: "Open-ended question", def: "A question, often starting with how or what, that neither suggests an answer nor asks for a specific fact, name, number, time, or place, so it is hard to answer in a word even when guarded." },
+        { term: "Closed-ended verbalization", def: "Closed questions (yes/no, or asking for a specific fact) and closed statements (explanatory, expecting no reply). Easy to answer tersely; the tool for focusing a wanderer." },
+        { term: "Variable verbalization", def: "Swing questions, qualitative questions, statements of inquiry, empathic statements, and facilitating statements: open when engagement is high, closed when the patient is guarded. Tickets to monologue in a shut-down interview; open gates for a wanderer." },
+        { term: "Facilitating statement", def: "\"Uh-huh,\" \"Go on,\" \"I see\": short signals of listening that urge more speech, weaker than a gentle command and liable to backfire with hostile patients." },
+        { term: "Focusing statement", def: "A structuring verbalization that returns the patient to the topic, from gentle (\"Let's look again at your mood over the past 2 weeks\") to explicit (\"We have limited time, so I'm going to focus on…\")." },
+        { term: "Return visit", def: "Arguably the single most important goal of the initial interview; secured in the body by caring plus conveyed expertise, which together generate hope." }
       ]
     },
 
