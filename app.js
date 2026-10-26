@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 8 study guide: Nonverbal Behavior",
+      teaser: "New: the Chapter 8 study guide completes Part I, from proxemics and immediacy to the guarded patient, the escalating patient, and interviewing by video, phone, and text.",
+      items: [
+        "A full study guide for Chapter 8: the interview as mime, proxemics, kinesics, and paralanguage, immediacy and context, nonverbal hints of hidden psychopathology (Mary), anxiety, deception, and ambivalence, the unspoken no and kinesic reciprocals, engaging with your body, the guarded patient and your own habits, note taking, calming potential violence, and technology.",
+        "Seven glossary terms added to Chapter 8 (illustrators and regulators, affective display, displacement activity, micro-expression, postural echoing, intention movements and vacuum gestures, naked communication effect). All Part I and Part III study guides are now complete."
+      ] },
     { date: "2026-10-27", title: "Chapter 7 study guide: Assessment Perspectives and the Human Matrix",
-      teaser: "New: the Chapter 7 study guide on the three assessment lenses, the six wings of the matrix, the matrix question, and the eight core pains.",
       items: [
         "A full study guide for Chapter 7: assessment as a bridge, the healing power and limits of diagnosis, the two delineations and the lost axes, the DSM-5 applied to Debbie, matrix treatment planning (Engel, intra- and inter-wing interventions, Mr. Franklin), all six wings with Debbie and Ted, the eight core pains, and Debbie's course.",
         "Five glossary terms added to Chapter 7 (six wings, intra-wing intervention, hidden diagnosis, worldview, caring/healing/teaching)."
@@ -951,7 +956,7 @@
       "<h2>How to use it</h2><p>Start with a chapter in Learn, then practice its responses, take the quiz, and run the related simulated interview. Drills sharpen the vocabulary you will use in supervision. Revisit the simulated interviews and try different paths: the debriefs teach as much from a misstep as from a good choice.</p>" +
       "<h2>Source</h2><p>Content is drawn from study guides based on Shawn Christopher Shea, <i>Psychiatric Interviewing: The Art of Understanding</i>, 3rd edition. All patient statements, cases, and names are composed for teaching; they are not transcripts from the book. Read the book itself for the full discussion, video modules, and annotated interviews.</p>" +
       "<h2>A note on clinical use</h2><p>This is an educational tool, not clinical guidance. Confidentiality limits, mandated reporting, duty-to-protect obligations, and risk assessment procedures vary by institution and jurisdiction. Follow your supervisor and local policy.</p>" +
-      "<h2>What's next</h2><p>Part III, Mastering Complex Interviewing Tasks, is complete. Study guides for the remaining chapters of Parts I and II will be added chapter by chapter.</p>" +
+      "<h2>What's next</h2><p>Study guides for Parts I and III are complete. Study guides for the Part II chapters (9 to 15) will be added chapter by chapter.</p>" +
       '<p><a href="#/whats-new">What\'s new</a>: see the latest changes to the trainer.</p>' +
       '<div class="notice section">This app was created by Isabella Navarro, MD. Last updated October 2026. <a href="mailto:isaymotion@gmail.com">isaymotion@gmail.com</a></div></div>';
   };

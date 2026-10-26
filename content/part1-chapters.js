@@ -892,7 +892,14 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Incongruent paramessages", def: "Conflicting messages across channels that often reveal ambivalence." },
         { term: "Kinesic reciprocal", def: "Scheflen: an escalating shared behavior pattern such as courting, parenting, or dominance." },
         { term: "Responsive zone", def: "The distance at which the patient feels comfortable and your movements still register." },
-        { term: "Phantom presence effect", def: "The reduced immediacy of a clinician who is only an image on a screen." }
+        { term: "Phantom presence effect", def: "The reduced immediacy of a clinician who is only an image on a screen." },
+        { term: "Illustrators and regulators", def: "Ekman and Friesen: illustrators are hand gestures that point to (deictic) or outline (iconic) what is said; regulators are the eye contact, nods, and hand positions that manage turn-taking and flow, the dialog functions psychosis tends to erode." },
+        { term: "Affective display", def: "A spontaneous facial movement that accompanies an emotion (anger, disgust, fear, happiness, sadness, surprise, and subtler states). Reading them is a learnable skill; see Ekman's Emotions Revealed." },
+        { term: "Displacement activity", def: "Morris: a tension-releasing adaptor such as picking at clothes, twirling hair, biting a pen, or tearing a cup. Each patient has a signature set; a sudden increase, or a conspicuous absence (the still-life response), signals anxiety." },
+        { term: "Micro-expression", def: "Ekman: a facial movement lasting 1/15 to 1/25 of a second that leaks a concealed emotion. It shows that something is withheld, not why; follow with \"Is there anything more you want to say about how you're feeling?\"" },
+        { term: "Postural echoing", def: "Well-blended pairs adopt similar postures and gestures, shifting and relaxing together. A clue that engagement is on track, and a technique: subtly match the patient's posture to signal shared ground." },
+        { term: "Intention movements and vacuum gestures", def: "Morris: late warning signs of violence. Intention movements foreshadow an act (clenched fists, white knuckles, a fist raised overhead); vacuum gestures rehearse it on empty air (shaking a fist, a boxing stance, strangling motions, pounding a palm)." },
+        { term: "Naked communication effect", def: "The disquiet a clinician feels when text-based contact strips away all nonverbal behavior, even paralanguage; intuition must be trusted less and silence takes new forms (minutes, hours, a sign-off)." }
       ]
     }
   ];
