@@ -25,8 +25,33 @@
   --sans: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
   color-scheme: light;
 }
+/* Dark tokens: one set, applied when the user picks Dark (data-theme="dark"),
+   or when the device prefers dark and the user has not picked Light.
+   Keep the two blocks below identical. */
+:root[data-theme="dark"] {
+  --paper: #111B15;
+  --surface: #18251D;
+  --sunk: #213027;
+  --ink: #E5EDE6;
+  --muted: #A7B6AB;
+  --line: #2D3D33;
+  --sun: #F2B92E;
+  --sun-soft: #3A3115;
+  --sun-text: #F4C860;
+  --seed: #C49A6C;
+  --stem: #7CC596;
+  --best: #84CC9C;
+  --best-soft: #1E3426;
+  --ok: #EDC060;
+  --ok-soft: #352C14;
+  --poor: #EE8C82;
+  --poor-soft: #3A1F1D;
+  --focus: #F2B92E;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #111B15;
     --surface: #18251D;
     --sunk: #213027;
@@ -455,3 +480,35 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
 .bm-item { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
 .bm-item a { font-family: var(--serif); font-size: 1.1rem; }
 @media print { .topbar, footer, .guide-side, .bm, .practice-links, .seg { display: none !important; } .guide-grid { display: block; } }
+
+/* ── Theme toggle ─────────────────────── */
+.theme-btn svg { display: block; }
+.seg button { border: 0; background: none; cursor: pointer; color: var(--muted); padding: 0.4rem 0.95rem; border-radius: 999px; font-size: 0.95rem; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 700; box-shadow: var(--shadow); }
+.settings-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.settings-row .seg { margin-top: 0; }
+
+/* ── Backup ───────────────────────────── */
+.backup-msg { margin: 0.75rem 0 0; font-size: 0.93rem; }
+.backup-msg.ok { color: var(--best); }
+.backup-msg.err { color: var(--poor); }
+
+/* ── Flashcard schedule ───────────────── */
+.box-badge { display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 0.15rem 0.55rem; border-radius: 999px; background: var(--sun-soft); color: var(--sun-text); }
+.box-badge.new { background: var(--sunk); color: var(--muted); }
+.srs-legend { font-size: 0.85rem; color: var(--muted); text-align: center; margin: 0.75rem auto 0; }
+.srs-answers { margin-top: 1rem; justify-content: center; }
+.srs-answers[hidden] { display: none; }
+.srs-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: 0.6rem; margin: 1rem 0; }
+.srs-stats div { background: var(--sunk); border-radius: var(--radius-m); padding: 0.7rem 0.9rem; }
+.srs-stats b { display: block; font-family: var(--serif); font-size: 1.6rem; line-height: 1.1; }
+.srs-stats span { font-size: 0.85rem; color: var(--muted); }
+
+/* ── What's new ───────────────────────── */
+.wn-list { list-style: none; margin: 1.5rem 0 0; padding: 0; }
+.wn-entry { padding: 1.25rem 0; border-top: 1px solid var(--line); }
+.wn-entry time { font-size: 0.85rem; font-weight: 700; color: var(--sun-text); }
+.wn-entry h2 { font-size: 1.35rem; margin: 0.2rem 0 0.5rem; }
+.wn-entry ul { margin: 0; padding-left: 1.15rem; }
+.wn-entry li + li { margin-top: 0.3rem; }
+.teaser { font-size: 0.95rem; }

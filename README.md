@@ -13,8 +13,11 @@ This app was created by Isabella Navarro, MD. Last updated October 2026. isaymot
 - **Chapter quizzes**: 78 questions.
 - **Simulated interviews**: 16 branching cases. Part I: paranoid patient, angry patient, shut-down veteran, wandering patient, overdose verbal video, reluctant teen, culture and the quiet yes, potential violence. Part II: hidden bipolar history, dysphoric mania before an antidepressant, the window shade, alcohol withdrawal delirium, delusional disorder and dangerousness, command hallucinations, borderline differential, engaging the grandiose pole. A sunflower gauge tracks blending and a bar tracks the database gathered.
 - **Technique drills**: degree of openness, facilic gates, validity techniques, empathic valence, mood presentations, delusional disorder subtypes, first-rank symptoms, personality probes, stages of the self (80 items).
-- **Flashcards**: 165 terms.
+- **Flashcards**: 165 terms, reviewed with spaced repetition (Leitner boxes). Rate each card Again, Good, or Easy; cards return after 1, 3, 7, 14, or 30 days. The Progress page shows cards learned and due today.
 - **Progress**: saved in each user's own browser (localStorage). Nothing is sent anywhere.
+- **Backup export / import**: on the Progress page, export all progress, bookmarks, and the flashcard schedule to a JSON file, and import it in another browser or device.
+- **Theme**: light, dark, or match device, from the top-bar button or Settings on the Progress page. Saved per device.
+- **What's New**: a page (`#/whats-new`, linked from the menu, About, and Home) listing each release in plain language. Add new entries at the top of `WHATS_NEW` in `app.js`.
 
 ## Publish on GitHub Pages
 
@@ -67,5 +70,6 @@ Create `content/guide-chN.js` following the schema at the top of `content/guide-
 ## Navigation
 
 - **Menu (three bars, upper left):** a drawer listing every part and chapter, with a Guide badge where a study guide exists and the current chapter highlighted.
-- **Back / Forward:** arrows in the top bar; greyed out when there is nowhere to go.
+- **Back / Forward:** arrows in the top bar; greyed out when there is nowhere to go. Going back or forward returns you to where you were on the page.
+- **Keyboard shortcuts:** Alt+Left arrow goes back, Alt+Right arrow goes forward (ignored while typing in a field).
 - **Search:** the Search button, or press `/` (or Ctrl/Cmd+K). It searches chapters, study-guide text, high-yield boxes, glossary terms, practice cases, interviews and drills. Arrow keys and Enter pick a result; Escape closes. The index builds itself from whatever content files are loaded, so new chapters and guides are searchable automatically.

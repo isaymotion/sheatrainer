@@ -51,16 +51,160 @@
 
   /* ───────── Storage ───────── */
   var KEY = "pit.progress.v1";
-  var store = { practice: {}, quiz: {}, sims: {}, cards: {}, drills: {}, bookmarks: {} };
+  var STORE_KEYS = ["practice", "quiz", "sims", "cards", "drills", "bookmarks"];
+  function emptyStore() { var o = {}; STORE_KEYS.forEach(function (k) { o[k] = {}; }); return o; }
+  var store = emptyStore();
   try {
     var raw = window.localStorage.getItem(KEY);
     if (raw) {
       var parsed = JSON.parse(raw);
       Object.keys(store).forEach(function (k) { if (parsed[k]) store[k] = parsed[k]; });
     }
+    // One-time migration: flashcards used to be stored as `true` ("Got it"); they are now Leitner box entries.
+    if (normalizeCards(store.cards)) save();
   } catch (e) { /* storage unavailable: progress lives for this session only */ }
   function save() {
     try { window.localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) { /* ignore */ }
+  }
+
+  /* ───────── Spaced repetition (Leitner boxes) ─────────
+     store.cards[key] = { box: 0..5, due: ms timestamp, reps: n }. A missing entry is a new card. */
+  var SRS_DAYS = [0, 1, 3, 7, 14, 30];
+  var DAY_MS = 86400000;
+  function normalizeCards(cards) {
+    var changed = false, now = Date.now();
+    Object.keys(cards).forEach(function (k) {
+      var v = cards[k];
+      if (v === true) { cards[k] = { box: 2, due: now, reps: 1 }; changed = true; return; }
+      if (!v || typeof v !== "object" || typeof v.box !== "number") { delete cards[k]; changed = true; return; }
+      var box = Math.max(0, Math.min(5, Math.round(v.box)));
+      if (box !== v.box || typeof v.due !== "number" || typeof v.reps !== "number") {
+        cards[k] = { box: box, due: typeof v.due === "number" ? v.due : now, reps: typeof v.reps === "number" ? v.reps : 0 };
+        changed = true;
+      }
+    });
+    return changed;
+  }
+  function cardEntry(key) { var e = store.cards[key]; return e && typeof e === "object" ? e : null; }
+  function isDue(key, now) { var e = cardEntry(key); return !e || e.due <= now; }
+  function endOfDay(offsetDays) { var d = new Date(); d.setHours(23, 59, 59, 999); return d.getTime() + (offsetDays || 0) * DAY_MS; }
+  function cardDeck(scope) {
+    var deck = [];
+    chapters().forEach(function (c) {
+      if (scope === "all" || c.id === scope) (c.glossary || []).forEach(function (g) { deck.push({ term: g.term, def: g.def, ch: c.num, key: c.id + ":" + g.term }); });
+    });
+    return deck;
+  }
+  function gradeCard(key, grade) {
+    var e = cardEntry(key) || { box: 0, due: 0, reps: 0 }, now = Date.now();
+    var box = grade === "again" ? 0 : Math.min(5, e.box + (grade === "easy" ? 2 : 1));
+    store.cards[key] = { box: box, due: now + SRS_DAYS[box] * DAY_MS, reps: (e.reps || 0) + 1 };
+    save();
+  }
+  function fmtDay(ms) {
+    var d = new Date(ms);
+    if (ms <= endOfDay(0)) return "today";
+    if (ms <= endOfDay(1)) return "tomorrow";
+    return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+
+  /* ───────── Theme (light / dark / match device), saved per device ───────── */
+  var THEME_KEY = "sheatrainer.theme";
+  var THEME_NAMES = { auto: "Match device", light: "Light", dark: "Dark" };
+  var THEME_ICONS = {
+    light: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    dark: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    auto: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>'
+  };
+  var darkMQ = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function getTheme() {
+    try { var t = window.localStorage.getItem(THEME_KEY); return t === "light" || t === "dark" ? t : "auto"; } catch (e) { return "auto"; }
+  }
+  function applyTheme(t) {
+    var root = document.documentElement;
+    if (t === "light" || t === "dark") root.setAttribute("data-theme", t); else root.removeAttribute("data-theme");
+    var dark = t === "dark" || (t !== "light" && darkMQ && darkMQ.matches);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#111B15" : "#1C3126");
+    var btn = document.getElementById("theme-btn");
+    if (btn) {
+      btn.innerHTML = THEME_ICONS[t];
+      btn.setAttribute("aria-label", "Theme: " + THEME_NAMES[t]);
+      btn.setAttribute("title", "Theme: " + THEME_NAMES[t]);
+    }
+    document.querySelectorAll("[data-theme-opt]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-theme-opt") === t ? "true" : "false"); });
+  }
+  function setTheme(t) {
+    if (t !== "light" && t !== "dark") t = "auto";
+    try {
+      if (t === "auto") window.localStorage.removeItem(THEME_KEY); else window.localStorage.setItem(THEME_KEY, t);
+    } catch (e) { /* storage unavailable: applies for this visit only */ }
+    applyTheme(t);
+  }
+  var themeNow = getTheme();
+  applyTheme(themeNow);
+  (function () {
+    var btn = document.getElementById("theme-btn");
+    if (btn) btn.addEventListener("click", function () {
+      var cur = document.documentElement.getAttribute("data-theme") || "auto";
+      setTheme({ auto: "light", light: "dark", dark: "auto" }[cur]);
+    });
+    // Keep the browser bar colour right when the device switches while on "Match device".
+    function onDeviceChange() { applyTheme(document.documentElement.getAttribute("data-theme") || "auto"); }
+    if (darkMQ) { if (darkMQ.addEventListener) darkMQ.addEventListener("change", onDeviceChange); else if (darkMQ.addListener) darkMQ.addListener(onDeviceChange); }
+  })();
+
+  /* ───────── What's new ─────────
+     Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
+  var WHATS_NEW = [
+    { date: "2026-10-26", title: "Themes, spaced repetition, and backups",
+      teaser: "New: choose a light or dark theme, review flashcards on a spaced-repetition schedule, and back up your progress.",
+      items: [
+        "Theme button in the top bar: match your device, or always use light or dark. Your choice is saved on this device and can also be changed under Settings on the Progress page.",
+        "Flashcards now use spaced repetition. Rate each card Again, Good, or Easy, and it comes back after 1, 3, 7, 14, or 30 days depending on how well you know it.",
+        "Export a backup of your progress to a file, and import it on another browser or device (Progress page).",
+        "Keyboard shortcuts: Alt+Left arrow goes back and Alt+Right arrow goes forward.",
+        "Going back or forward now returns you to where you were on the page.",
+        "This What's new page."
+      ] },
+    { date: "2026-10-14", title: "Chapter 16 study guide: The Mental Status",
+      items: ["A full study guide for Chapter 16, the first chapter of Part III, with high-yield points, glossary terms, and bookmarks."] },
+    { date: "2026-10-14", title: "Chapter menu, back and forward buttons, and search",
+      items: [
+        "A menu (three bars, upper left) lists every part and chapter and shows which have study guides.",
+        "Back and forward arrows in the top bar.",
+        "Search across chapters, study guides, glossary terms, practice cases, interviews, and drills. Press / or Ctrl+K to open it."
+      ] },
+    { date: "2026-10-14", title: "Chapter 2 study guide: Beyond Empathy",
+      items: ["A full study guide for Chapter 2."] },
+    { date: "2026-10-08", title: "Chapter 1 study guide, bookmarks, and glossary pop-ups",
+      items: [
+        "The first full chapter study guide, with a high-yield box and links into practice.",
+        "Bookmark any study guide section and find it later under Bookmarks.",
+        "Tap an underlined term to see its glossary definition."
+      ] },
+    { date: "2026-10-08", title: "Part II: The Interview and Psychopathology",
+      items: [
+        "Chapters 9 to 15 with key ideas, practice moments, quizzes, drills, and flashcards.",
+        "Eight new simulated interviews.",
+        "A new sunflower app icon."
+      ] },
+    { date: "2026-10-02", title: "First release: Part I",
+      items: [
+        "Chapters 1 to 8 with key ideas, pocket cards, and vocabulary.",
+        "Response practice, chapter quizzes, technique drills, and flashcards.",
+        "Eight branching simulated interviews with the sunflower blending gauge.",
+        "Progress saved in your browser."
+      ] }
+  ];
+  function whatsNewSorted() {
+    return WHATS_NEW.map(function (w, i) { return { w: w, i: i }; })
+      .sort(function (a, b) { return a.w.date < b.w.date ? 1 : a.w.date > b.w.date ? -1 : a.i - b.i; })
+      .map(function (x) { return x.w; });
+  }
+  function fmtDate(iso) {
+    var p = iso.split("-");
+    return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
   }
 
   /* ───────── Helpers ───────── */
@@ -178,6 +322,7 @@
         '<div class="hero-intro">' +
           "<h1>What would you say next?</h1>" +
           '<p class="lede">Practice the moment-to-moment choices that help patients feel safe enough to tell you the truth. The sunflower turns toward you as the patient engages.</p>' +
+          whatsNewTeaser() +
           '<div class="panel" id="hero-item" aria-live="polite"></div>' +
         "</div>" +
         '<figure class="hero-flower">' + flowerSVG(45) + "<figcaption>Blending: how engaged this patient feels with you right now.</figcaption></figure>" +
@@ -192,6 +337,10 @@
     renderHero();
     setFlower(app.querySelector("[data-flower]"), 45);
   };
+  function whatsNewTeaser() {
+    var w = whatsNewSorted()[0];
+    return w && w.teaser ? '<p class="teaser">' + esc(w.teaser) + ' <a href="#/whats-new">See what\'s new</a></p>' : "";
+  }
   function renderHero() {
     var h = session.hero, it = h.item;
     var box = document.getElementById("hero-item");
@@ -602,52 +751,161 @@
     app.innerHTML = html + "</div></div>";
   }
 
-  /* Flashcards */
+  /* Flashcards (spaced repetition) */
   views.cards = function (arg) {
     setNav("cards");
     arg = arg || "all";
-    if (!session.cards || session.cards.key !== arg) {
-      var deck = [];
-      chapters().forEach(function (c) {
-        if (arg === "all" || c.id === arg) c.glossary.forEach(function (g) { deck.push({ term: g.term, def: g.def, ch: c.num, key: c.id + ":" + g.term }); });
-      });
+    if (!session.cards || session.cards.key !== arg || !session.cards.queue.length) {
+      var deck = cardDeck(arg);
       if (!deck.length) return notFound();
-      session.cards = { key: arg, queue: shuffle(deck), total: deck.length, known: 0, flipped: false };
+      startCards(arg, deck, false);
     }
     renderCards();
   };
+  function startCards(key, deck, ahead) {
+    var now = Date.now();
+    var queue = ahead ? shuffle(deck) : shuffle(deck.filter(function (c) { return isDue(c.key, now); }));
+    session.cards = { key: key, deck: deck, queue: queue, total: queue.length, ahead: ahead, flipped: false, tally: { again: 0, good: 0, easy: 0 }, answered: 0 };
+  }
+  var SRS_LEGEND = "Again: see it later in this session. Good: up one box. Easy: up two boxes. Boxes 1 to 5 come back after 1, 3, 7, 14, and 30 days.";
   function renderCards() {
     var s = session.cards;
-    var head = "<h1>Flashcards</h1><p class=\"lede\">Tap a card to flip it. Mark the ones you know; the rest come back around.</p>" + chapterChips(s.key, "cards");
+    var head = "<h1>Flashcards</h1><p class=\"lede\">Tap a card to flip it, then rate how well you knew it. Cards you know well come back less often.</p>" + chapterChips(s.key, "cards");
     if (!s.queue.length) {
-      app.innerHTML = head + '<div class="panel section narrow"><h2>Deck complete</h2><p>All ' + s.total + ' cards marked as known.</p><button class="btn" data-action="cards-restart">Shuffle and start over</button></div>';
+      var now = Date.now(), scheduled = 0, next = null, tomorrow = 0, endTomorrow = endOfDay(1);
+      s.deck.forEach(function (c) {
+        var e = cardEntry(c.key);
+        if (!e) return;
+        scheduled++;
+        if (e.due > now && (next === null || e.due < next)) next = e.due;
+        if (e.due <= endTomorrow) tomorrow++;
+      });
+      if (s.answered) {
+        var t = s.tally;
+        app.innerHTML = head + '<div class="panel section narrow"><h2>Session complete</h2><p>You reviewed ' + s.total + " card" + (s.total === 1 ? "" : "s") + (s.ahead ? " ahead of schedule" : "") + ".</p>" +
+          '<div class="srs-stats"><div><b>' + t.again + "</b><span>Again</span></div><div><b>" + t.good + "</b><span>Good</span></div><div><b>" + t.easy + "</b><span>Easy</span></div><div><b>" + tomorrow + "</b><span>Due by tomorrow</span></div></div>" +
+          '<div class="row"><a class="btn" href="#/progress">See progress</a><button class="btn secondary" data-action="cards-ahead">Review anyway</button></div></div>';
+        return;
+      }
+      app.innerHTML = head + '<div class="panel section narrow"><h2>All caught up</h2><p>' + scheduled + " card" + (scheduled === 1 ? " is" : "s are") + " scheduled" +
+        (next !== null ? ". The next review is due " + esc(fmtDay(next)) + "." : ".") + "</p>" +
+        '<p class="muted small">Reviewing ahead only changes a card\'s schedule if you answer it.</p><button class="btn" data-action="cards-ahead">Review anyway</button></div>';
       return;
     }
-    var c = s.queue[0];
-    app.innerHTML = head + '<div class="narrow section"><div class="row"><span class="counter">' + s.known + " of " + s.total + ' known</span><span class="spacer"></span><span class="counter">Chapter ' + c.ch + "</span></div>" +
+    var c = s.queue[0], e = cardEntry(c.key);
+    var badge = e ? '<span class="box-badge">Box ' + e.box + " of 5</span>" : '<span class="box-badge new">New</span>';
+    app.innerHTML = head + '<div class="narrow section"><div class="row"><span class="counter">' + s.queue.length + " left in this session" + (s.ahead ? " (reviewing ahead)" : "") + '</span><span class="spacer"></span>' + badge + '<span class="counter">Chapter ' + c.ch + "</span></div>" +
       '<button class="flash' + (s.flipped ? " flipped" : "") + '" data-action="flip" aria-label="Flip card" style="margin-top:.75rem"><div class="flash-inner">' +
       '<div class="flash-face front"><span class="flash-term">' + esc(c.term) + '</span><span class="muted small">Tap to see the definition</span></div>' +
       '<div class="flash-face back"><span class="muted small">' + esc(c.term) + '</span><span class="flash-def">' + esc(c.def) + "</span></div></div></button>" +
-      '<div class="row" style="margin-top:1rem;justify-content:center"><button class="btn secondary" data-action="card-again">Still learning</button><button class="btn" data-action="card-know">Got it</button></div></div>';
+      '<div class="row srs-answers" id="srs-answers"' + (s.flipped ? "" : " hidden") + '><button class="btn secondary" data-action="card-grade" data-grade="again">Again</button><button class="btn" data-action="card-grade" data-grade="good">Good</button><button class="btn secondary" data-action="card-grade" data-grade="easy">Easy</button></div>' +
+      '<p class="srs-legend">' + esc(SRS_LEGEND) + "</p></div>";
   }
 
   /* Progress */
+  var progressNote = null; // { ok: bool, text } shown once after an import
   views.progress = function () {
     setNav("progress");
+    var now = Date.now(), eod = endOfDay(0), allLearned = 0, allCards = 0, dueToday = 0;
     var rows = chapters().map(function (c) {
+      var gl = c.glossary || [], learned = 0;
+      gl.forEach(function (g) {
+        var e = cardEntry(c.id + ":" + g.term);
+        if (e && e.box >= 3) learned++;
+        if (!e || e.due <= eod) dueToday++;
+      });
+      allLearned += learned; allCards += gl.length;
       var items = c.practice || [];
       var answered = items.filter(function (p) { return store.practice[p.id]; });
       var best = answered.filter(function (p) { return store.practice[p.id] === "best"; }).length;
       var sims = simulations().filter(function (s) { return s.chapters[0] === c.num; });
       var simDone = sims.filter(function (s) { return store.sims[s.id]; }).length;
       return "<tr><td><a href=\"#/learn/" + c.id + '">' + c.num + ". " + esc(c.title) + "</a></td><td>" + (items.length ? answered.length + "/" + items.length : "\u2014") + "</td><td>" + (answered.length ? best + "/" + answered.length : "\u2014") +
-        "</td><td>" + (store.quiz[c.id] != null ? store.quiz[c.id] + "%" : "\u2014") + "</td><td>" + (sims.length ? simDone + "/" + sims.length : "\u2014") + "</td></tr>";
+        "</td><td>" + (store.quiz[c.id] != null ? store.quiz[c.id] + "%" : "\u2014") + "</td><td>" + (sims.length ? simDone + "/" + sims.length : "\u2014") + "</td><td>" + (gl.length ? learned + "/" + gl.length : "\u2014") + "</td></tr>";
     }).join("");
     var drillRows = drills().map(function (d) { return "<tr><td>" + esc(d.title) + "</td><td>" + (store.drills[d.id] != null ? store.drills[d.id] + "%" : "\u2014") + "</td></tr>"; }).join("");
-    app.innerHTML = "<h1>Your progress</h1><p class=\"lede\">Saved in this browser only. Clearing your browser data or switching devices starts fresh.</p>" +
-      '<div class="table-wrap section"><table class="progress"><thead><tr><th>Chapter</th><th>Practiced</th><th>Best responses</th><th>Quiz best</th><th>Interviews</th></tr></thead><tbody>' + rows + "</tbody></table></div>" +
+    var theme = getTheme();
+    var seg = '<div class="seg" role="group" aria-label="Theme">' + ["auto", "light", "dark"].map(function (t) {
+      return '<button type="button" data-action="theme" data-theme-opt="' + t + '" aria-pressed="' + (t === theme) + '">' + THEME_NAMES[t] + "</button>";
+    }).join("") + "</div>";
+    var note = progressNote ? '<p class="backup-msg ' + (progressNote.ok ? "ok" : "err") + '" role="status">' + esc(progressNote.text) + "</p>" : '<p class="backup-msg" role="status"></p>';
+    progressNote = null;
+    app.innerHTML = "<h1>Your progress</h1><p class=\"lede\">Saved in this browser only. Clearing your browser data or switching devices starts fresh, unless you export a backup below.</p>" +
+      '<p class="section">Flashcards: <b>' + allLearned + " of " + allCards + "</b> learned (box 3 or higher). <b>" + dueToday + "</b> due today, including new cards" +
+        (dueToday ? '. <a href="#/cards/all">Review now</a>' : ".") + "</p>" +
+      '<div class="table-wrap"><table class="progress"><thead><tr><th>Chapter</th><th>Practiced</th><th>Best responses</th><th>Quiz best</th><th>Interviews</th><th>Cards learned</th></tr></thead><tbody>' + rows + "</tbody></table></div>" +
       '<div class="table-wrap section"><table class="progress"><thead><tr><th>Drill</th><th>Best score</th></tr></thead><tbody>' + drillRows + "</tbody></table></div>" +
+      '<section class="section"><h2>Settings</h2><div class="settings-row"><span>Theme</span>' + seg + '</div><p class="muted small" style="margin-top:.5rem">Saved on this device. You can also use the theme button in the top bar.</p></section>' +
+      '<section class="section"><h2>Backup</h2><p class="muted">Save your progress, bookmarks, and flashcard schedule to a file, then import it in another browser or on another device.</p>' +
+        '<div class="row"><button class="btn" data-action="export">Export backup</button><button class="btn secondary" data-action="import">Import backup</button>' +
+        '<input type="file" id="backup-file" accept=".json,application/json" hidden></div>' + note + "</section>" +
       '<div class="section"><button class="btn secondary" data-action="reset">Reset all progress</button></div>';
+  };
+
+  /* Backup export / import */
+  function localISODate() {
+    var d = new Date();
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+  function storedTheme() {
+    try { return window.localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+  function exportBackup() {
+    var data = { app: "sheatrainer", version: 1, exported: new Date().toISOString(), theme: storedTheme(), store: store };
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "sheatrainer-backup-" + localISODate() + ".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+  function parseBackup(text) {
+    var d;
+    try { d = JSON.parse(text); } catch (e) { throw new Error("This file could not be read. Choose a .json backup exported from this trainer."); }
+    if (!d || typeof d !== "object" || d.app !== "sheatrainer") throw new Error("This file is not a backup from the Psychiatric Interviewing Trainer.");
+    if (!d.store || typeof d.store !== "object" || Array.isArray(d.store)) throw new Error("This backup does not contain any saved progress.");
+    var out = emptyStore();
+    STORE_KEYS.forEach(function (k) {
+      var v = d.store[k];
+      if (v == null) return;
+      if (typeof v !== "object" || Array.isArray(v)) throw new Error("The \u201C" + k + "\u201D section of this backup is not in the expected format.");
+      out[k] = v;
+    });
+    normalizeCards(out.cards);
+    var theme = Object.prototype.hasOwnProperty.call(d, "theme") ? (d.theme === "light" || d.theme === "dark" ? d.theme : "auto") : null;
+    return { store: out, theme: theme };
+  }
+  function importBackupFile(file) {
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var b = parseBackup(String(reader.result || ""));
+        if (!window.confirm("Replace the progress saved in this browser with this backup?")) return;
+        store = b.store; save();
+        if (b.theme) setTheme(b.theme);
+        session.cards = null;
+        progressNote = { ok: true, text: "Backup imported. Your progress has been replaced." };
+      } catch (err) {
+        progressNote = { ok: false, text: (err && err.message) || "This file could not be imported." };
+      }
+      views.progress();
+    };
+    reader.onerror = function () { progressNote = { ok: false, text: "The file could not be read. Try again." }; views.progress(); };
+    reader.readAsText(file);
+  }
+  app.addEventListener("change", function (e) {
+    if (e.target && e.target.id === "backup-file") importBackupFile(e.target.files && e.target.files[0]);
+  });
+
+  /* What's new */
+  views["whats-new"] = function () {
+    setNav("whats-new");
+    app.innerHTML = '<div class="narrow"><h1>What\'s new</h1><p class="lede">Recent changes to the trainer, newest first.</p><ol class="wn-list">' +
+      whatsNewSorted().map(function (w) {
+        return '<li class="wn-entry"><time datetime="' + esc(w.date) + '">' + esc(fmtDate(w.date)) + "</time><h2>" + esc(w.title) + "</h2><ul>" +
+          w.items.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></li>";
+      }).join("") + "</ol></div>";
   };
 
   /* About */
@@ -659,6 +917,7 @@
       "<h2>Source</h2><p>Content is drawn from study guides based on Shawn Christopher Shea, <i>Psychiatric Interviewing: The Art of Understanding</i>, 3rd edition. All patient statements, cases, and names are composed for teaching; they are not transcripts from the book. Read the book itself for the full discussion, video modules, and annotated interviews.</p>" +
       "<h2>A note on clinical use</h2><p>This is an educational tool, not clinical guidance. Confidentiality limits, mandated reporting, duty-to-protect obligations, and risk assessment procedures vary by institution and jurisdiction. Follow your supervisor and local policy.</p>" +
       "<h2>What's next</h2><p>Part III, Mastering Complex Interviewing Tasks, will be added chapter by chapter.</p>" +
+      '<p><a href="#/whats-new">What\'s new</a>: see the latest changes to the trainer.</p>' +
       '<div class="notice section">This app was created by Isabella Navarro, MD. Last updated October 2026. <a href="mailto:isaymotion@gmail.com">isaymotion@gmail.com</a></div></div>';
   };
 
@@ -708,10 +967,23 @@
     if (a === "drill-next") { var dd = session.drill; dd.idx++; dd.answered = null; dd.opts = null; renderDrill(); return; }
     if (a === "drill-restart") { var did = session.drill.set.id; session.drill = null; views.drills(did); return; }
 
-    if (a === "flip") { session.cards.flipped = !session.cards.flipped; el.classList.toggle("flipped", session.cards.flipped); return; }
-    if (a === "card-know") { var c = session.cards; var card = c.queue.shift(); store.cards[card.key] = true; save(); c.known++; c.flipped = false; renderCards(); return; }
-    if (a === "card-again") { var cc = session.cards; cc.queue.push(cc.queue.shift()); cc.flipped = false; renderCards(); return; }
-    if (a === "cards-restart") { var ck = session.cards.key; session.cards = null; views.cards(ck); return; }
+    if (a === "flip") {
+      session.cards.flipped = !session.cards.flipped; el.classList.toggle("flipped", session.cards.flipped);
+      var ans = document.getElementById("srs-answers"); if (ans) ans.hidden = !session.cards.flipped;
+      return;
+    }
+    if (a === "card-grade") {
+      var c = session.cards, card = c.queue.shift(), grade = el.getAttribute("data-grade");
+      gradeCard(card.key, grade);
+      c.tally[grade]++; c.answered++; c.flipped = false;
+      if (grade === "again") c.queue.push(card);
+      renderCards(); return;
+    }
+    if (a === "cards-ahead") { var ck = session.cards.key; startCards(ck, session.cards.deck, true); renderCards(); window.scrollTo(0, 0); return; }
+
+    if (a === "theme") { setTheme(el.getAttribute("data-theme-opt")); return; }
+    if (a === "export") { exportBackup(); return; }
+    if (a === "import") { var fi = document.getElementById("backup-file"); if (fi) { fi.value = ""; fi.click(); } return; }
 
     if (a === "term") { e.preventDefault(); openTerm(el); return; }
     if (a === "bookmark") {
@@ -729,24 +1001,46 @@
     if (a === "unbookmark") { delete store.bookmarks[el.getAttribute("data-key")]; save(); views.bookmarks(); return; }
     if (a === "reset") {
       if (window.confirm("Reset all saved progress in this browser?")) {
-        store = { practice: {}, quiz: {}, sims: {}, cards: {}, drills: {}, bookmarks: {} }; save(); views.progress();
+        store = emptyStore(); save(); session.cards = null; views.progress();
       }
     }
   });
+
+  /* ───────── Scroll restoration ─────────
+     Remember each page's scroll position (in memory). Back/forward returns to it; ordinary navigation starts at the top.
+     Entries this app has rendered carry a history.state marker, so popstate can tell a back/forward visit
+     from the popstate some browsers also fire when a link changes the hash. */
+  var scrollMemo = {}, scrollKey = location.hash || "#/", fromHistory = false, scrollPending = false;
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.addEventListener("scroll", function () {
+    if (scrollPending) return;
+    scrollPending = true;
+    setTimeout(function () { scrollPending = false; scrollMemo[scrollKey] = window.scrollY; }, 120);
+  }, { passive: true });
+  window.addEventListener("popstate", function (e) { fromHistory = !!(e.state && e.state.sheatrainer); });
 
   /* ───────── Router ───────── */
   function route() {
     var parts = (location.hash.replace(/^#\/?/, "") || "").split("/");
     var name = parts[0] || "home", arg = parts[1], sub = parts[2];
     var fn = views[name];
+    scrollMemo[scrollKey] = window.scrollY; // the page we are leaving
+    scrollKey = location.hash || "#/";
+    var restoreY = fromHistory && scrollMemo.hasOwnProperty(scrollKey) ? scrollMemo[scrollKey] : null;
+    fromHistory = false;
+    try { if (!history.state || !history.state.sheatrainer) history.replaceState({ sheatrainer: 1 }, ""); } catch (e) { /* ignore */ }
     closeTerm();
     if (fn) fn(arg, sub); else notFound();
+    app.focus({ preventScroll: true });
+    if (restoreY !== null) {
+      window.requestAnimationFrame(function () { window.scrollTo(0, restoreY); });
+      return;
+    }
     if (name === "learn" && sub && sub !== "review") {
       var target = document.getElementById("sec-" + sub);
-      if (target) { target.scrollIntoView({ block: "start" }); app.focus({ preventScroll: true }); return; }
+      if (target) { target.scrollIntoView({ block: "start" }); return; }
     }
     if (name !== "simulate" || !arg) window.scrollTo(0, 0);
-    app.focus({ preventScroll: true });
   }
   window.addEventListener("hashchange", function () {
     // Re-entering a simulation from the list starts it over.
@@ -768,7 +1062,7 @@
     function buildDrawer() {
       var h = '<div class="drawer-head"><span>Contents</span><button type="button" class="icon-btn" id="drawer-close" aria-label="Close menu">&times;</button></div><nav aria-label="Chapters" class="drawer-body">';
       h += '<ul class="drawer-links">' +
-        [["#/", "Home"], ["#/learn", "All chapters"], ["#/practice/all", "Practice"], ["#/simulate", "Interviews"], ["#/drills", "Drills"], ["#/cards/all", "Flashcards"], ["#/bookmarks", "Bookmarks"], ["#/progress", "Progress"], ["#/about", "About"]]
+        [["#/", "Home"], ["#/learn", "All chapters"], ["#/practice/all", "Practice"], ["#/simulate", "Interviews"], ["#/drills", "Drills"], ["#/cards/all", "Flashcards"], ["#/bookmarks", "Bookmarks"], ["#/progress", "Progress"], ["#/about", "About"], ["#/whats-new", "What's new"]]
           .map(function (l) { return '<li><a href="' + l[0] + '">' + l[1] + "</a></li>"; }).join("") + "</ul>";
       parts().forEach(function (p) {
         h += '<h2 class="drawer-part">Part ' + esc(p.numeral) + "<span>" + esc(p.title) + "</span></h2><ul class=\"drawer-ch\">";
@@ -867,6 +1161,7 @@
       });
       simulations().forEach(function (s) { add("Interview", s.title, "Simulated interview", (s.setting || "") + " " + (s.who || "") + " " + (s.goal || ""), "#/simulate/" + s.id, 1); });
       drills().forEach(function (d) { add("Drill", d.title, "Chapter " + d.chapter, d.about, "#/drills/" + d.id, 1); });
+      add("Page", "What's new", "Updates", WHATS_NEW.map(function (w) { return w.title + " " + w.items.join(" "); }).join(" "), "#/whats-new", 0);
       return out;
     }
     function snippet(text, terms) {
@@ -944,6 +1239,11 @@
       if (e.key === "Escape") { if (!panel.hidden) closeSearch(); else if (!drawer.hidden) closeDrawer(); return; }
       var tag = (e.target.tagName || "").toLowerCase();
       var typing = tag === "input" || tag === "textarea" || tag === "select" || e.target.isContentEditable;
+      if (e.altKey && !typing && !e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+        e.preventDefault();
+        if (e.key === "ArrowLeft") history.back(); else history.forward();
+        return;
+      }
       if ((e.key === "/" && !typing && !e.metaKey && !e.ctrlKey) || ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey))) { e.preventDefault(); openSearch(); }
       if (e.key === "Tab" && !drawer.hidden) {
         var f = drawer.querySelectorAll("a[href], button"); if (!f.length) return;
