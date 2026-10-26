@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-26", title: "Chapter 17 study guide: Exploring Suicidal Ideation",
+      teaser: "New: the Chapter 17 study guide on suicide assessment and the CASE Approach, with 41 new glossary terms and a 10-question quiz.",
+      items: [
+        "A full study guide for Chapter 17: risk factors, warning signs, and protective factors; the tetrad of lethality; the equation of suicidal intent; timing the inquiry; and the CASE Approach region by region, with composed examples of the verbal video, gentle assumption, and denials of the specific.",
+        "Chapter 17 key ideas, pocket card, quiz, and flashcards (41 terms)."
+      ] },
     { date: "2026-10-26", title: "Themes, spaced repetition, and backups",
-      teaser: "New: choose a light or dark theme, review flashcards on a spaced-repetition schedule, and back up your progress.",
       items: [
         "Theme button in the top bar: match your device, or always use light or dark. Your choice is saved on this device and can also be changed under Settings on the Progress page.",
         "Flashcards now use spaced repetition. Rate each card Again, Good, or Easy, and it comes back after 1, 3, 7, 14, or 30 days depending on how well you know it.",
