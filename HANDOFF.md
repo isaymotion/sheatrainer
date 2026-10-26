@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-26, after the Chapter 16 study guide (commit b3e2d90 on main).
+Updated 2026-10-26, after the feature-parity release (commit 797f3e1 on main; Ch 16 guide was b3e2d90).
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
@@ -20,8 +20,8 @@ Updated 2026-10-26, after the Chapter 16 study guide (commit b3e2d90 on main).
 ## 3. Architecture and data formats
 ```
 index.html        header (menu button, brand, nav, back/fwd, search), drawer, search panel, footer, script tags
-app.js            router + views; script tag carries ?v=N cache-buster (now v=7)
-styles.css        tokens, light/dark, guide styles (now ?v=6)
+app.js            router + views; script tag carries ?v=N cache-buster (now v=8)
+styles.css        tokens, light/dark, guide styles (now ?v=7)
 content/part1-chapters.js, part1-practice.js   Ch 1–8 (chapters; sims/drills)
 content/part2-chapters.js, part2-practice.js   Ch 9–15
 content/part3-chapters.js                      Ch 16 only so far (parts.part3)
@@ -56,6 +56,7 @@ node ../dev-tools-wt/tools/validate.js .              # expect: chapters 16, gui
 python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
 ```
 Baseline counts (2026-10-26): 16 chapters, practice 87, quiz 88, glossary 197, sims 16, drills 9.
+Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, items; optional `teaser` shown on Home) and bump `app.js?v=`.
 
 ## 6. Status
 | Area | Status |
@@ -63,6 +64,7 @@ Baseline counts (2026-10-26): 16 chapters, practice 87, quiz 88, glossary 197, s
 | Part I trainer (Ch 1–8): learn, practice, quiz, sims, drills, cards | Done |
 | Part II trainer (Ch 9–15) | Done |
 | Navigation: hamburger drawer, back/forward, search (`/`, Ctrl/Cmd+K) | Done (a852eee) |
+| Standard-feature parity: theme toggle (light/dark/auto, key `sheatrainer.theme`), Alt+←/→, scroll restoration, What's New (`#/whats-new`, `WHATS_NEW` array in app.js, add new entries at top with every release), backup export/import (Progress page), Leitner spaced repetition for flashcards (`store.cards[key] = {box 0–5, due, reps}`) | Done (797f3e1) |
 | Study guides | Ch 1, 2, 16 done; 17, 18, then 3–15 remaining (15 left) |
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
@@ -80,7 +82,7 @@ Baseline counts (2026-10-26): 16 chapters, practice 87, quiz 88, glossary 197, s
 - Wide tables overflowed on phones until `.guide-grid` used `grid-template-columns: minmax(0,1fr)`; the check script catches regressions.
 - Header height drives sticky offsets: `.guide-side`/`.learn-grid aside` `top: 5.5rem`, `.guide-sec scroll-margin-top: 5.5rem` (7.5rem ≤900px). Adjust if the header changes.
 - Desktop nav clips at mid widths; brand text is hidden between 761–1320px.
-- Abort Google Fonts in Playwright (`**/fonts.*`) or pages stall. Use Chromium at `/opt/pw-browsers/chromium-1194/...`; don't run `playwright install`.
+- Abort Google Fonts in Playwright (`**/fonts.*`) or pages stall. Use Chromium at `/opt/pw-browsers/chromium-1243/chrome-linux64/chrome` (pass as `CHROME=` env to check.py; the script's default path is stale); don't run `playwright install`.
 - `gh api` Pages endpoints are blocked by the sandbox proxy; verify deploys by pushing and trusting Pages, or ask the user to check.
 - When validating with ad-hoc `JSON.stringify` + regex, nested arrays produce false "missing" refs like `"[[MMSE`; `tools/validate.js` walks strings properly.
 - Bump `?v=N` on app.js/styles.css whenever they change, or phones serve stale code.
