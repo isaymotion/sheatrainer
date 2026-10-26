@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 6 study guide: Understanding the Person Beneath the Diagnosis",
+      teaser: "New: the Chapter 6 study guide on parataxic distortion, the interpersonal and phenomenological perspectives, the wellness triad, and cultural glasses.",
+      items: [
+        "A full study guide for Chapter 6: the two arrows to treatment planning (Jennifer), parataxic distortion and intersubjectivity, reliability and the reliably invalid, Whitehorn's interpersonal perspective, phenomenological inquiry and the tense shift, the wellness triad of strengths, skills, and interests (Jamal), kulturbrille, and culture in treatment planning (Anna's mother).",
+        "Four glossary terms added to Chapter 6 (Daseins-analysis, present-tense shift, VIA Inventory of Strengths, patient skill)."
+      ] },
     { date: "2026-10-27", title: "Chapter 5 study guide: Validity Techniques",
-      teaser: "New: the Chapter 5 study guide, the definitive walk through all four clusters of validity techniques that the suicide and violence chapters build on.",
       items: [
         "A full study guide for Chapter 5: why patients don't always tell the truth; anchor, tagging, and exaggeration; defining terms and clarifying norms; normalization, both types of shame attenuation, induction to bragging; the behavioral incident and verbal video; gentle assumption, denial of the specific, the catch-all, symptom amplification; doublets and triplets; bogus symptoms, soundings, and the sexual history; and the closing interview with Billy.",
         "Four glossary terms added to Chapter 5 (defining technical terms, patient-opinion question, endorsement of bogus symptoms, validity doublet)."

@@ -691,7 +691,11 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Presenting solutions", def: "What the patient has already tried that has helped." },
         { term: "Wellness triad", def: "Strengths, skills, and interests." },
         { term: "Kulturbrille", def: "Boas: the cultural glasses through which each person sees." },
-        { term: "Mutual constitution", def: "Culture and psyche continually shape each other." }
+        { term: "Mutual constitution", def: "Culture and psyche continually shape each other." },
+        { term: "Daseins-analysis", def: "Boss: analysis of being-in-the-world; the aim of phenomenological inquiry is to know what it is like to be the person across from you, often entered through the senses." },
+        { term: "Present-tense shift", def: "Switching a phenomenological inquiry from past to present tense (\"What else are you feeling in the room?\") to make images more real and unlock repressed affect; avoided with unstable or psychotic patients." },
+        { term: "VIA Inventory of Strengths", def: "Peterson and Seligman's list of 24 character strengths in six categories (knowledge, courage, humanity, justice, temperance, transcendence); a free self-assessment exists online. For the interviewer, a reminder to notice strengths that are easy to miss." },
+        { term: "Patient skill", def: "A specific, teachable ability usable toward a goal (drumming, organizing, listening), as distinct from a strength, which is a character trait. Easy to raise through the school and job history, and a door into self-esteem, lost dreams, and defenses." }
       ]
     },
 
