@@ -464,7 +464,16 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Manufactured gate", def: "Serial natural gates through stepping-stone regions to reach a delicate topic." },
         { term: "Phantom gate", def: "A clinician-initiated jump with no cue, no reference, and no topical link." },
         { term: "Observed gate", def: "A transition cued by the patient's nonverbal behavior." },
-        { term: "Dead zone", def: "A second quarter lost to interesting but unhelpful material." }
+        { term: "Dead zone", def: "A second quarter lost to interesting but unhelpful material." },
+        { term: "Free facilitation region", def: "A process region of nondirective listening: nods, uh-huhs, empathic statements, open questions, and gentle commands while the patient wanders where they wish. Builds engagement and surfaces what lies just below the surface." },
+        { term: "Transformational region", def: "A process region in which the clinician works to dissolve a roadblock (anger, hesitancy, a challenge to the clinician) rather than gather data; formerly called a resistance region." },
+        { term: "Psychodynamic region", def: "A process region in which the clinician asks questions but attends to how and why the patient answers: reflectiveness, insight, response to interpretation, observing ego." },
+        { term: "Tracking", def: "Following the patient's statements and immediate emotional state with pertinent questions. Most trainees bring it; it must be matched by an equal ability to focus." },
+        { term: "Pivot point", def: "The moment a patient spontaneously moves into a new region and the clinician must decide whether to follow. Recognizing pivot points instantly is arguably the greatest secret of structuring." },
+        { term: "Spontaneous gate", def: "A transition made by the patient, which the clinician merely follows with a question such as \"How do you mean?\" Imperceptible, but following every one produces a wandering or unguided interview." },
+        { term: "Implied gate", def: "A clinician-initiated move into a topically similar region with no cue or reference. Smooth when the regions are close, abrupt when they are not; allows parallel expansion of related regions." },
+        { term: "Introduced gate", def: "Announcing that a transition is coming. Useful between the body and the closing, and for entering a transformational region when tension has been building." },
+        { term: "Split expansion", def: "Expanding one region at several points in the interview. Flexible, but a source of omissions unless the database is tracked; brief excursions out of a region are the milder cousin." }
       ]
     },
 

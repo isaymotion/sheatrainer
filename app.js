@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 4 study guide: Facilics",
+      teaser: "New: the Chapter 4 study guide on facilics, with regions, the quarter-by-quarter clock, pivot points, and every gate, linked to all six practice items.",
+      items: [
+        "A full study guide for Chapter 4: content and process regions, using time (the 5-minute check, the dead zone), stilted versus blended expansions, pivot points and spontaneous gates, natural and manufactured gates, referred gates for the cognitive exam and sensitive topics, phantom, implied, introduced, and observed gates.",
+        "Nine glossary terms added to Chapter 4 (free facilitation, transformational, and psychodynamic regions; tracking; pivot point; spontaneous, implied, and introduced gates; split expansion)."
+      ] },
     { date: "2026-10-27", title: "Chapter 3 study guide: The Dynamic Structure of the Interview",
-      teaser: "New: the Chapter 3 study guide on the five phases, PACE, and the Degree of Openness Continuum, with practice links for every problem interview.",
       items: [
         "A full study guide for Chapter 3: the introduction and confidentiality, the opening and PACE, the Degree of Openness Continuum, transforming shut-down, wandering, and rehearsed interviews, the body's database, and the closing and termination.",
         "Seven glossary terms added to Chapter 3 (Degree of Openness Continuum, open-ended question, closed-ended and variable verbalizations, facilitating and focusing statements, return visit)."
