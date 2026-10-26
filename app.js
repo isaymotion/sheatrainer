@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 5 study guide: Validity Techniques",
+      teaser: "New: the Chapter 5 study guide, the definitive walk through all four clusters of validity techniques that the suicide and violence chapters build on.",
+      items: [
+        "A full study guide for Chapter 5: why patients don't always tell the truth; anchor, tagging, and exaggeration; defining terms and clarifying norms; normalization, both types of shame attenuation, induction to bragging; the behavioral incident and verbal video; gentle assumption, denial of the specific, the catch-all, symptom amplification; doublets and triplets; bogus symptoms, soundings, and the sexual history; and the closing interview with Billy.",
+        "Four glossary terms added to Chapter 5 (defining technical terms, patient-opinion question, endorsement of bogus symptoms, validity doublet)."
+      ] },
     { date: "2026-10-27", title: "Chapter 4 study guide: Facilics",
-      teaser: "New: the Chapter 4 study guide on facilics, with regions, the quarter-by-quarter clock, pivot points, and every gate, linked to all six practice items.",
       items: [
         "A full study guide for Chapter 4: content and process regions, using time (the 5-minute check, the dead zone), stilted versus blended expansions, pivot points and spontaneous gates, natural and manufactured gates, referred gates for the cognitive exam and sensitive topics, phantom, implied, introduced, and observed gates.",
         "Nine glossary terms added to Chapter 4 (free facilitation, transformational, and psychodynamic regions; tracking; pivot point; spontaneous, implied, and introduced gates; split expansion)."

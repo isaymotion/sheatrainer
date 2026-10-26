@@ -582,7 +582,11 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Denial of the specific", def: "Asking about list items one at a time after an unconvincing \"no.\"" },
         { term: "Catch-all question", def: "\"Is there anything we haven't discussed?\" to catch outliers." },
         { term: "Symptom amplification", def: "Offering high numbers so minimized answers still reveal a problem." },
-        { term: "Soundings", def: "Graded statements of inquiry that measure motivation or conviction (Havens)." }
+        { term: "Soundings", def: "Graded statements of inquiry that measure motivation or conviction (Havens)." },
+        { term: "Defining technical terms", def: "Carlat: spelling out what you mean by a word the public also uses (depression, panic, addiction) so a patient's \"always\" is not mistaken for years of major depression." },
+        { term: "Patient-opinion question", def: "A question that asks the patient's judgment (\"Is he affectionate?\") rather than for facts. Invaluable for perspective and goals, poor for truth; the behavioral incident is its complement." },
+        { term: "Endorsement of bogus symptoms", def: "Resnick: asking about a symptom highly atypical of the feigned disorder, embedded among typical ones. Endorsement raises the likelihood of malingering." },
+        { term: "Validity doublet", def: "Two techniques combined in one question, such as a normalization softening a gentle assumption, or a shame attenuation inserted inside a gentle assumption; a triplet adds symptom amplification." }
       ]
     },
 
