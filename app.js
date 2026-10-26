@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 18 study guide: Exploring Violent and Homicidal Ideation",
+      teaser: "New: the Chapter 18 study guide on violence risk and the CADE Approach completes Part III, with 26 new glossary terms and a 10-question quiz.",
+      items: [
+        "A full study guide for Chapter 18: the three domains of violence, what structured instruments can and cannot predict, risk factors, the tetrad of lethality for violence, paranoid process and Knoll and Meloy's four steps, domestic violence caveats, and the CADE Approach region by region.",
+        "Chapter 18 key ideas, pocket card, quiz, and flashcards (26 terms). Part III is now complete."
+      ] },
     { date: "2026-10-26", title: "Chapter 17 study guide: Exploring Suicidal Ideation",
-      teaser: "New: the Chapter 17 study guide on suicide assessment and the CASE Approach, with 41 new glossary terms and a 10-question quiz.",
       items: [
         "A full study guide for Chapter 17: risk factors, warning signs, and protective factors; the tetrad of lethality; the equation of suicidal intent; timing the inquiry; and the CASE Approach region by region, with composed examples of the verbal video, gentle assumption, and denials of the specific.",
         "Chapter 17 key ideas, pocket card, quiz, and flashcards (41 terms)."
@@ -921,7 +926,7 @@
       "<h2>How to use it</h2><p>Start with a chapter in Learn, then practice its responses, take the quiz, and run the related simulated interview. Drills sharpen the vocabulary you will use in supervision. Revisit the simulated interviews and try different paths: the debriefs teach as much from a misstep as from a good choice.</p>" +
       "<h2>Source</h2><p>Content is drawn from study guides based on Shawn Christopher Shea, <i>Psychiatric Interviewing: The Art of Understanding</i>, 3rd edition. All patient statements, cases, and names are composed for teaching; they are not transcripts from the book. Read the book itself for the full discussion, video modules, and annotated interviews.</p>" +
       "<h2>A note on clinical use</h2><p>This is an educational tool, not clinical guidance. Confidentiality limits, mandated reporting, duty-to-protect obligations, and risk assessment procedures vary by institution and jurisdiction. Follow your supervisor and local policy.</p>" +
-      "<h2>What's next</h2><p>Part III, Mastering Complex Interviewing Tasks, will be added chapter by chapter.</p>" +
+      "<h2>What's next</h2><p>Part III, Mastering Complex Interviewing Tasks, is complete. Study guides for the remaining chapters of Parts I and II will be added chapter by chapter.</p>" +
       '<p><a href="#/whats-new">What\'s new</a>: see the latest changes to the trainer.</p>' +
       '<div class="notice section">This app was created by Isabella Navarro, MD. Last updated October 2026. <a href="mailto:isaymotion@gmail.com">isaymotion@gmail.com</a></div></div>';
   };
