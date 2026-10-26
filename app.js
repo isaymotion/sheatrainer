@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 7 study guide: Assessment Perspectives and the Human Matrix",
+      teaser: "New: the Chapter 7 study guide on the three assessment lenses, the six wings of the matrix, the matrix question, and the eight core pains.",
+      items: [
+        "A full study guide for Chapter 7: assessment as a bridge, the healing power and limits of diagnosis, the two delineations and the lost axes, the DSM-5 applied to Debbie, matrix treatment planning (Engel, intra- and inter-wing interventions, Mr. Franklin), all six wings with Debbie and Ted, the eight core pains, and Debbie's course.",
+        "Five glossary terms added to Chapter 7 (six wings, intra-wing intervention, hidden diagnosis, worldview, caring/healing/teaching)."
+      ] },
     { date: "2026-10-27", title: "Chapter 6 study guide: Understanding the Person Beneath the Diagnosis",
-      teaser: "New: the Chapter 6 study guide on parataxic distortion, the interpersonal and phenomenological perspectives, the wellness triad, and cultural glasses.",
       items: [
         "A full study guide for Chapter 6: the two arrows to treatment planning (Jennifer), parataxic distortion and intersubjectivity, reliability and the reliably invalid, Whitehorn's interpersonal perspective, phenomenological inquiry and the tense shift, the wellness triad of strengths, skills, and interests (Jamal), kulturbrille, and culture in treatment planning (Anna's mother).",
         "Four glossary terms added to Chapter 6 (Daseins-analysis, present-tense shift, VIA Inventory of Strengths, patient skill)."

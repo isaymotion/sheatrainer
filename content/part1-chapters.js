@@ -778,7 +778,12 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Healing / damaging matrix effect", def: "A change in one wing that helps / harms another." },
         { term: "Red herring effect", def: "A problem in one wing appearing to originate in another." },
         { term: "Matrix question", def: "\"How might your life change if…?\": surfaces the ripple effects of a planned intervention." },
-        { term: "Core pains", def: "Eight fundamental pains beneath complex presentations." }
+        { term: "Core pains", def: "Eight fundamental pains beneath complex presentations." },
+        { term: "Six wings of the matrix", def: "Biologic, psychological, dyadic, family, cultural/societal/environmental, and worldview (framework for meaning), each nested in the next. Each is a place to look for problems, for wellness, and for interventions." },
+        { term: "Intra-wing intervention", def: "Treating a problem within its own wing: a medication for a biological problem, individual therapy for a psychological one, couples therapy for a dyadic one. Holistic, but only half of Engel's original model." },
+        { term: "Hidden diagnosis", def: "A comorbid disorder (OCD, substance use, bulimia) the patient does not volunteer because of stigma, embarrassment, or lack of awareness. Found only by doing a full differential on every patient; a common cause of treatment failure." },
+        { term: "Worldview", def: "Josephson and Peteet: the patient's framework for meaning, from religion or spirituality to any belief system that gives a sense of mission (family, country, AA, a team). The sixth wing. Doorway question: \"What makes you tick?\"" },
+        { term: "Caring, healing, teaching", def: "Ponce: three clinical functions to consider on every wing: providing safety and basic needs, alleviating distress and dysfunction, and teaching skills that build mastery and self-respect." }
       ]
     },
 
