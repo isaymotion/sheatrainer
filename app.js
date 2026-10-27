@@ -157,8 +157,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 10 study guide: Beneath the Mood Disorder",
+      teaser: "New: the Chapter 10 study guide walks through the five wings of the matrix as a depressed person lives them, from the window shade response and ideational caging to tears, the family, and the framework for meaning.",
+      items: [
+        "A full study guide for Chapter 10: the body as first messenger and the depressive paradox, agitated depression versus dysphoric mania, blocking of the future and the shrinking active world, the window shade response, opening an ideational cage, Beck's distortions and the immunity to logic, loneliness, burdensomeness, helplessness and hopelessness, the defenses that hide depression, the dyadic wing and countertransference, first tears, the family as co-sufferer and informant, culture and stigma, and the framework for meaning.",
+        "Nine glossary terms added to Chapter 10 (ossification, delusional guilt, hopelessness, isolation as a defense, projection, countertransference, family homeostasis, identified patient, existential crisis).",
+        "Sa Tagalog cards on five Chapter 10 sections."
+      ] },
     { date: "2026-10-27", title: "Sa Tagalog: links to Usap Tayo and a new drill",
-      teaser: "New: 'Sa Tagalog' cards in the study guides link each topic to the matching phrases in Usap Tayo, and a new drill, Sabihin sa Tagalog, asks you to keep Shea's technique when you switch languages.",
       items: [
         "'Sa Tagalog' cards at the end of forty study-guide sections (Chapters 1 to 9 and 16 to 18): why the topic matters in Filipino, one example phrase, and a link to the matching section of Usap Tayo, the companion Tagalog app. Usap Tayo links back here from each of its psychiatry sections.",
         "New technique drill: Sabihin sa Tagalog. Twelve of Shea's validity techniques and mood questions; pick the respectful Tagalog wording that keeps the technique, and learn why the leading, closed, or rude options lose it.",

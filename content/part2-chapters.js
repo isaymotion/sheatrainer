@@ -250,7 +250,16 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Perceived burdensomeness", def: "Joiner: the belief \"I am a burden,\" an interpersonal suicide warning sign." },
         { term: "Learned helplessness", def: "Seligman: giving up after inescapable adversity." },
         { term: "Pseudo-hypomanic defense", def: "A cheerful front concealing depression." },
-        { term: "Anger–guilt–depression loop", def: "Irritability leads to lashing out, guilt, deeper depression, and more irritability." }
+        { term: "Anger–guilt–depression loop", def: "Irritability leads to lashing out, guilt, deeper depression, and more irritability." },
+        { term: "Ossification", def: "Jaspers's word for the depressed state: body and feeling turned rigid and bone-like; movement, thought, and emotion all slowed and heavy." },
+        { term: "Delusional guilt", def: "Guilt of psychotic intensity, held with delusional conviction. Ordinary depressive self-blame is its milder relative." },
+        { term: "Hopelessness", def: "Beck: a negative view of the future that predicts suicide more specifically and sensitively than depressed mood itself. Ask indirectly (\"What do you see for yourself ahead?\") and then directly." },
+        { term: "Isolation (defense)", def: "A psychodynamic defense in which all the depressive rumination is loaded onto one symptom complex (\"I just can't sleep\") while depression itself is denied; often paired with rationalization." },
+        { term: "Projection", def: "A defense that turns intolerable self-hatred into \"others hate me\" or \"others want to punish me.\" Paranoia can alternate with, and hide, a lethal depression; the second statement may be projected suicidal ideation." },
+        { term: "Countertransference", def: "The interviewer's own emotional reactions to the patient (frustration, anger, guilt, sadness, feeling ineffectual). With a depressed patient they are diagnostic clues and a hazard to engagement at once." },
+        { term: "Family homeostasis", def: "Bowen and Minuchin: a family system may need a member's illness as a stabilizer (the caretaker's self-worth, the adult child finally one-up on a parent), and may unconsciously resist recovery." },
+        { term: "Identified patient", def: "The family member labeled as the one who is ill, when the depression is in fact being lived by the whole family system." },
+        { term: "Existential crisis", def: "The failure to build, or the sudden collapse of, a framework for meaning; can trigger or perpetuate a depression." }
       ]
     },
 
