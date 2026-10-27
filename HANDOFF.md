@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-27, after the Chapter 8 study guide (commit 70bfacc on main). Parts I and III are complete; Part II guides (9–15) next.
+Updated 2026-10-27, after the Chapter 9 study guide (commit 45c4433 on main). Parts I and III are complete; Part II guides 10–15 next.
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
@@ -21,12 +21,12 @@ Updated 2026-10-27, after the Chapter 8 study guide (commit 70bfacc on main). Pa
 ## 3. Architecture and data formats
 ```
 index.html        header (menu button, brand, nav, back/fwd, search), drawer, search panel, footer, script tags
-app.js            router + views; script tag carries ?v=N cache-buster (now v=16)
+app.js            router + views; script tag carries ?v=N cache-buster (now v=17)
 styles.css        tokens, light/dark, guide styles (now ?v=7)
 content/part1-chapters.js, part1-practice.js   Ch 1–8 (chapters; sims/drills)
 content/part2-chapters.js, part2-practice.js   Ch 9–15
 content/part3-chapters.js                      Ch 16–18 complete (parts.part3)
-content/guide-ch1.js … guide-ch8.js, guide-ch16.js, guide-ch17.js, guide-ch18.js   study guides (schema documented at top of guide-ch1.js)
+content/guide-ch1.js … guide-ch9.js, guide-ch16.js, guide-ch17.js, guide-ch18.js   study guides (schema documented at top of guide-ch1.js)
 icons/, manifest.webmanifest                    sunflower icon (?v=2)
 ```
 - Routes: `#/home`, `#/learn`, `#/learn/chN` (guide), `#/learn/chN/<sectionId>`, `#/learn/chN/review`, `#/practice/<chN|all>[/<itemId>]`, `#/quiz/chN`, `#/simulate[/<id>]`, `#/drills[/<id>]`, `#/cards/<chN|all>`, `#/bookmarks`, `#/progress`, `#/about`.
@@ -43,7 +43,7 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
    **If Ch 17–18**: add a chapter object to `content/part3-chapters.js` (concepts ~8–9, pearls ~8, `practice: []`, quiz 10, glossary ~25–35 non-duplicate terms), following ch16.
 3. Write `content/guide-chN.js`: intro, high-yield (mustKnow ~9–11, pitfalls ~7–9, phrases ~5–6), 8–10 sections, deeper list (video modules, appendices). Composed examples only; reserved section ids `high-yield`, `deeper`, `review` are not allowed.
 4. Add `<script src="content/guide-chN.js"></script>` in index.html after the other guides, before app.js (and part3-chapters.js stays after part2-practice.js). Bump `app.js?v=` (or styles) only if those files changed.
-5. Update README "Study guides" line (currently "Chapters 1–8 and 16–18 so far") and the intro sentence listing included chapters and counts if changed.
+5. Update README "Study guides" line (currently "Chapters 1–9 and 16–18 so far") and the intro sentence listing included chapters and counts if changed.
 6. `node tools/validate.js .` → OK; `python3 tools/check.py . --chapter chN --out /scratch/shots` → PASS; look at 2–3 screenshots (desktop + phone).
 7. `git fetch -q origin main`, commit, `git push origin HEAD:main`.
 8. Update the status table/next step in this doc (dev-tools branch and project doc `claude/handoff.md`).
@@ -53,10 +53,10 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
 git clone https://github.com/isaymotion/sheatrainer.git /home/claude/sheatrainer
 cd /home/claude/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-wt dev-tools
 pip install beautifulsoup4 --break-system-packages   # if missing
-node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 16 chapters: 18 guides: ch1,ch16,...,ch8 / practice: 87 quiz: 108 glossary: 300 sims: 16 drills: 9 / OK: no errors
+node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 17 chapters: 18 guides: ch1,ch16,...,ch9 / practice: 87 quiz: 108 glossary: 316 sims: 16 drills: 9 / OK: no errors
 python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
 ```
-Baseline counts (2026-10-27): 18 chapters, practice 87, quiz 108, glossary 300, sims 16, drills 9.
+Baseline counts (2026-10-27, after Ch 9): 18 chapters, practice 87, quiz 108, glossary 316, sims 16, drills 9.
 Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, items; optional `teaser` shown on Home) and bump `app.js?v=`.
 
 ## 6. Status
@@ -66,13 +66,13 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 | Part II trainer (Ch 9–15) | Done |
 | Navigation: hamburger drawer, back/forward, search (`/`, Ctrl/Cmd+K) | Done (a852eee) |
 | Standard-feature parity: theme toggle (light/dark/auto, key `sheatrainer.theme`), Alt+←/→, scroll restoration, What's New (`#/whats-new`, `WHATS_NEW` array in app.js, add new entries at top with every release), backup export/import (Progress page), Leitner spaced repetition for flashcards (`store.cards[key] = {box 0–5, due, reps}`) | Done (797f3e1) |
-| Study guides | Ch 1–8, 16–18 done; 9–15 remaining (7 left) |
+| Study guides | Ch 1–9, 16–18 done; 10–15 remaining (6 left) |
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
 | Ch 19–23 | Listed as Coming soon |
 
 ## 7. Next step
-**Chapter 9** (epub part0021; chapter N = part(0012+N) for 1–15). First Part II chapter; chapter objects live in `content/part2-chapters.js`. Check its practice ids (c9p1…) and existing glossary before writing; check candidate terms against all chapters with a node one-liner to avoid duplicates. Then Chapters 10–15.
+**Chapter 10** (epub part0024, ~72k chars, a single file; extract_chapter.py finds chapters by their heading, so `… 10 /scratch/ch10.txt` works). Chapter objects live in `content/part2-chapters.js` (ch10 has its own glossary already, e.g. "Pseudo-hypomanic defense", "Anger–guilt–depression loop"); Part II sims/drills in `content/part2-practice.js` (ch10: `sim-shade`; practice ids c10p1…). Check candidate glossary terms against all chapters with a node one-liner. Ch 9 now owns many mood terms (early morning awakening, mood reactivity, euphoric mania, hypomanic episode, cyclothymic disorder, rapid cycling, nervios, etc.), so Ch 10 should cite them with `[[term]]` rather than redefine them. Then Chapters 11–15 (Ch 11 = part0025 is ~210k chars; read in chunks).
 
 ## 8. Pitfalls learned
 - Glossary syntax is `[[term|shown text]]` (term first). A guide whose chapter has no entry in a parts file renders "not found".
@@ -84,7 +84,7 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 - When validating with ad-hoc `JSON.stringify` + regex, nested arrays produce false "missing" refs like `"[[MMSE`; `tools/validate.js` walks strings properly.
 - Bump `?v=N` on app.js/styles.css whenever they change, or phones serve stale code.
 - Pushing to main returned 403 until the repo was attached to the session with push access (`add_repo` isaymotion/sheatrainer). Do that first in a new chat. The first Bash call of a session may be blocked by the auto-mode classifier; just repeat it.
-- Chapter 17 spanned two epub files (part0032 and part0033); extract_chapter.py only reads one, so if an extract ends mid-sentence, also extract the next part. Ch 1–15 = part(0012+N), Ch 16 = part0031.
+- Chapter 17 spanned two epub files (part0032 and part0033) and Chapter 9 spanned part0022 and part0023 (Part II has its own divider at part0021, so the part(0012+N) arithmetic in the script's docstring is off by one from Ch 9 on; the script finds the chapter by heading anyway). extract_chapter.py only reads one file, so if an extract does not end with the Video Module / References block, also extract the next part (unzip the epub and run BeautifulSoup on `OEBPS/Text/partNNNN.xhtml`). Ch 10 = part0024, Ch 11 = part0025, Ch 12 = part0026.
 - validate.js rejects duplicate glossary terms across chapters (hit once: "Negative statement of inquiry" in ch3 and ch17). Before adding terms, check them with a node one-liner against every chapter's glossary; a guide cites the owning chapter's term via `[[term]]`.
 - Dark-theme screenshots need a page reload after setting `localStorage.sheatrainer.theme`.
 - When adding a What's New entry, remove `teaser` from the previous top entry (only the newest shows on Home).
