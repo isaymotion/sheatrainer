@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-27, after the Chapter 9 study guide (commit 45c4433 on main). Parts I and III are complete; Part II guides 10–15 next.
+Updated 2026-10-27, after the Chapter 9 study guide (45c4433) and the Tagalog integration (3f0dc50 on main; Usap Tayo 8f00b58). Parts I and III are complete; Part II guides 10–15 next.
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
@@ -21,12 +21,13 @@ Updated 2026-10-27, after the Chapter 9 study guide (commit 45c4433 on main). Pa
 ## 3. Architecture and data formats
 ```
 index.html        header (menu button, brand, nav, back/fwd, search), drawer, search panel, footer, script tags
-app.js            router + views; script tag carries ?v=N cache-buster (now v=17)
-styles.css        tokens, light/dark, guide styles (now ?v=7)
+app.js            router + views; script tag carries ?v=N cache-buster (now v=18)
+styles.css        tokens, light/dark, guide styles (now ?v=8)
 content/part1-chapters.js, part1-practice.js   Ch 1–8 (chapters; sims/drills)
 content/part2-chapters.js, part2-practice.js   Ch 9–15
 content/part3-chapters.js                      Ch 16–18 complete (parts.part3)
 content/guide-ch1.js … guide-ch9.js, guide-ch16.js, guide-ch17.js, guide-ch18.js   study guides (schema documented at top of guide-ch1.js)
+content/tagalog.js                              Sa Tagalog cards (links map chN:sectionId -> Usap Tayo section, with teaser) and the sabihin-tagalog drill (per-item opts)
 icons/, manifest.webmanifest                    sunflower icon (?v=2)
 ```
 - Routes: `#/home`, `#/learn`, `#/learn/chN` (guide), `#/learn/chN/<sectionId>`, `#/learn/chN/review`, `#/practice/<chN|all>[/<itemId>]`, `#/quiz/chN`, `#/simulate[/<id>]`, `#/drills[/<id>]`, `#/cards/<chN|all>`, `#/bookmarks`, `#/progress`, `#/about`.
@@ -46,17 +47,18 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
 5. Update README "Study guides" line (currently "Chapters 1–9 and 16–18 so far") and the intro sentence listing included chapters and counts if changed.
 6. `node tools/validate.js .` → OK; `python3 tools/check.py . --chapter chN --out /scratch/shots` → PASS; look at 2–3 screenshots (desktop + phone).
 7. `git fetch -q origin main`, commit, `git push origin HEAD:main`.
-8. Update the status table/next step in this doc (dev-tools branch and project doc `claude/handoff.md`).
+8. Add the new guide's `chN:sectionId` entries to `content/tagalog.js` where a Usap Tayo section fits.
+9. Update the status table/next step in this doc (dev-tools branch and project doc `claude/handoff.md`).
 
 ## 5. Commands
 ```bash
 git clone https://github.com/isaymotion/sheatrainer.git /home/claude/sheatrainer
 cd /home/claude/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-wt dev-tools
 pip install beautifulsoup4 --break-system-packages   # if missing
-node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 17 chapters: 18 guides: ch1,ch16,...,ch9 / practice: 87 quiz: 108 glossary: 316 sims: 16 drills: 9 / OK: no errors
+node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 18 chapters: 18 guides: ch1,ch16,...,ch9 / practice: 87 quiz: 108 glossary: 316 sims: 16 drills: 10 / OK: no errors
 python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
 ```
-Baseline counts (2026-10-27, after Ch 9): 18 chapters, practice 87, quiz 108, glossary 316, sims 16, drills 9.
+Baseline counts (2026-10-27, after Ch 9 + Tagalog): 18 chapters, practice 87, quiz 108, glossary 316, sims 16, drills 10.
 Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, items; optional `teaser` shown on Home) and bump `app.js?v=`.
 
 ## 6. Status
@@ -70,6 +72,7 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
 | Ch 19–23 | Listed as Coming soon |
+| Tagalog integration | Done (3f0dc50): `content/tagalog.js` cards on 40 guide sections + drill. Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
 
 ## 7. Next step
 **Chapter 10** (epub part0024, ~72k chars, a single file; extract_chapter.py finds chapters by their heading, so `… 10 /scratch/ch10.txt` works). Chapter objects live in `content/part2-chapters.js` (ch10 has its own glossary already, e.g. "Pseudo-hypomanic defense", "Anger–guilt–depression loop"); Part II sims/drills in `content/part2-practice.js` (ch10: `sim-shade`; practice ids c10p1…). Check candidate glossary terms against all chapters with a node one-liner. Ch 9 now owns many mood terms (early morning awakening, mood reactivity, euphoric mania, hypomanic episode, cyclothymic disorder, rapid cycling, nervios, etc.), so Ch 10 should cite them with `[[term]]` rather than redefine them. Then Chapters 11–15 (Ch 11 = part0025 is ~210k chars; read in chunks).
@@ -88,6 +91,9 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 - validate.js rejects duplicate glossary terms across chapters (hit once: "Negative statement of inquiry" in ch3 and ch17). Before adding terms, check them with a node one-liner against every chapter's glossary; a guide cites the owning chapter's term via `[[term]]`.
 - Dark-theme screenshots need a page reload after setting `localStorage.sheatrainer.theme`.
 - When adding a What's New entry, remove `teaser` from the previous top entry (only the newest shows on Home).
+- Drill items may carry their own `opts` array (used by sabihin-tagalog); otherwise options come from `set.categories`.
+- `pkill -f` with a pattern that appears in the same shell line kills the Bash call itself (exit 144); use a different pattern or `fuser -k`.
+- Usap Tayo pitfalls: append new phrase sections to `PSYCH_SECTIONS` (flashcard ids are `p:<section>:<index>`); add new files to the `FILES` list in `sw.js` and bump its VERSION; new phrases play with device TTS until `tools/make_audio_pack.py` regenerates the audio pack.
 
 ## 9. Files to re-attach in a new chat
 - `Psychiatric_Interviewing_-_Shawn_Christopher_Shea.epub`: needed for every remaining study guide.
