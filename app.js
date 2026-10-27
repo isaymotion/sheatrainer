@@ -157,8 +157,13 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Chapter 9 study guide: Mood Disorders",
+      teaser: "New: the Chapter 9 study guide opens Part II, from validity and reliability to the bipolar trap, dysphoric mania, depression in disguise, testing persistence, and taking a family history.",
+      items: [
+        "A full study guide for Chapter 9: how diagnostic systems are built, major depression and SIG E CAPS, exploring anhedonia and the neurovegetative symptoms conversationally, melancholia, anxiety and alcohol, the bipolar trap and euphoric mania, mixed states and dysphoric mania, bipolar II, induced episodes and cyclothymia, denial of depression, culture, atypical features and the organic screen, persistence and the history of the present illness, and the family history.",
+        "Sixteen glossary terms added to Chapter 9 (including categorical vs dimensional systems, SIG E CAPS, early morning awakening, euphoric mania, agitated depression, mood-congruent / mood-incongruent, sealing over, hypomanic episode, cyclothymic disorder, rapid cycling, mood reactivity, rejection sensitivity, leaden paralysis, nervios)."
+      ] },
     { date: "2026-10-27", title: "Chapter 8 study guide: Nonverbal Behavior",
-      teaser: "New: the Chapter 8 study guide completes Part I, from proxemics and immediacy to the guarded patient, the escalating patient, and interviewing by video, phone, and text.",
       items: [
         "A full study guide for Chapter 8: the interview as mime, proxemics, kinesics, and paralanguage, immediacy and context, nonverbal hints of hidden psychopathology (Mary), anxiety, deception, and ambivalence, the unspoken no and kinesic reciprocals, engaging with your body, the guarded patient and your own habits, note taking, calming potential violence, and technology.",
         "Seven glossary terms added to Chapter 8 (illustrators and regulators, affective display, displacement activity, micro-expression, postural echoing, intention movements and vacuum gestures, naked communication effect). All Part I and Part III study guides are now complete."

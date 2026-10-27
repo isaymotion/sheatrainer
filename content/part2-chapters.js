@@ -125,7 +125,23 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Bipolar II disorder", def: "Major depression plus hypomania, never full mania." },
         { term: "Atypical features", def: "Mood reactivity plus increased appetite or weight, hypersomnia, leaden paralysis, or rejection sensitivity." },
         { term: "Persistent depressive disorder", def: "Depressed mood more days than not for at least two years (one year in youth), never symptom-free for more than two months." },
-        { term: "DMDD", def: "Disruptive mood dysregulation disorder: chronic irritability and outbursts in youth, not episodic." }
+        { term: "DMDD", def: "Disruptive mood dysregulation disorder: chronic irritability and outbursts in youth, not episodic." },
+        { term: "Categorical vs dimensional systems", def: "Discrete diagnoses with criteria sets (fast, reliable) versus graded traits and severities (more valid, less practical). The DSM-5 is categorical with dimensional specifiers." },
+        { term: "SIG E CAPS", def: "Mnemonic for the symptoms of major depression: Sleep, Interest, Guilt, Energy, Concentration, Appetite, Psychomotor change, Suicidality (Gross, via Carlat)." },
+        { term: "Early morning awakening", def: "Being jolted awake early by a stream of worries, unable to return to sleep and dreading the day; severe forms mark melancholia." },
+        { term: "Euphoric mania", def: "The classic manic picture: elation, grandiosity, high energy, little need for sleep, pressured speech, flight of ideas, with irritability and lability underneath." },
+        { term: "Agitated depression", def: "A depression with marked restlessness, pacing, and anxious fretting, more common in the elderly; the patient feels overwhelmed and helpless rather than driven." },
+        { term: "Mood-congruent / mood-incongruent", def: "Psychotic content that fits the prevailing mood (guilt, ruin, or grandeur, special powers) versus content unrelated to it (paranoia, control, thought insertion)." },
+        { term: "Sealing over", def: "The burying of an embarrassing past manic episode by rationalization, repression, and denial, so the patient minimizes or omits it; collateral sources recover it." },
+        { term: "Hypomanic episode", def: "Manic-type symptoms for at least four days with an observable change from baseline but no marked impairment, hospitalization, or psychosis." },
+        { term: "Substance/medication-induced bipolar disorder", def: "Manic or hypomanic symptoms appearing only with a triggering agent (antidepressants, steroids, stimulants, St. John's wort, light therapy, ECT); if they persist a month after stopping, the diagnosis becomes bipolar I or II." },
+        { term: "Cyclothymic disorder", def: "Two years of frequent subthreshold hypomanic and depressive symptoms, present at least half the time, never free for more than two months." },
+        { term: "Rapid cycling", def: "Specifier for bipolar I or II: four or more mood episodes in twelve months, separated by remission or an immediate switch of polarity." },
+        { term: "Depressive equivalent", def: "Depression in a child or adolescent expressed mainly through anger and disruptive outbursts rather than low mood and neurovegetative symptoms." },
+        { term: "Mood reactivity", def: "The capacity to brighten substantially, even to normal mood, in response to positive events during a depression; the core of atypical features." },
+        { term: "Rejection sensitivity", def: "A lifelong, impairing oversensitivity to perceived interpersonal rejection, present between as well as during depressive episodes." },
+        { term: "Leaden paralysis", def: "An unpleasant heaviness in the arms or legs during depression; in older patients, distinguish it from peripheral arterial disease." },
+        { term: "Nervios", def: "A Latino/a idiom of distress ('nerves') that can express depression, anxiety, somatic symptoms, and more; a useful gateway question." }
       ]
     },
 
