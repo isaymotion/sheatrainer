@@ -13,9 +13,10 @@ Updated 2026-10-27, after the Chapter 8 study guide (commit 70bfacc on main). Pa
 - Study guides are written **in our own words** as a companion. Never reproduce book passages, the book's dialogues, or its Clinician A/B excerpts. Clinical exchanges are composed (label them "Composed."); book cases are summarized ("Summarized from the chapter."). The `deeper` list points readers to the book and its video modules.
 - Patient speech inside strings uses single quotes for nested quotes. No "·" separators in UI text.
 - Commits: `git -c user.name="isaymotion" -c user.email="isaymotion@users.noreply.github.com" commit`, message ending with
-  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` and `Claude-Session: <current session URL>` (use the attribution given in the new session's system reminder).
+  `Co-Authored-By: <model named in the session's attribution reminder> <noreply@anthropic.com>` and `Claude-Session: <current session URL>` (use the attribution given in the new session's system reminder).
 - User approved the guide depth/layout of Ch 1 ("Looks about right"). One chapter per turn, then report briefly.
-- Order requested by the user: **Chapters 16, 17, 18 first, then Chapter 3 onward** (3–15).
+- Order requested by the user: Chapters 16, 17, 18, then 3–8 (all done); now **Part II, Chapters 9–15 in order**.
+- User preference: use subagents for simpler mechanical tasks; Claude writes the clinical content and does the final review itself.
 
 ## 3. Architecture and data formats
 ```
@@ -52,7 +53,7 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
 git clone https://github.com/isaymotion/sheatrainer.git /home/claude/sheatrainer
 cd /home/claude/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-wt dev-tools
 pip install beautifulsoup4 --break-system-packages   # if missing
-node ../dev-tools-wt/tools/validate.js .              # expect: chapters 16, guides ch1,ch16,ch2 ... OK: no errors
+node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 16 chapters: 18 guides: ch1,ch16,...,ch8 / practice: 87 quiz: 108 glossary: 300 sims: 16 drills: 9 / OK: no errors
 python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
 ```
 Baseline counts (2026-10-27): 18 chapters, practice 87, quiz 108, glossary 300, sims 16, drills 9.
@@ -82,6 +83,11 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 - `gh api` Pages endpoints are blocked by the sandbox proxy; verify deploys by pushing and trusting Pages, or ask the user to check.
 - When validating with ad-hoc `JSON.stringify` + regex, nested arrays produce false "missing" refs like `"[[MMSE`; `tools/validate.js` walks strings properly.
 - Bump `?v=N` on app.js/styles.css whenever they change, or phones serve stale code.
+- Pushing to main returned 403 until the repo was attached to the session with push access (`add_repo` isaymotion/sheatrainer). Do that first in a new chat. The first Bash call of a session may be blocked by the auto-mode classifier; just repeat it.
+- Chapter 17 spanned two epub files (part0032 and part0033); extract_chapter.py only reads one, so if an extract ends mid-sentence, also extract the next part. Ch 1–15 = part(0012+N), Ch 16 = part0031.
+- validate.js rejects duplicate glossary terms across chapters (hit once: "Negative statement of inquiry" in ch3 and ch17). Before adding terms, check them with a node one-liner against every chapter's glossary; a guide cites the owning chapter's term via `[[term]]`.
+- Dark-theme screenshots need a page reload after setting `localStorage.sheatrainer.theme`.
+- When adding a What's New entry, remove `teaser` from the previous top entry (only the newest shows on Home).
 
 ## 9. Files to re-attach in a new chat
 - `Psychiatric_Interviewing_-_Shawn_Christopher_Shea.epub`: needed for every remaining study guide.
