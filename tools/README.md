@@ -19,3 +19,4 @@ cd ~/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-
 Requirements: node, python3, playwright (python) with Chromium at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (set `CHROME` to override), beautifulsoup4 (`pip install beautifulsoup4 --break-system-packages`).
 
 Never commit the epub, extracted chapter text, or slide decks to any branch: they are copyrighted.
+- `tagalog-review-list.js`: regenerates the Tagalog phrase review list from `sheatrainer/content/tagalog.js` and `Tagalog/js/data/psych-shea.js`; usage in its header. Upload the output to the project as `claude/tagalog-phrase-review.md`.
