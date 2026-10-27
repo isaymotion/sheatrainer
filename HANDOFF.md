@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-27 (handoff), after the Chapter 9 study guide (45c4433) and the Tagalog integration (3f0dc50, f9be541 on main; Usap Tayo 8f00b58, 9d1d9ed). Parts I and III are complete; Part II guides 10–15 next, and the Tagalog phrase review is pending.
+Updated 2026-10-27 (handoff), after the Chapter 10 study guide (11e92b3), the Chapter 9 study guide (45c4433) and the Tagalog integration (3f0dc50, f9be541 on main; Usap Tayo 8f00b58, 9d1d9ed). Parts I and III are complete; Part II guides 11–15 next, and the Tagalog phrase review is pending.
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
@@ -21,12 +21,12 @@ Updated 2026-10-27 (handoff), after the Chapter 9 study guide (45c4433) and the 
 ## 3. Architecture and data formats
 ```
 index.html        header (menu button, brand, nav, back/fwd, search), drawer, search panel, footer, script tags
-app.js            router + views; script tag carries ?v=N cache-buster (now v=18)
+app.js            router + views; script tag carries ?v=N cache-buster (now v=19)
 styles.css        tokens, light/dark, guide styles (now ?v=8)
 content/part1-chapters.js, part1-practice.js   Ch 1–8 (chapters; sims/drills)
 content/part2-chapters.js, part2-practice.js   Ch 9–15
 content/part3-chapters.js                      Ch 16–18 complete (parts.part3)
-content/guide-ch1.js … guide-ch9.js, guide-ch16.js, guide-ch17.js, guide-ch18.js   study guides (schema documented at top of guide-ch1.js)
+content/guide-ch1.js … guide-ch10.js, guide-ch16.js, guide-ch17.js, guide-ch18.js   study guides (schema documented at top of guide-ch1.js)
 content/tagalog.js                              Sa Tagalog cards (links map chN:sectionId -> Usap Tayo section, with teaser) and the sabihin-tagalog drill (per-item opts)
 icons/, manifest.webmanifest                    sunflower icon (?v=2)
 ```
@@ -44,7 +44,7 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
    **If Ch 17–18**: add a chapter object to `content/part3-chapters.js` (concepts ~8–9, pearls ~8, `practice: []`, quiz 10, glossary ~25–35 non-duplicate terms), following ch16.
 3. Write `content/guide-chN.js`: intro, high-yield (mustKnow ~9–11, pitfalls ~7–9, phrases ~5–6), 8–10 sections, deeper list (video modules, appendices). Composed examples only; reserved section ids `high-yield`, `deeper`, `review` are not allowed.
 4. Add `<script src="content/guide-chN.js"></script>` in index.html after the other guides, before app.js (and part3-chapters.js stays after part2-practice.js). Bump `app.js?v=` (or styles) only if those files changed.
-5. Update README "Study guides" line (currently "Chapters 1–9 and 16–18 so far") and the intro sentence listing included chapters and counts if changed.
+5. Update README "Study guides" line (currently "Chapters 1–10 and 16–18 so far") and the intro sentence listing included chapters and counts if changed.
 6. `node tools/validate.js .` → OK; `python3 tools/check.py . --chapter chN --out /scratch/shots` → PASS; look at 2–3 screenshots (desktop + phone).
 7. `git fetch -q origin main`, commit, `git push origin HEAD:main`.
 8. Add the new guide's `chN:sectionId` entries to `content/tagalog.js` where a Usap Tayo section fits.
@@ -55,10 +55,10 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
 git clone https://github.com/isaymotion/sheatrainer.git /home/claude/sheatrainer
 cd /home/claude/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-wt dev-tools
 pip install beautifulsoup4 --break-system-packages   # if missing
-node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 18 chapters: 18 guides: ch1,ch16,...,ch9 / practice: 87 quiz: 108 glossary: 316 sims: 16 drills: 10 / OK: no errors
+node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 19 chapters: 18 guides: ch1,ch10,ch16,...,ch9 / practice: 87 quiz: 108 glossary: 325 sims: 16 drills: 10 / OK: no errors
 python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
 ```
-Baseline counts (2026-10-27, after Ch 9 + Tagalog): 18 chapters, practice 87, quiz 108, glossary 316, sims 16, drills 10.
+Baseline counts (2026-10-27, after Ch 10): 18 chapters, practice 87, quiz 108, glossary 325, sims 16, drills 10.
 Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, items; optional `teaser` shown on Home) and bump `app.js?v=`.
 
 ## 6. Status
@@ -68,18 +68,18 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 | Part II trainer (Ch 9–15) | Done |
 | Navigation: hamburger drawer, back/forward, search (`/`, Ctrl/Cmd+K) | Done (a852eee) |
 | Standard-feature parity: theme toggle (light/dark/auto, key `sheatrainer.theme`), Alt+←/→, scroll restoration, What's New (`#/whats-new`, `WHATS_NEW` array in app.js, add new entries at top with every release), backup export/import (Progress page), Leitner spaced repetition for flashcards (`store.cards[key] = {box 0–5, due, reps}`) | Done (797f3e1) |
-| Study guides | Ch 1–9, 16–18 done; 10–15 remaining (6 left) |
+| Study guides | Ch 1–10, 16–18 done; 11–15 remaining (5 left) |
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
 | Ch 19–23 | Listed as Coming soon |
-| Tagalog integration | Done (3f0dc50): `content/tagalog.js` cards on 40 guide sections + drill. Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
+| Tagalog integration | Done (3f0dc50): `content/tagalog.js` cards on 45 guide sections + drill (ch10: biological, window-shade, themes, tears, family added 2026-10-27; their `SHEA_LINKS` back-links in Usap Tayo are NOT yet added because `add_repo` isaymotion/Tagalog was denied in that session; add them next time the Tagalog repo is attached). Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
 
 ## 7. Next step
 **Two tracks; the chapter track is the default unless the user brings the review.**
 
 *Track A, Tagalog review (user-driven):* the user is reviewing `claude/tagalog-phrase-review.md` (project doc; regenerate with `node ../dev-tools-wt/tools/tagalog-review-list.js . ../tagalog <out.md>` after cloning isaymotion/Tagalog with `add_repo` push access). When she sends corrections, apply each change in BOTH `tagalog/js/data/psych-shea.js` (f and c forms) and `sheatrainer/content/tagalog.js` (drill `a` + `opts`, card `tl`), then regenerate and re-upload the review doc. Two lines already corrected on 2026-10-27 (A11 catch-all, A15 early waking). When she says the review is done: set `REVIEWED = true` in psych-shea.js, bump Usap Tayo `sw.js` VERSION and `meta.js` version, add a What's New line, and remove 'Draft wording under review' from `tagalog.js` (`status` and the drill `about`). The Usap Tayo repo is also edited by other sessions (v2.0.0 substance-use module landed 2026-10-27): always `git fetch` and rebase before pushing. The recorded audio pack does NOT yet contain the 25 Shea phrases (manifest keys checked against `js/audio-key.js`); they play by device TTS until `tools/make_audio_pack.py` is rerun by the user (needs the edge TTS voice; not runnable in the sandbox).
 
-*Track B, next study guide:* **Chapter 10** (epub part0024, ~72k chars, a single file; extract_chapter.py finds chapters by their heading, so `… 10 /scratch/ch10.txt` works). Chapter objects live in `content/part2-chapters.js` (ch10 has its own glossary already, e.g. "Pseudo-hypomanic defense", "Anger–guilt–depression loop"); Part II sims/drills in `content/part2-practice.js` (ch10: `sim-shade`; practice ids c10p1…). Check candidate glossary terms against all chapters with a node one-liner. Ch 9 now owns many mood terms (early morning awakening, mood reactivity, euphoric mania, hypomanic episode, cyclothymic disorder, rapid cycling, nervios, etc.), so Ch 10 should cite them with `[[term]]` rather than redefine them. Then Chapters 11–15 (Ch 11 = part0025 is ~210k chars; read in chunks).
+*Track B, next study guide:* **Chapter 11** (epub part0025, ~210k chars; read in chunks of ~50k; extract_chapter.py finds the chapter by heading, so `… 11 /scratch/ch11.txt` works, but confirm the extract ends with the Video Module / References block and otherwise also extract part0026). Chapter objects live in `content/part2-chapters.js` (ch11 has its own glossary already); Part II sims in `content/part2-practice.js` (ch11: `sim-floor`, `sim-neighbor`; drill `delusion-types`; practice ids c11p1…). Check candidate glossary terms against all chapters with a node one-liner before adding. Ch 10 now owns ossification, delusional guilt, hopelessness, isolation (defense), projection, countertransference, family homeostasis, identified patient, existential crisis; Ch 9 owns the mood terms; cite with `[[term]]` rather than redefine. Ch 10 guide pattern (11e92b3): 10 sections, mustKnow 15, pitfalls 11, phrases 10, 9 new glossary terms, 5 Sa Tagalog cards, What's New with teaser (previous teaser removed). Then Chapters 12–15 (Ch 12 = part0026).
 
 ## 8. Pitfalls learned
 - Glossary syntax is `[[term|shown text]]` (term first). A guide whose chapter has no entry in a parts file renders "not found".
