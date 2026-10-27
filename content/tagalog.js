@@ -1,0 +1,134 @@
+/*
+  Psychiatric Interviewing Trainer — Tagalog links and the "Sabihin sa Tagalog" drill.
+
+  Tagalog content lives in Usap Tayo (https://isaymotion.github.io/Tagalog/), the companion app,
+  so phrases are written and reviewed in one place. This file only holds:
+    1. links: which Usap Tayo section each study-guide section points to, with a one-line teaser
+       (English + Tagalog) so the card is useful offline.
+    2. one technique drill whose Tagalog options are specific to Shea's techniques.
+  Every Tagalog line here is an original, conversational phrasing written for training (not from the
+  book) and is marked DRAFT until reviewed by Dr. Navarro or a native-speaking clinician.
+  Respectful register (po, kayo) is used in teasers; Usap Tayo shows the everyday register as well.
+
+  links key: "chN:sectionId" -> { s: usapTayoSectionId, why, en?, tl? }   (s may be replaced by href)
+*/
+window.TRAINER = window.TRAINER || { parts: {} };
+window.TRAINER.tagalog = {
+  app: "Usap Tayo",
+  base: "https://isaymotion.github.io/Tagalog/#/psych/s/",
+  status: "Draft Tagalog wording, under review.",
+  sections: {
+    opening: "Opening and rapport", consent: "Confidentiality and consent", "cc-hpi": "Chief complaint and history of present illness",
+    depression: "Mood and depression", mania: "Mania and hypomania", anxiety: "Anxiety, panic, and OCD", trauma: "Trauma and PTSD",
+    hallucinations: "Psychosis: hallucinations", delusions: "Psychosis: delusions", suicide: "Suicide and self-harm risk",
+    violence: "Violence and homicide risk", deescalation: "De-escalation with an agitated patient", substance: "Alcohol, drugs, and gambling",
+    history: "Past psychiatric, medical, and medication history", "family-hx": "Family history", social: "Personal and social history",
+    collateral: "Collateral history from family", "mse-cog": "MSE: orientation, attention, memory", "mse-describe": "MSE: describing observations",
+    explain: "Explaining diagnosis and treatment", closing: "Closing the interview", "shea-techniques": "Shea's validity techniques in Tagalog"
+  },
+  links: {
+    "ch1:anger-paraphrase": { s: "deescalation", why: "Defusing statements and apologies, in the words an angry patient will actually hear.", en: "You're right to be upset about the wait. I'm sorry.", tl: "Tama po kayong mainis sa paghihintay. Pasensya na po." },
+    "ch2:ocd": { s: "anxiety", why: "The normalizing OCD screen and the other anxiety questions, in Tagalog.", en: "Many people check the stove or the lock more than once. Does that happen to you?", tl: "Maraming tao ang paulit-ulit na tumitingin sa kalan o sa kandado. Nangyayari po ba iyon sa inyo?" },
+    "ch2:collab": { s: "explain", why: "Explaining a diagnosis and a plan collaboratively.", en: "Before I explain, what do you think is going on?", tl: "Bago ko po ipaliwanag, ano po sa tingin ninyo ang nangyayari?" },
+    "ch3:introduction": { s: "opening", why: "Introductions, names, and the first minutes of rapport.", en: "What would you like me to call you?", tl: "Ano po ang gusto ninyong itawag ko sa inyo?" },
+    "ch3:confidentiality": { s: "consent", why: "Confidentiality and its limits, said simply." },
+    "ch3:opening": { s: "cc-hpi", why: "Open questions for the chief complaint, and how to let the patient run.", en: "Tell me what brought you here today.", tl: "Ikuwento po ninyo kung ano ang nagdala sa inyo rito ngayon." },
+    "ch3:closing": { s: "closing", why: "Closing with hope, summarizing, and asking what was missed.", en: "Is there anything we haven't talked about that you want me to know?", tl: "May hindi po ba tayo napag-usapan na gusto ninyong malaman ko?" },
+    "ch4:expansions": { s: "depression", why: "The neurovegetative symptoms, phrased so they weave into conversation rather than sounding like a checklist." },
+    "ch5:recall": { s: "shea-techniques", why: "Anchor questions and the other recall aids in Tagalog.", en: "Around the fiesta, were you already feeling this way, or did it start after?", tl: "Noong pista po, ganito na po ba ang pakiramdam ninyo, o nagsimula lang pagkatapos?" },
+    "ch5:raising": { s: "shea-techniques", why: "Normalization and shame attenuation, worded for Filipino patients.", en: "Many people who are this stressed have thoughts of hurting themselves. Has that happened to you?", tl: "Maraming tao na ganito ka-stress ang nagkakaroon ng pag-iisip na saktan ang sarili. Nangyari na po ba iyon sa inyo?" },
+    "ch5:behavioral-incident": { s: "shea-techniques", why: "Behavioral incidents: the sequence questions and the fact questions.", en: "What happened next? What did you do then?", tl: "Ano po ang sumunod na nangyari? Ano po ang ginawa ninyo pagkatapos?" },
+    "ch5:finishing-lists": { s: "shea-techniques", why: "Gentle assumption, symptom amplification, denial of the specific, and the catch-all question.", en: "What other ways have you thought of ending your life?", tl: "Ano pa po ang ibang paraan na naisip ninyo para tapusin ang buhay ninyo?" },
+    "ch5:special": { s: "substance", why: "Alcohol, drugs, and gambling, with the amplified quantity questions." },
+    "ch6:wellness": { s: "social", why: "Interests, work, relationships, and strengths: the wellness triad in Tagalog." },
+    "ch6:culture-glasses": { href: "https://isaymotion.github.io/Tagalog/#/lessons/idioms-distress", title: "Lesson: idioms of distress", why: "Mabigat ang dibdib, nerbiyos, tulala: how Filipino patients name distress." },
+    "ch8:violence": { s: "deescalation", why: "The de-escalation phrases and the hospital's 12-step checklist.", en: "I'm here to help, not to force you. Let's sit down and talk.", tl: "Nandito po ako para tumulong, hindi para pilitin kayo. Maupo po tayo at mag-usap." },
+    "ch9:exploring": { s: "depression", why: "Anhedonia, sleep, appetite, energy, and libido in Tagalog.", en: "Lately, do you still enjoy the things you used to enjoy, or has that changed?", tl: "Nitong mga nakaraang linggo, nasisiyahan pa po ba kayo sa mga bagay na dati ninyong kinagigiliwan, o nagbago na?" },
+    "ch9:melancholia-anxiety": { s: "history", why: "Past diagnoses, admissions, medications, and therapy.", en: "Have you ever been admitted, or seen a doctor, for your nerves or your mood?", tl: "Na-admit na po ba kayo, o nagpatingin sa doktor, dahil sa nerbiyos o sa pakiramdam ninyo?" },
+    "ch9:bipolar-trap": { s: "mania", why: "The 'just the opposite' question and the manic symptoms.", en: "Has there ever been a stretch of days when you felt the opposite: full of energy, hardly needing sleep, ready to take on anything?", tl: "Nagkaroon na po ba ng ilang araw na kabaligtaran ang pakiramdam ninyo: sobrang lakas ng enerhiya, halos hindi na kailangang matulog, kayang-kaya ang lahat?" },
+    "ch9:mixed-states": { s: "shea-techniques", why: "The drivenness question that separates a dysphoric mania from an agitated depression.", en: "Do you feel you have to do something about this right now, even if part of you knows it isn't wise?", tl: "Pakiramdam po ba ninyo kailangan ninyong gumawa ng aksyon ngayon na, kahit alam ninyong hindi ito matalino?" },
+    "ch9:soft-bipolarity": { s: "mania", why: "The two hypomania screens, with the 'odd to you' clause.", en: "Do you get spells, even just hours, when you suddenly feel unusually up and energized for no reason, and it strikes you as odd?", tl: "May mga pagkakataon po ba, kahit ilang oras lang, na bigla kayong sumisigla nang sobra na walang dahilan, at kakaiba ito para sa inyo?" },
+    "ch9:disguise": { s: "depression", why: "Sad, unhappy, not yourself, and nerbiyos: the words that reach a patient who denies depression.", en: "When was the last time you felt like crying?", tl: "Kailan po ang huling beses na naramdaman ninyong gusto ninyong umiyak?" },
+    "ch9:persistence": { s: "cc-hpi", why: "Dating the onset and framing the two-week window.", en: "Just the past two weeks now: how has your sleep been?", tl: "Nitong nakaraang dalawang linggo lang po: kumusta ang tulog ninyo?" },
+    "ch9:family-history": { s: "family-hx", why: "Naming the relatives, saying alcohol out loud, and asking about suicide separately.", en: "Has anyone in your family ever tried to take their own life, or died that way?", tl: "May kamag-anak po ba kayong sumubok magpakamatay, o namatay sa ganoong paraan?" },
+    "ch16:appearance": { s: "mse-describe", why: "Standard wording for the observed parts of the MSE." },
+    "ch16:process": { s: "mse-describe", why: "Describing speech and thought process." },
+    "ch16:content": { s: "delusions", why: "Delusions by type, with conviction and action questions." },
+    "ch16:perception": { s: "hallucinations", why: "Hallucinations and perceptual disturbances." },
+    "ch16:mood": { s: "depression", why: "Mood in the patient's own words." },
+    "ch16:cognition": { s: "mse-cog", why: "Orientation, attention, memory, abstraction, insight, and judgment." },
+    "ch17:before-asking": { s: "suicide", why: "Raising suicide gently: the screen, then the exploration.", en: "Many people who are this stressed have thoughts of hurting themselves. Has that happened to you?", tl: "Maraming tao na ganito ka-stress ang nagkakaroon ng pag-iisip na saktan ang sarili. Nangyari na po ba iyon sa inyo?" },
+    "ch17:case-approach": { s: "shea-techniques", why: "The CASE Approach's validity techniques in Tagalog: gentle assumption, denial of the specific, behavioral incidents.", en: "Have you ever thought of overdosing on your medicines?", tl: "Naisip na po ba ninyong uminom nang sobra-sobrang gamot?" },
+    "ch17:presenting": { s: "suicide", why: "Making the verbal video of the presenting event.", en: "Did you take the pills out of the bottle? How many were in your hand?", tl: "Inilabas po ba ninyo ang mga tableta sa bote? Ilan po ang nasa kamay ninyo?" },
+    "ch17:recent": { s: "suicide", why: "Recent events: the method list, one method at a time." },
+    "ch17:past-immediate": { s: "suicide", why: "Past attempts, immediate intent, and protective factors." },
+    "ch18:corroboration": { s: "collateral", why: "Collateral history from family, in Tagalog." },
+    "ch18:stage": { s: "violence", why: "Setting the stage before asking about violence.", en: "With everything you've been carrying, have you ever felt like hitting someone?", tl: "Sa dami po ng pinagdadaanan ninyo, naramdaman na po ba ninyong gusto ninyong manakit ng tao?" },
+    "ch18:presenting-recent": { s: "violence", why: "Presenting and recent violent events, step by step." },
+    "ch18:past-immediate": { s: "violence", why: "Past violence and immediate intent." }
+  }
+};
+
+/* "Sabihin sa Tagalog" drill: choose the Tagalog wording that keeps Shea's technique and the respect.
+   Options are per item (opts), unlike the other drills, which draw from a shared category list. */
+(function () {
+  var parts = window.TRAINER.parts;
+  var host = parts.part1 || parts.part2 || Object.keys(parts).map(function (k) { return parts[k]; })[0];
+  if (!host) return;
+  host.drills = host.drills || [];
+  host.drills.push({
+    id: "sabihin-tagalog", speaker: "Clinician", prompt: "Which Tagalog wording keeps the technique?", title: "Sabihin sa Tagalog", chapter: 5,
+    about: "Shea's validity techniques and mood questions, in Filipino. Pick the respectful wording that keeps the technique intact; the wrong options are leading, closed, rude, or lose the point. Draft wording under review.",
+    categories: [],
+    items: [
+      { ctx: "Gentle assumption for suicide methods, after the patient has described one method.", say: "What other ways have you thought of ending your life?",
+        a: "Ano pa po ang ibang paraan na naisip ninyo para tapusin ang buhay ninyo?",
+        opts: ["Ano pa po ang ibang paraan na naisip ninyo para tapusin ang buhay ninyo?", "Wala na po bang iba? Iyon lang po?", "Hindi naman po kayo nag-isip ng ibang paraan, di po ba?", "Bakit mo naman naisip iyon?"],
+        w: "Gentle assumption assumes there were other methods and asks which. 'Iyon lang po?' invites a no; the third is a leading denial; the fourth asks why, drops the respect, and leaves the list unfinished." },
+      { ctx: "Symptom amplification for drinking, setting the anchor high.", say: "On the days you drink the most, how many bottles do you finish? Ten? Fifteen?",
+        a: "Sa mga araw na pinakamarami kayong nainom, ilang bote po ang nauubos ninyo? Sampu? Labinlima?",
+        opts: ["Sa mga araw na pinakamarami kayong nainom, ilang bote po ang nauubos ninyo? Sampu? Labinlima?", "Umiinom po ba kayo? Konti lang po siguro?", "Ilang bote po ang naiinom ninyo? Dalawa? Tatlo?", "Lasenggo po ba kayo?"],
+        w: "Amplification names a high number so that minimizing still lands near the truth. A low anchor (dalawa, tatlo) does the opposite; 'konti lang siguro' invites minimizing; 'lasenggo' is an insult." },
+      { ctx: "Denial of the specific, after a general denial of suicidal thoughts.", say: "Have you ever thought of overdosing on your medicines?",
+        a: "Naisip na po ba ninyong uminom nang sobra-sobrang gamot?",
+        opts: ["Naisip na po ba ninyong uminom nang sobra-sobrang gamot?", "Naisip na po ba ninyong saktan ang sarili ninyo sa kahit anong paraan?", "Hindi naman po kayo mag-o-overdose, di po ba?", "Sigurado po ba kayong wala kayong naiisip na ganoon?"],
+        w: "Denial of the specific names one concrete method at a time. The second is another general question that will get the same general no; the third and fourth press the patient to confirm the denial." },
+      { ctx: "Behavioral incident: moving the story forward in time.", say: "What happened next? What did you do then?",
+        a: "Ano po ang sumunod na nangyari? Ano po ang ginawa ninyo pagkatapos?",
+        opts: ["Ano po ang sumunod na nangyari? Ano po ang ginawa ninyo pagkatapos?", "Bakit po ninyo ginawa iyon?", "Nagsisi po ba kayo pagkatapos?", "Siguro po natakot kayo pagkatapos, ano po?"],
+        w: "A behavioral incident asks for the next concrete fact or action. 'Bakit' asks for an opinion about motive, 'nagsisi ba' asks for a feeling, and the last supplies the answer." },
+      { ctx: "Behavioral incident: a fact question about the presenting event.", say: "Did you take the pills out of the bottle? How many were in your hand?",
+        a: "Inilabas po ba ninyo ang mga tableta sa bote? Ilan po ang nasa kamay ninyo?",
+        opts: ["Inilabas po ba ninyo ang mga tableta sa bote? Ilan po ang nasa kamay ninyo?", "Seryoso po ba kayo noon, o gusto lang ninyong makuha ang atensyon nila?", "Marami po ba? Konti lang po ba?", "Nagbibiro lang po kayo noon, di po ba?"],
+        w: "Fact questions build the verbal video: the bottle, the number in the hand. The others ask the patient to judge their own intent, offer vague quantities, or invite a face-saving denial." },
+      { ctx: "Shame attenuation before asking about violence.", say: "With everything you've been carrying, have you ever felt like hitting someone?",
+        a: "Sa dami po ng pinagdadaanan ninyo, naramdaman na po ba ninyong gusto ninyong manakit ng tao?",
+        opts: ["Sa dami po ng pinagdadaanan ninyo, naramdaman na po ba ninyong gusto ninyong manakit ng tao?", "Marahas po ba kayong tao?", "Nanakit na po ba kayo ng tao? Oo o hindi lang po.", "Hindi naman po kayo nananakit, di po ba?"],
+        w: "Shame attenuation frames the behavior as an understandable response to the patient's burden. 'Marahas ba kayo' asks for a self-label, the yes-or-no demand shuts the door, and the last leads toward denial." },
+      { ctx: "Normalization when raising self-harm for the first time.", say: "Many people who are this stressed have thoughts of hurting themselves. Has that happened to you?",
+        a: "Maraming tao na ganito ka-stress ang nagkakaroon ng pag-iisip na saktan ang sarili. Nangyari na po ba iyon sa inyo?",
+        opts: ["Maraming tao na ganito ka-stress ang nagkakaroon ng pag-iisip na saktan ang sarili. Nangyari na po ba iyon sa inyo?", "Hindi po kayo nag-iisip na saktan ang sarili ninyo, tama po ba?", "Kailangan ko pong itanong ito para sa form: may suicidal ideation po ba kayo?", "Nag-iisip po ba kayong magpakamatay? Masama po iyon."],
+        w: "Normalization tells the patient that others in this situation have had the thought before asking. The others lead toward no, hide behind a form, or attach a judgment." },
+      { ctx: "Catch-all question to finish a list of methods.", say: "Is there anything else you've thought of doing, even once?",
+        a: "May iba pa po ba kayong naisip gawin, kahit minsan lang?",
+        opts: ["May iba pa po ba kayong naisip gawin, kahit minsan lang?", "Sigurado po akong wala nang iba, di po ba?", "Tapos na po tayo diyan. Kumusta ang tulog ninyo?", "Ayan, nakakatakot naman po iyan. Iba na lang po ang pag-usapan natin."],
+        w: "The catch-all ('even once') gently finishes the list. The others close it for the patient, change the subject, or react with alarm." },
+      { ctx: "Anchor question to date the onset of a depression.", say: "Around the fiesta, were you already feeling this way, or did it start after?",
+        a: "Noong pista po, ganito na po ba ang pakiramdam ninyo, o nagsimula lang pagkatapos?",
+        opts: ["Noong pista po, ganito na po ba ang pakiramdam ninyo, o nagsimula lang pagkatapos?", "Kailan po eksaktong petsa nagsimula? Kailangan ko po ng buwan at araw.", "Matagal na po ba?", "Simula pa po ba noong bata kayo?"],
+        w: "An anchor ties recall to a memorable event. Demanding an exact date, asking 'matagal na ba?', or jumping to childhood all produce vaguer answers." },
+      { ctx: "Exploring anhedonia after learning what the patient used to enjoy.", say: "Lately, do you still enjoy the things you used to enjoy, or has that changed?",
+        a: "Nitong mga nakaraang linggo, nasisiyahan pa po ba kayo sa mga bagay na dati ninyong kinagigiliwan, o nagbago na?",
+        opts: ["Nitong mga nakaraang linggo, nasisiyahan pa po ba kayo sa mga bagay na dati ninyong kinagigiliwan, o nagbago na?", "May anhedonia po ba kayo?", "Wala na po kayong ganang gumawa ng kahit ano, tama po?", "Tamad na po ba kayo ngayon?"],
+        w: "Ask about the specific pleasures already named, in plain words. 'Anhedonia' is jargon, the third supplies the answer, and 'tamad' is exactly the guilt the patient already fears." },
+      { ctx: "Screening for past mania in a severely depressed patient.", say: "Has there ever been a stretch of days when you felt the opposite: full of energy, hardly needing sleep, ready to take on anything?",
+        a: "Nagkaroon na po ba ng ilang araw na kabaligtaran ang pakiramdam ninyo: sobrang lakas ng enerhiya, halos hindi na kailangang matulog, kayang-kaya ang lahat?",
+        opts: ["Nagkaroon na po ba ng ilang araw na kabaligtaran ang pakiramdam ninyo: sobrang lakas ng enerhiya, halos hindi na kailangang matulog, kayang-kaya ang lahat?", "Bipolar po ba kayo?", "Masaya naman po kayo minsan, di po ba?", "Hindi po siguro kayo nagka-mania, dahil depressed po kayo?"],
+        w: "Describe the experience, and include that it can follow a low period. Asking 'bipolar ba kayo' asks for a diagnosis the patient cannot give; the others assume the answer." },
+      { ctx: "Testing persistence when the patient says 'depressed for years.'", say: "For some people the low mood stays day after day; for others it comes and goes. Which is more like you?",
+        a: "May mga taong araw-araw na lang mabigat ang pakiramdam; sa iba naman, pabalik-balik. Alin po ang mas katulad ninyo?",
+        opts: ["May mga taong araw-araw na lang mabigat ang pakiramdam; sa iba naman, pabalik-balik. Alin po ang mas katulad ninyo?", "Araw-araw po ba? Talaga po?", "Hindi naman po siguro araw-araw, may masaya rin po siguro?", "Ilang taon na po ba? Hindi po ba masyadong matagal iyon?"],
+        w: "The continuum question lets the patient place themselves between two normal patterns. The others doubt the patient, supply the answer, or argue with the history." }
+    ]
+  });
+})();

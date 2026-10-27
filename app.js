@@ -157,8 +157,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-27", title: "Sa Tagalog: links to Usap Tayo and a new drill",
+      teaser: "New: 'Sa Tagalog' cards in the study guides link each topic to the matching phrases in Usap Tayo, and a new drill, Sabihin sa Tagalog, asks you to keep Shea's technique when you switch languages.",
+      items: [
+        "'Sa Tagalog' cards at the end of forty study-guide sections (Chapters 1 to 9 and 16 to 18): why the topic matters in Filipino, one example phrase, and a link to the matching section of Usap Tayo, the companion Tagalog app. Usap Tayo links back here from each of its psychiatry sections.",
+        "New technique drill: Sabihin sa Tagalog. Twelve of Shea's validity techniques and mood questions; pick the respectful Tagalog wording that keeps the technique, and learn why the leading, closed, or rude options lose it.",
+        "Tagalog wording is original, conversational Filipino written for training; it is marked as draft until reviewed."
+      ] },
     { date: "2026-10-27", title: "Chapter 9 study guide: Mood Disorders",
-      teaser: "New: the Chapter 9 study guide opens Part II, from validity and reliability to the bipolar trap, dysphoric mania, depression in disguise, testing persistence, and taking a family history.",
       items: [
         "A full study guide for Chapter 9: how diagnostic systems are built, major depression and SIG E CAPS, exploring anhedonia and the neurovegetative symptoms conversationally, melancholia, anxiety and alcohol, the bipolar trap and euphoric mania, mixed states and dysphoric mania, bipolar II, induced episodes and cyclothymia, denial of depression, culture, atypical features and the organic screen, persistence and the history of the present illness, and the family history.",
         "Sixteen glossary terms added to Chapter 9 (including categorical vs dimensional systems, SIG E CAPS, early morning awakening, euphoric mania, agitated depression, mood-congruent / mood-incongruent, sealing over, hypomanic episode, cyclothymic disorder, rapid cycling, mood reactivity, rejection sensitivity, leaden paralysis, nervios)."
@@ -458,6 +464,17 @@
     return "#/";
   }
 
+  /* "Sa Tagalog" card: links a guide section to the matching section of Usap Tayo (content/tagalog.js). */
+  function tagalogCard(chId, secId) {
+    var T = window.TRAINER.tagalog, l = T && T.links && T.links[chId + ":" + secId];
+    if (!l) return "";
+    var href = l.href || (T.base + l.s), title = l.title || T.sections[l.s] || l.s;
+    return '<aside class="tl-card"><div class="tl-head"><span class="tl-tag">Sa Tagalog</span><span class="small muted">' + esc(T.status) + "</span></div>" +
+      '<p class="tl-why">' + esc(l.why) + "</p>" +
+      (l.tl ? '<p class="tl-phrase"><span class="tl-en">' + esc(l.en) + '</span><span class="tl-tl" lang="tl">' + esc(l.tl) + "</span></p>" : "") +
+      '<a class="chip tl-link" href="' + esc(href) + '" target="_blank" rel="noopener">Open in ' + esc(T.app) + ": " + esc(title) + "</a></aside>";
+  }
+
   function renderBlock(b) {
     switch (b.type) {
       case "p": return "<p>" + rich(b.text) + "</p>";
@@ -574,6 +591,7 @@
         (sec.lede ? '<p class="sec-lede">' + rich(sec.lede) + "</p>" : "") +
         sec.blocks.map(renderBlock).join("") +
         (links ? '<div class="practice-links"><span class="small muted">Practice this</span><div class="chips">' + links + "</div></div>" : "") +
+        tagalogCard(c.id, sec.id) +
         "</section>";
     }).join("");
 
@@ -777,8 +795,11 @@
     }
     var it = s.list[s.idx];
     if (!s.opts) {
-      var others = shuffle(set.categories.filter(function (c) { return c !== it.a; })).slice(0, 3);
-      s.opts = shuffle(others.concat([it.a]));
+      if (it.opts) { s.opts = shuffle(it.opts.slice()); }
+      else {
+        var others = shuffle(set.categories.filter(function (c) { return c !== it.a; })).slice(0, 3);
+        s.opts = shuffle(others.concat([it.a]));
+      }
     }
     var opts = s.opts.map(function (o) {
       if (s.answered === null) return '<button class="option" data-action="drill-pick" data-v="' + esc(o) + '">' + esc(o) + "</button>";

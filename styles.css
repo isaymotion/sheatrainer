@@ -474,6 +474,14 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
 @media (max-width: 600px) { .ex-line { grid-template-columns: 1fr; gap: 0; } .ex-tag { white-space: normal; } }
 .practice-links { display: grid; gap: 0.4rem; margin-top: 1.25rem; }
 .deeper ul { padding-left: 1.1rem; }
+.tl-card { margin-top: 1.25rem; padding: 0.9rem 1.1rem; border: 1px dashed var(--stem); border-radius: var(--radius-m); background: var(--surface); display: grid; gap: 0.5rem; }
+.tl-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+.tl-tag { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: var(--sun-text); }
+.tl-why { margin: 0; font-size: 0.95rem; }
+.tl-phrase { margin: 0; display: grid; gap: 0.15rem; }
+.tl-en { font-size: 0.9rem; color: var(--muted); }
+.tl-tl { font-family: var(--serif); font-size: 1.05rem; line-height: 1.5; }
+.tl-link { justify-self: start; }
 
 .bm-list { list-style: none; padding: 0; margin: 1.5rem 0 0; }
 .bm-ch { font-weight: 700; color: var(--muted); font-size: 0.9rem; margin-top: 1.5rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--line); }
