@@ -157,8 +157,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-28", title: "Chapter 11 study guide: Psychotic Disorders",
+      teaser: "New: the Chapter 11 study guide covers the differential diagnosis of psychosis through Shea's seven cases, from delirium tremens and the police interview to the soft signs of a smoldering psychosis, 'Do you believe me?', dangerousness, delirium, and the great masquerader.",
+      items: [
+        "A full study guide for Chapter 11 in eleven sections: what psychosis is, visual hallucinations and withdrawal, intoxication and medications and the interview with the police, schizophrenia's signature, mood versus psychosis and the schizoaffective middle, delusional disorders with dangerousness and paraphrenia, the life cycle of a psychosis and its soft signs, hallucinations that are not psychosis, delirium and the bedside tests, medical psychosis and the screening physical, and micropsychotic episodes, flashbacks, and partial complex seizures.",
+        "Twenty-four glossary terms added to Chapter 11 (including schizophreniform and brief psychotic disorder, schizoaffective disorder, the schizo–bipolar continuum, distance from a delusion, overvalued idea, Othello syndrome, folie à deux, confrontation with a paranoid persecutor, partition delusion, psychotic matrix, the Confusion Assessment Method, the anticholinergic syndrome, and partial complex seizures).",
+        "Sa Tagalog cards on five Chapter 11 sections."
+      ] },
     { date: "2026-10-27", title: "Chapter 10 study guide: Beneath the Mood Disorder",
-      teaser: "New: the Chapter 10 study guide walks through the five wings of the matrix as a depressed person lives them, from the window shade response and ideational caging to tears, the family, and the framework for meaning.",
       items: [
         "A full study guide for Chapter 10: the body as first messenger and the depressive paradox, agitated depression versus dysphoric mania, blocking of the future and the shrinking active world, the window shade response, opening an ideational cage, Beck's distortions and the immunity to logic, loneliness, burdensomeness, helplessness and hopelessness, the defenses that hide depression, the dyadic wing and countertransference, first tears, the family as co-sufferer and informant, culture and stigma, and the framework for meaning.",
         "Nine glossary terms added to Chapter 10 (ossification, delusional guilt, hopelessness, isolation as a defense, projection, countertransference, family homeostasis, identified patient, existential crisis).",
