@@ -505,7 +505,21 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Functional hallucination", def: "A real sound that triggers a separate hallucination, heard at the same time." },
         { term: "Paleologic", def: "Rosenbaum: faulty logic linking shared attributes to identity." },
         { term: "Waxy flexibility", def: "A catatonic sign: limbs stay where the examiner places them." },
-        { term: "Culture-bound syndrome", def: "A presentation shaped by a particular culture, such as koro." }
+        { term: "Culture-bound syndrome", def: "A presentation shaped by a particular culture, such as koro." },
+        { term: "Made symptoms", def: "Schneider's made feelings, made impulses, and made volitional acts: the experience that an outside force is making me feel, want, or do something against my will ('delusions of control')." },
+        { term: "Thought withdrawal", def: "The felt or believed removal of thoughts from the mind by an alien force, sometimes mid-sentence; shows outwardly as thought blocking, and paranoid delusions usually follow." },
+        { term: "Thought insertion", def: "Thoughts from another entity forced into the mind; often linked to possession or to a device such as a phone or computer." },
+        { term: "Phenomenological leverage", def: "Schneider's requirement that a symptom be embedded in a psychotic matrix before it counts as psychotic: 'not a defective stone in an otherwise perfect mosaic.'" },
+        { term: "Audible thoughts", def: "A first-rank symptom: hearing one's own thought just after thinking it, like an internal echo, or hearing a voice whose content becomes clear seconds later." },
+        { term: "Thought leakage", def: "Shea's term for passive thought broadcasting ('thought diffusion'): thoughts escaping through a porous ego so that others can hear them; usually experienced as the end of privacy. Contrast intentional sending, sometimes felt as a power." },
+        { term: "Auditory illusion", def: "A distortion of a real sound (a friend's reassurance heard as a threat); can be as frightening or dangerous as a hallucination." },
+        { term: "Negativism", def: "A negative symptom of catatonia: a tendency not to comply with any request." },
+        { term: "Ambitendency", def: "A negative symptom of catatonia: hesitancy to complete an action, such as extending a hand to shake and withdrawing it." },
+        { term: "Precox feeling", def: "The clinician's inability to feel with the patient, an empathic bond that will not form; suggestive of schizophrenia and a useful prompt to check its criteria, never a criterion itself." },
+        { term: "Agree to disagree", def: "Shea's way of ending a dispute about the diagnosis: state your view calmly, acknowledge the difference of opinion, admit you could be wrong, let time decide, and keep the door open." },
+        { term: "Recovery vs rehabilitation", def: "Deegan: rehabilitation is the services offered so a person can adapt; recovery is the lived experience of accepting and overcoming the disability and finding a new sense of self and purpose." },
+        { term: "Counterprojection", def: "Leston Havens's technique of voicing the other person's likely feeling as shared ('it's hard for families; it's hard for us too'), used here to soften a confidentiality refusal." },
+        { term: "Koro", def: "A culturally specific syndrome of China and South East Asia: fear that the penis (in women, the vulva or nipples) is retracting into the body, sometimes with fear of death. Never volunteered; ask with a normalization." }
       ]
     },
 

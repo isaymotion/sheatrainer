@@ -157,8 +157,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-28", title: "Chapter 12 study guide: Beneath the Psychosis",
+      teaser: "New: the Chapter 12 study guide on the person beneath the psychosis: the porous ego and Schneider's first-rank symptoms, akathisia and catatonia, raising and exploring voices, command hallucinations, the wounded self, families, culture and language (including a Filipino patient whose delusions lived only in Ilocano), and Jake.",
+      items: [
+        "A full study guide for Chapter 12 in nine sections: sleep, the porous ego, and the first-rank symptoms with a question for each; akathisia and the approach to a catatonic patient; what voices are and the relationship patients form with them; raising voices without disengaging and exploring their phenomenology (Kenney); command hallucinations and the four dimensions of dangerousness; thought process, the agitated patient, and the gates into psychotic material; the wounded self, the precox feeling, and agreeing to disagree; families, mourning, the alliance with parents, and confidentiality; culture, subculture, and language; and the worldview wing with Jake.",
+        "Fourteen glossary terms added to Chapter 12 (made symptoms, thought withdrawal, thought insertion, phenomenological leverage, audible thoughts, thought leakage, auditory illusion, negativism, ambitendency, precox feeling, agree to disagree, recovery vs rehabilitation, counterprojection, koro).",
+        "Sa Tagalog cards on five Chapter 12 sections."
+      ] },
     { date: "2026-10-28", title: "Chapter 11 study guide: Psychotic Disorders",
-      teaser: "New: the Chapter 11 study guide covers the differential diagnosis of psychosis through Shea's seven cases, from delirium tremens and the police interview to the soft signs of a smoldering psychosis, 'Do you believe me?', dangerousness, delirium, and the great masquerader.",
       items: [
         "A full study guide for Chapter 11 in eleven sections: what psychosis is, visual hallucinations and withdrawal, intoxication and medications and the interview with the police, schizophrenia's signature, mood versus psychosis and the schizoaffective middle, delusional disorders with dangerousness and paraphrenia, the life cycle of a psychosis and its soft signs, hallucinations that are not psychosis, delirium and the bedside tests, medical psychosis and the screening physical, and micropsychotic episodes, flashbacks, and partial complex seizures.",
         "Twenty-four glossary terms added to Chapter 11 (including schizophreniform and brief psychotic disorder, schizoaffective disorder, the schizo–bipolar continuum, distance from a delusion, overvalued idea, Othello syndrome, folie à deux, confrontation with a paranoid persecutor, partition delusion, psychotic matrix, the Confusion Assessment Method, the anticholinergic syndrome, and partial complex seizures).",
