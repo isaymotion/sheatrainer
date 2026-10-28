@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-28 (handoff), after the Chapter 12 study guide (453fa91), Chapter 11 (a17a4b7), Chapter 10 (11e92b3), Chapter 9 (45c4433) and the Tagalog integration (3f0dc50, f9be541 on main; Usap Tayo 8f00b58, 9d1d9ed). Parts I and III are complete; Part II guides 13–15 next, and the Tagalog phrase review is pending.
+Updated 2026-10-28 (handoff), after the Usap Tayo back-links (Tagalog ed4e7f4; trainer 11a1528), the Chapter 12 study guide (453fa91), Chapter 11 (a17a4b7), Chapter 10 (11e92b3), Chapter 9 (45c4433) and the Tagalog integration (3f0dc50, f9be541 on main; Usap Tayo 8f00b58, 9d1d9ed). Parts I and III are complete; Part II guides 13–15 next, and the Tagalog phrase review is pending.
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
@@ -21,7 +21,7 @@ Updated 2026-10-28 (handoff), after the Chapter 12 study guide (453fa91), Chapte
 ## 3. Architecture and data formats
 ```
 index.html        header (menu button, brand, nav, back/fwd, search), drawer, search panel, footer, script tags
-app.js            router + views; script tag carries ?v=N cache-buster (now v=21)
+app.js            router + views; script tag carries ?v=N cache-buster (now v=22)
 styles.css        tokens, light/dark, guide styles (now ?v=8)
 content/part1-chapters.js, part1-practice.js   Ch 1–8 (chapters; sims/drills)
 content/part2-chapters.js, part2-practice.js   Ch 9–15
@@ -72,7 +72,7 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
 | Ch 19–23 | Listed as Coming soon |
-| Tagalog integration | Done (3f0dc50): `content/tagalog.js` cards on 55 guide sections + drill (ch10: biological, window-shade, themes, tears, family; ch11: visual-withdrawal, schizophrenia, delusional-disorders, life-cycle, delirium; ch12: porous-ego, raising-voices, commands, families, culture-language; their `SHEA_LINKS` back-links in Usap Tayo are NOT yet added because `add_repo` isaymotion/Tagalog was denied on 2026-10-27; add all fifteen next time the Tagalog repo is attached). Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
+| Tagalog integration | Done (3f0dc50): `content/tagalog.js` cards on 56 guide sections + drill (ch10: biological, window-shade, themes, tears, family; ch11: visual-withdrawal → `wd-alcohol`, schizophrenia, delusional-disorders, life-cycle, delirium; ch12: porous-ego, akathisia-catatonia → `meds`, raising-voices, commands, families, culture-language). Usap Tayo back-links done 2026-10-28 (Tagalog ed4e7f4, v2.2.1): `SHEA_LINKS` values may now be a single link or an array (most relevant first) and `js/psych-views.js` renders a list; 28 sections, 42 links, all verified against the trainer's guide sections with a node check. For each new guide chapter, add the trainer card(s) AND append the matching link to the relevant `SHEA_LINKS` arrays, then bump Usap Tayo `sw.js` VERSION and `meta.js` version with a What's New line. The trainer's `tagalog.js` `sections` map must list any Usap Tayo section id a card uses (meds and wd-alcohol were added). Note: the Tagalog remote reports it moved to `github.com/isaymotion/Tagalog.git` (capital T); pushes still work. Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
 
 ## 7. Next step
 **Two tracks; the chapter track is the default unless the user brings the review.**
