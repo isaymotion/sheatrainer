@@ -162,7 +162,7 @@
       items: [
         "A full study guide for Chapter 12 in nine sections: sleep, the porous ego, and the first-rank symptoms with a question for each; akathisia and the approach to a catatonic patient; what voices are and the relationship patients form with them; raising voices without disengaging and exploring their phenomenology (Kenney); command hallucinations and the four dimensions of dangerousness; thought process, the agitated patient, and the gates into psychotic material; the wounded self, the precox feeling, and agreeing to disagree; families, mourning, the alliance with parents, and confidentiality; culture, subculture, and language; and the worldview wing with Jake.",
         "Fourteen glossary terms added to Chapter 12 (made symptoms, thought withdrawal, thought insertion, phenomenological leverage, audible thoughts, thought leakage, auditory illusion, negativism, ambitendency, precox feeling, agree to disagree, recovery vs rehabilitation, counterprojection, koro).",
-        "Sa Tagalog cards on five Chapter 12 sections."
+        "Sa Tagalog cards on six Chapter 12 sections, and Usap Tayo now links back from its phrase sections to the Chapter 10, 11 and 12 guides."
       ] },
     { date: "2026-10-28", title: "Chapter 11 study guide: Psychotic Disorders",
       items: [
