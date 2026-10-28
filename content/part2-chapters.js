@@ -726,7 +726,13 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "State dependency", def: "A \"trait\" actually caused by another disorder, such as mania, depression, or drugs." },
         { term: "Epiphenomena", def: "Associated experiences that a truly pathological trait produces." },
         { term: "Entrance question", def: "A question for raising a dimensional trait, anchored to history." },
-        { term: "Prototype-based system", def: "Diagnosis by matching narrative descriptions, such as the SWAP-II." }
+        { term: "Prototype-based system", def: "Diagnosis by matching narrative descriptions, such as the SWAP-II." },
+        { term: "Anxiety-prone, poorly empathic, psychotic-prone", def: "Shea's three working groups of the ten DSM-5 personality disorders, by how life feels: anxiety-prone (obsessive–compulsive, dependent, avoidant), poorly empathic (schizoid, antisocial, histrionic, narcissistic), psychotic-prone (borderline, schizotypal, paranoid). Similar to, but not the same as, Clusters A, B, and C." },
+        { term: "Stable vs unstable narcissism", def: "Shea's two variants of narcissistic personality: stable (truly feels superior, can be fairly content while admired) and unstable (a grandiose front over a fragile, easily wounded self; rages, bitterness, severe depressions, micropsychotic episodes)." },
+        { term: "Passive-aggressive personality", def: "A pattern described in the DSM-IV-TR appendix: feeling taken for granted, resenting demands, and expressing opposition indirectly through slowness, half-effort, 'forgetting', and deflating others' plans." },
+        { term: "Process comment", def: "A remark by the patient about the interview or the interviewer, often caustic; a signal sign for antisocial, narcissistic, histrionic, and borderline personality disorders and passive-aggressive traits." },
+        { term: "Tapping for epiphenomena", def: "Shea's check of a trait's severity: after a 'yes', ask a generic epiphenomena question ('What makes you say that?', 'Give me an example'), then if needed a specific one about a typical consequence. Ready, concrete examples of trouble suggest a pathological trait." },
+        { term: "Alternative DSM-5 Model for Personality Disorders", def: "The DSM-5 appendix's hybrid dimensional system rating 25 trait facets in five domains (negative affectivity, detachment, antagonism, disinhibition, psychoticism). Rich but slow; its facets make useful entry points and treatment targets." }
       ]
     },
 

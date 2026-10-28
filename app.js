@@ -157,8 +157,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-29", title: "Chapter 14 study guide: Personality Disorders, the Differential Diagnosis",
+      teaser: "New: the Chapter 14 study guide turns personality diagnosis into a bedside method: portraits of the ten disorders in Shea's three groups, the errors to avoid, narrowing the field with signal signs and probe questions, expanding with checks for persistence, state dependency, and severity, and the hidden strengths that dimensional traits reveal.",
+      items: [
+        "A full study guide for Chapter 14 in nine sections: the anxiety-prone, poorly empathic, and psychotic-prone disorders; label slapping, countertransference, and refusing to diagnose; limiting the field with signal signs and symptoms (Ms. Dole); probe questions, with a composed example for each region; expanding a diagnosis with Mrs. Jacobs; tapping for epiphenomena with Tommy; and dimensions, hidden strengths (Nancy), and prototype systems.",
+        "Six glossary terms added to Chapter 14 (Shea's three groups, stable vs unstable narcissism, passive-aggressive personality, process comment, tapping for epiphenomena, the Alternative DSM-5 Model).",
+        "Sa Tagalog cards on two Chapter 14 sections, with links back from Usap Tayo."
+      ] },
     { date: "2026-10-29", title: "Chapter 13 study guide: Personality Disorders, Core Concepts",
-      teaser: "New: the Chapter 13 study guide on personality disorders before the interview begins: defenses that create new pain, why the diagnosis is historical and lives in the social history, the four dangers and eight benefits of labels, and the map that is not the terrain.",
       items: [
         "A full study guide for Chapter 13 in seven sections: Mr. Fellows and what a personality disorder feels like from both chairs; the DSM-5 general criteria and the historical diagnosis; reading the social history and ego-syntonic versus ego-dystonic patterns; label theory; eight ways an accurate diagnosis helps, including tailoring treatment discussions and the clinician who is leaving; the map and the terrain; and where personality comes from (temperament, heritability, Khalid, limbic scars).",
         "Four glossary terms added to Chapter 13 (map and terrain, narcissistic insult, dialectical behavior therapy, mentalization-based therapy).",

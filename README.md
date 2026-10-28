@@ -6,7 +6,7 @@ This app was created by Isabella Navarro, MD. Last updated October 2026. isaymot
 
 ## What's inside
 
-- **Study guides**: a full reading guide per chapter (Chapters 1–13 and 16–18 so far), with a high-yield box, clickable glossary terms, section bookmarks, and links into practice. Written in our own words as a companion to the book.
+- **Study guides**: a full reading guide per chapter (Chapters 1–14 and 16–18 so far), with a high-yield box, clickable glossary terms, section bookmarks, and links into practice. Written in our own words as a companion to the book.
 - **Learn / Quick review**: key ideas, a pocket card of pearls, and vocabulary for each chapter.
 - **Bookmarks**: saved study guide sections, kept in each user's browser.
 - **Response practice**: 87 composed clinical moments, each with three replies explained (best, workable, likely to backfire).
