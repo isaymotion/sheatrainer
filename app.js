@@ -157,8 +157,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-29", title: "Chapter 13 study guide: Personality Disorders, Core Concepts",
+      teaser: "New: the Chapter 13 study guide on personality disorders before the interview begins: defenses that create new pain, why the diagnosis is historical and lives in the social history, the four dangers and eight benefits of labels, and the map that is not the terrain.",
+      items: [
+        "A full study guide for Chapter 13 in seven sections: Mr. Fellows and what a personality disorder feels like from both chairs; the DSM-5 general criteria and the historical diagnosis; reading the social history and ego-syntonic versus ego-dystonic patterns; label theory; eight ways an accurate diagnosis helps, including tailoring treatment discussions and the clinician who is leaving; the map and the terrain; and where personality comes from (temperament, heritability, Khalid, limbic scars).",
+        "Four glossary terms added to Chapter 13 (map and terrain, narcissistic insult, dialectical behavior therapy, mentalization-based therapy).",
+        "Sa Tagalog cards on two Chapter 13 sections, with links back from Usap Tayo."
+      ] },
     { date: "2026-10-28", title: "Chapter 12 study guide: Beneath the Psychosis",
-      teaser: "New: the Chapter 12 study guide on the person beneath the psychosis: the porous ego and Schneider's first-rank symptoms, akathisia and catatonia, raising and exploring voices, command hallucinations, the wounded self, families, culture and language (including a Filipino patient whose delusions lived only in Ilocano), and Jake.",
       items: [
         "A full study guide for Chapter 12 in nine sections: sleep, the porous ego, and the first-rank symptoms with a question for each; akathisia and the approach to a catatonic patient; what voices are and the relationship patients form with them; raising voices without disengaging and exploring their phenomenology (Kenney); command hallucinations and the four dimensions of dangerousness; thought process, the agitated patient, and the gates into psychotic material; the wounded self, the precox feeling, and agreeing to disagree; families, mourning, the alliance with parents, and confidentiality; culture, subculture, and language; and the worldview wing with Jake.",
         "Fourteen glossary terms added to Chapter 12 (made symptoms, thought withdrawal, thought insertion, phenomenological leverage, audible thoughts, thought leakage, auditory illusion, negativism, ambitendency, precox feeling, agree to disagree, recovery vs rehabilitation, counterprojection, koro).",

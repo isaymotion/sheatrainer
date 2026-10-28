@@ -615,7 +615,11 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Ego-dystonic", def: "Behaviors the patient experiences as painful and problematic." },
         { term: "Label theory", def: "How diagnostic labels can stereotype, stigmatize, oversimplify, and stick." },
         { term: "Temperament", def: "Inborn behavioral tendencies (Thomas and Chess) that can persist into adulthood." },
-        { term: "Limbic scars", def: "Lasting brain changes described in research on childhood maltreatment." }
+        { term: "Limbic scars", def: "Lasting brain changes described in research on childhood maltreatment." },
+        { term: "Map and terrain", def: "Shea's metaphor: a personality diagnosis is a map that shows hazards, engagement strategies, and likely treatments, but tells you nothing about what it is like to be the person. Never mistake the map for the terrain." },
+        { term: "Narcissistic insult", def: "An injury to a fragile self-esteem, such as an early challenge or correction in a first interview; in patients with narcissistic needs it can provoke anger or a no-show." },
+        { term: "Dialectical behavior therapy", def: "DBT (Linehan): a structured therapy combining skills training in emotion regulation, distress tolerance, and interpersonal effectiveness with validation; one of several therapies with evidence in borderline personality disorder." },
+        { term: "Mentalization-based therapy", def: "MBT: a therapy that strengthens the capacity to understand one's own and others' behavior in terms of mental states; one of several therapies with evidence in borderline personality disorder." }
       ]
     },
 
