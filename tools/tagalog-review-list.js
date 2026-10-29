@@ -36,5 +36,40 @@ if (extra.length) {
     });
   });
 }
+// E. Sa Tagalog overlay for English simulations; F. Tagalog-first cases
+const simFiles = ["content/part1-practice.js", "content/part2-practice.js"].map((f) => path.join(trainer, f)).filter(fs.existsSync);
+const w2 = { TRAINER: { parts: {} } };
+for (const f of ["content/part1-chapters.js", "content/part2-chapters.js"].map((f) => path.join(trainer, f)).filter(fs.existsSync).concat(simFiles)) new Function("window", fs.readFileSync(f, "utf8"))(w2);
+const sims = [].concat(...Object.values(w2.TRAINER.parts).map((p) => p.simulations || []));
+const ovFile = path.join(trainer, "content/tagalog-sims.js");
+if (fs.existsSync(ovFile)) {
+  const w3 = { TRAINER: { parts: {} } }; new Function("window", fs.readFileSync(ovFile, "utf8"))(w3);
+  const ov = w3.TRAINER.tagalogSims || {};
+  md += `## E. Sa Tagalog overlay for English interviews (\`content/tagalog-sims.js\`)\n\nPatient lines and clinician choices shown when the Sa Tagalog switch is on. The English is the original line.\n\n`;
+  Object.keys(ov).forEach((sid, si) => {
+    const sim = sims.find((s) => s.id === sid); if (!sim) return;
+    md += `### E${si + 1}. ${sim.title} (\`#/simulate/${sid}\`)\n\n`;
+    Object.entries(ov[sid].nodes || {}).forEach(([nid, n]) => {
+      const node = sim.nodes[nid]; if (!node) return;
+      if (n.p) md += `- **${nid}, patient:** ${n.p}\n  - ${node.p}\n`;
+      (n.t || []).forEach((t, i) => { if (t) md += `- **${nid}, you (${i + 1}):** ${t}\n  - ${node.choices[i].t}\n`; });
+    });
+    md += "\n";
+  });
+}
+const caseFile = path.join(trainer, "content/tagalog-cases.js");
+if (fs.existsSync(caseFile)) {
+  const w4 = { TRAINER: { parts: { part1: { simulations: [] } } } }; new Function("window", fs.readFileSync(caseFile, "utf8"))(w4);
+  const cases = w4.TRAINER.parts.part1.simulations;
+  md += `## F. Interviews written in Tagalog first (\`content/tagalog-cases.js\`)\n\nEach patient line and clinician choice, with the English gloss shown in the app underneath. Please check register (po/kayo vs ikaw), naturalness, and that the gloss matches.\n\n`;
+  cases.forEach((sim, si) => {
+    md += `### F${si + 1}. ${sim.title} (\`#/simulate/${sim.id}\`)\n\n`;
+    Object.entries(sim.nodes).forEach(([nid, n]) => {
+      if (n.p) md += `- **${nid}, patient:** ${n.p}\n  - ${n.en || ""}\n`;
+      (n.choices || []).forEach((c, i) => { md += `- **${nid}, you (${i + 1}):** ${c.t}\n  - ${c.en || ""}\n`; });
+    });
+    md += "\n";
+  });
+}
 fs.writeFileSync(out, md);
 console.log(`${out}: ${sec.phrases.length} phrases, ${d.items.length} drill items, ${extra.reduce((n, x) => n + x.items.length, 0)} extra drill items, ${md.length} chars`);
