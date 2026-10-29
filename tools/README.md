@@ -14,9 +14,11 @@ cd ~/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-
 |---|---|---|
 | `validate.js` | Loads every content script listed in index.html and checks glossary refs, duplicate terms/ids, quiz answers, guide links, simulation reachability | `node tools/validate.js ~/sheatrainer` → ends with `OK: no errors` |
 | `check.py` | Playwright smoke test at 1280px and 390px: routes, every guide section, overflow, JS errors, menu drawer, back button, search; saves screenshots | `python3 tools/check.py ~/sheatrainer --chapter ch17 --out /scratch/shots` → ends with `PASS` |
+| `check-shea-links.js` | Usap Tayo ↔ trainer links: every `SHEA_LINKS` entry in Usap Tayo resolves to a real Usap Tayo section and a real trainer guide section; every trainer Sa Tagalog card points to a real Usap Tayo section listed in `tagalog.js` `sections` | `node tools/check-shea-links.js ~/sheatrainer ~/tagalog` → ends with `all resolve` |
+| `usaptayo-render.js` | Serves the Tagalog repo itself, opens phrase sections at 1280px and 390px, prints the Technique notes block, checks overflow and JS errors, saves screenshots | `node tools/usaptayo-render.js ~/tagalog /scratch/shots hallucinations social` → ends with `PASS` |
 | `extract_chapter.py` | Pulls one chapter of the epub into plain text with section headings, for reading while writing a guide | `python3 -I tools/extract_chapter.py book.epub 17 /scratch/ch17.txt` |
 
-Requirements: node, python3, playwright (python) with Chromium at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (set `CHROME` to override), beautifulsoup4 (`pip install beautifulsoup4 --break-system-packages`).
+Requirements: node, python3, playwright (python) with Chromium; the script's default path is stale, so pass `CHROME=/opt/pw-browsers/chromium-1243/chrome-linux64/chrome` (or whatever `ls -d /opt/pw-browsers/chromium-*/chrome-linux*/chrome` shows), beautifulsoup4 (`pip install beautifulsoup4 --break-system-packages`).
 
 Never commit the epub, extracted chapter text, or slide decks to any branch: they are copyrighted.
 - `tagalog-review-list.js`: regenerates the Tagalog phrase review list from `sheatrainer/content/tagalog.js` and `Tagalog/js/data/psych-shea.js`; usage in its header. Upload the output to the project as `claude/tagalog-phrase-review.md`.

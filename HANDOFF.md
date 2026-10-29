@@ -47,8 +47,9 @@ icons/, manifest.webmanifest                    sunflower icon (?v=2)
 5. Update README "Study guides" line (currently "Chapters 1–14 and 16–18 so far") and the intro sentence listing included chapters and counts if changed.
 6. `node tools/validate.js .` → OK; `python3 tools/check.py . --chapter chN --out /scratch/shots` → PASS; look at 2–3 screenshots (desktop + phone).
 7. `git fetch -q origin main`, commit, `git push origin HEAD:main`.
-8. Add the new guide's `chN:sectionId` entries to `content/tagalog.js` where a Usap Tayo section fits.
-9. Update the status table/next step in this doc (dev-tools branch and project doc `claude/handoff.md`).
+8. Add the new guide's `chN:sectionId` entries to `content/tagalog.js` where a Usap Tayo section fits (1–2 for a short chapter, ~5 for a long one; add any new Usap Tayo section id to the `sections` map there), add a WHATS_NEW entry with `teaser` (remove the previous entry's teaser) and bump `app.js?v=`.
+9. In the same pass, Usap Tayo (`/home/claude/tagalog`): append the matching link(s) to `SHEA_LINKS` in `js/data/psych-shea.js` (value may be one link or an array, most relevant first), bump `sw.js` VERSION and `js/data/meta.js` version, add a WHATS_NEW item; run `node ../dev-tools-wt/tools/check-shea-links.js /home/claude/sheatrainer /home/claude/tagalog` (expect `all resolve`) and optionally `tools/usaptayo-render.js`; `git fetch` + rebase (other sessions push audio packs) and push.
+10. Update the status table/next step in this doc (dev-tools branch and project doc `claude/handoff.md`).
 
 ## 5. Commands
 ```bash
@@ -56,8 +57,13 @@ git clone https://github.com/isaymotion/sheatrainer.git /home/claude/sheatrainer
 cd /home/claude/sheatrainer && git fetch origin dev-tools && git worktree add ../dev-tools-wt dev-tools
 pip install beautifulsoup4 --break-system-packages   # if missing
 node ../dev-tools-wt/tools/validate.js .              # expect: scripts: 23 chapters: 18 guides: ch1,ch10,...,ch14,ch16,...,ch9 / practice: 87 quiz: 108 glossary: 373 sims: 16 drills: 10 / OK: no errors
-python3 ../dev-tools-wt/tools/check.py . --chapter ch16 --out /scratch/shots   # expect PASS
+CHROME=/opt/pw-browsers/chromium-1243/chrome-linux64/chrome python3 ../dev-tools-wt/tools/check.py . --chapter ch14 --out /scratch/shots   # expect PASS
+# Usap Tayo (attach with add_repo isaymotion/Tagalog, access push; the user granted permission on 2026-10-28)
+git clone --depth 1 https://github.com/isaymotion/tagalog /home/claude/tagalog
+node ../dev-tools-wt/tools/check-shea-links.js /home/claude/sheatrainer /home/claude/tagalog   # expect: 28 sections, 46 links, 59 trainer cards: all resolve
+node ../dev-tools-wt/tools/usaptayo-render.js /home/claude/tagalog /scratch/shots social shea-techniques   # expect PASS
 ```
+Use the session's scratchpad directory for `/scratch`.
 Baseline counts (2026-10-29, after Ch 14): 18 chapters, practice 87, quiz 108, glossary 373, sims 16, drills 10.
 Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, items; optional `teaser` shown on Home) and bump `app.js?v=`.
 
@@ -72,7 +78,7 @@ Every release: add an entry at the top of `WHATS_NEW` in app.js (date, title, it
 | Ch 16 trainer extras | Key ideas, pocket card, glossary 32, quiz 10. No practice items or sims (waiting on Part III PPTX study guides) |
 | Parts III–IV trainer content (practice, sims, drills) | Waiting for the user's Part III/IV PPTX study guides |
 | Ch 19–23 | Listed as Coming soon |
-| Tagalog integration | Done (3f0dc50): `content/tagalog.js` cards on 60 guide sections + drill (ch14: probes → `social`, expand → `shea-techniques`; ch13: social-history → `social`, benefits → `explain`; ch10: biological, window-shade, themes, tears, family; ch11: visual-withdrawal → `wd-alcohol`, schizophrenia, delusional-disorders, life-cycle, delirium; ch12: porous-ego, akathisia-catatonia → `meds`, raising-voices, commands, families, culture-language). Usap Tayo back-links done 2026-10-28 (Tagalog ed4e7f4, v2.2.1): `SHEA_LINKS` values may now be a single link or an array (most relevant first) and `js/psych-views.js` renders a list; 28 sections, 46 links (after Ch 14), all verified against the trainer's guide sections with a node check. For each new guide chapter, add the trainer card(s) AND append the matching link to the relevant `SHEA_LINKS` arrays, then bump Usap Tayo `sw.js` VERSION and `meta.js` version with a What's New line. The trainer's `tagalog.js` `sections` map must list any Usap Tayo section id a card uses (meds and wd-alcohol were added). Note: the Tagalog remote reports it moved to `github.com/isaymotion/Tagalog.git` (capital T); pushes still work. Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
+| Tagalog integration | Done (3f0dc50): `content/tagalog.js` 59 cards + drill (ch14: probes → `social`, expand → `shea-techniques`; ch13: social-history → `social`, benefits → `explain`; ch10: biological, window-shade, themes, tears, family; ch11: visual-withdrawal → `wd-alcohol`, schizophrenia, delusional-disorders, life-cycle, delirium; ch12: porous-ego, akathisia-catatonia → `meds`, raising-voices, commands, families, culture-language). Usap Tayo back-links done 2026-10-28 (Tagalog ed4e7f4, v2.2.1): `SHEA_LINKS` values may now be a single link or an array (most relevant first) and `js/psych-views.js` renders a list; 28 sections, 46 links (after Ch 14), all verified against the trainer's guide sections with a node check. For each new guide chapter, add the trainer card(s) AND append the matching link to the relevant `SHEA_LINKS` arrays, then bump Usap Tayo `sw.js` VERSION and `meta.js` version with a What's New line. The trainer's `tagalog.js` `sections` map must list any Usap Tayo section id a card uses (meds and wd-alcohol were added). Note: the Tagalog remote reports it moved to `github.com/isaymotion/Tagalog.git` (capital T); pushes still work. Usap Tayo (repo isaymotion/Tagalog, `js/data/psych-shea.js`) has the 24-phrase `shea-techniques` section (DRAFT; set `REVIEWED = true` after her review) and `SHEA_LINKS` back-links. When a new guide chapter is added, add its `chN:sectionId` entries to `tagalog.js` and, if a Usap Tayo section matches, its entry to `SHEA_LINKS`. Deferred: Tagalog toggle for simulations. |
 
 ## 7. Next step
 **Two tracks; the chapter track is the default unless the user brings the review.**
