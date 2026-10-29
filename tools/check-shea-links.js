@@ -13,6 +13,7 @@ for (const f of fs.readdirSync(cdir).filter((f) => /^guide-ch\d+\.js$/.test(f)))
 const tOrder = fs.readFileSync(path.join(st, 'index.html'), 'utf8').match(/src="(content\/[^"]+)"/g).map((s) => s.slice(5, -1));
 for (const f of tOrder) if (!/guide-ch/.test(f)) (0, eval)(fs.readFileSync(path.join(st, f), 'utf8'));
 const drillIds = new Set([].concat(...Object.values(TRAINER.parts).map((p) => (p.drills || []).map((d) => d.id))));
+const simIds = new Set([].concat(...Object.values(TRAINER.parts).map((p) => (p.simulations || []).map((d) => d.id))));
 // load Usap Tayo data files in index.html order so PSYCH_SECTIONS is complete
 const order = fs.readFileSync(path.join(ut, 'index.html'), 'utf8').match(/src="(js\/data\/[^"]+)"/g).map((s) => s.slice(5, -1));
 for (const f of order) { try { (0, eval)(fs.readFileSync(path.join(ut, f), 'utf8')); } catch (e) { /* non-phrase data files may need browser globals */ } }
@@ -23,8 +24,8 @@ for (const [k, v] of Object.entries(SHEA_LINKS)) {
   for (const l of [].concat(v)) {
     n++;
     if (l.href) {
-      const m = /^#\/drills\/([\w-]+)$/.exec(l.href);
-      if (!(m && drillIds.has(m[1]))) { bad++; console.log('MISSING TRAINER ROUTE', k, '->', l.href); }
+      const m = /^#\/(drills|simulate)\/([\w-]+)$/.exec(l.href);
+      if (!(m && (m[1] === 'drills' ? drillIds : simIds).has(m[2]))) { bad++; console.log('MISSING TRAINER ROUTE', k, '->', l.href); }
       continue;
     }
     const g = TRAINER.guides[l.ch];
