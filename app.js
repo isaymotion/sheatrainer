@@ -116,14 +116,19 @@
   try { simTl = localStorage.getItem(SIM_TL_KEY) === "1"; } catch (e) { simTl = false; }
   function simOverlay(sim) { var o = TR.tagalogSims; return o && o[sim.id] ? o[sim.id] : null; }
   function tlNode(sim, nodeId) { var o = simOverlay(sim); return o && o.nodes ? o.nodes[nodeId] : null; }
-  function tlOn(sim) { return simTl && !!simOverlay(sim); }
+  function tlOn(sim) { return !!sim.tl || (simTl && !!simOverlay(sim)); }
   function gloss(en) { return '<span class="gloss">' + esc(en) + "</span>"; }
   function speechTl(sim, nodeId, en, who) {
+    if (sim.tl) { /* Tagalog-first case: p is Tagalog, node.en is the gloss */
+      var tn = sim.nodes[nodeId];
+      return speech(en, who).replace(/<\/p>$/, (tn && tn.en ? gloss(tn.en) : "") + "</p>");
+    }
     var n = tlOn(sim) ? tlNode(sim, nodeId) : null;
     if (!(n && n.p && en)) return speech(en, who);
     return speech(n.p, who).replace(/<\/p>$/, gloss(en) + "</p>");
   }
   function choiceTl(sim, nodeId, i, en) {
+    if (sim.tl) { var c = sim.nodes[nodeId] && sim.nodes[nodeId].choices[i]; return esc(en) + (c && c.en ? gloss(c.en) : ""); }
     var n = tlOn(sim) ? tlNode(sim, nodeId) : null;
     var t = n && n.t && n.t[i];
     return t ? esc(t) + gloss(en) : esc(en);
@@ -175,8 +180,15 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-30", title: "Three interviews written in Filipino: Bataan cases",
+      teaser: "New: three simulated interviews composed in Tagalog first, set in Mariveles. Nasa kuwarto si Nanay (the mother answers for the patient), Nerbiyos daw (a panic and depression picture with a kulam explanation), and Ang kasama (a nephew's reluctant collateral about drinking).",
+      items: [
+        "Nasa kuwarto si Nanay (Chapters 3 and 7): honour the mother, earn the floor for Liza without shaming either of them, and raise suicide with normalization while the family is in the room.",
+        "Nerbiyos daw (Chapters 6 and 10): take the idiom and the chest heaviness seriously, build the verbal video of a panic attack, hear the depression behind it, and ask for the patient's own explanatory model instead of arguing with her sister-in-law's kulam.",
+        "Ang kasama (Chapters 5 and 7): get usable collateral about alcohol and withdrawal from a nephew who does not want to shame his uncle: normalization, a medical reason, shame attenuation, high anchors.",
+        "Patient lines and your choices are Tagalog or Taglish with the English underneath; cues, coaching and debriefs are in English. Composed for training; draft wording under review."
+      ] },
     { date: "2026-10-30", title: "Sa Tagalog: play four interviews in Filipino",
-      teaser: "New: a Sa Tagalog switch on four simulated interviews (Watching, Just a few pills, I don't have a problem, The man who won't sit). The patient's lines and your choices appear in Tagalog with the English underneath; the coaching stays in English.",
       items: [
         "A Sa Tagalog button at the top of an interview that has Filipino lines. Your choice is remembered on this device, and the whole transcript switches with it.",
         "Four interviews so far: Watching (the paranoid spiral, Chapters 1 and 5), Just a few pills (the CASE Approach, Chapter 5), I don't have a problem (a guarded adolescent, Chapters 2 and 3), and The man who won't sit (de-escalation, Chapter 8).",
@@ -776,12 +788,12 @@
     var cards = simulations().map(function (s) {
       var rec = store.sims[s.id];
       return '<a class="sim-card" href="#/simulate/' + s.id + '"><h3>' + esc(s.title) + '</h3><span class="muted small">Chapter' + (s.chapters.length > 1 ? "s " : " ") + s.chapters.join(" and ") + ". " + esc(s.setting) + "</span><span>" + esc(s.goal) + "</span>" +
-        (simOverlay(s) ? '<span class="tag-tl">Sa Tagalog</span>' : "") +
+        (s.tl ? '<span class="tag-tl">Tagalog</span>' : simOverlay(s) ? '<span class="tag-tl">Sa Tagalog</span>' : "") +
         (rec ? '<span class="done">Completed. Best blending ' + rec.best + "</span>" : "") + "</a>";
     }).join("");
     app.innerHTML = "<h1>Simulated interviews</h1><p class=\"lede\">Branching cases with coaching after each choice. Blending tracks engagement; the database tracks how much valid, useful information you have gathered. Good interviews grow both.</p>" +
       '<div class="notice">Cases are composed for teaching and simplified. In real practice, risk assessment, safety planning, and legal obligations follow your supervisor, institution, and local law.</div>' +
-      '<p class="muted small">Interviews marked <b>Sa Tagalog</b> can be played in Filipino: the patient\'s lines and your choices switch to Tagalog with the English underneath, while the coaching stays in English. Draft wording under review.</p>' +
+      '<p class="muted small">Interviews marked <b>Sa Tagalog</b> can be played in Filipino: the patient\'s lines and your choices switch to Tagalog with the English underneath, while the coaching stays in English. Interviews marked <b>Tagalog</b> are written in Filipino first, with the English underneath. Draft wording under review.</p>' +
       '<div class="sim-grid section">' + cards + "</div>";
   };
   function startSim(id) {
