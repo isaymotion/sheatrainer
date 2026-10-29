@@ -157,8 +157,16 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-30", title: "Three Tagalog clinical drills",
+      teaser: "New: three drills for interviewing in Filipino. Idioms of distress (nerbiyos, sumpong, kulam, lutang, bahala na), choosing the right register (po, kayo, ikaw), and Pakinggan: hearing the move in a Tagalog line and answering it.",
+      items: [
+        "Mga Salitang Pahiwatig (18 items): a patient's line in Tagalog; decide what it most likely signals and which region of the interview to open next.",
+        "Po, Kayo, Ikaw (12 items): choose the opening line whose register fits the person in front of you: an elderly widow, a teenager, a colleague, an angry patient, a child, a patient who asks you to drop the po.",
+        "Pakinggan (12 items): hear the interpersonal move in a Tagalog line (disavowal, minimization, deference, the family taking the floor, the doorknob hesitation) and pick the reply that keeps the alliance and the data.",
+        "All Tagalog wording is composed for training and marked draft until reviewed. Feedback stays in English and carries the gloss.",
+        "Usap Tayo now links to these drills from its opening, history and Shea-techniques sections."
+      ] },
     { date: "2026-10-29", title: "Chapter 15 study guide: The Psychodynamic Lens",
-      teaser: "New: the Chapter 15 study guide, the last of Parts I to III. Object relations and self psychology made practical: the four stages of the self, merger objects and splitting, Kohut's bipolar self, complementary shifts, accepting the pedestal, and countertransference.",
       items: [
         "A full study guide for Chapter 15 in ten sections: safety in the room; the four stages of the self; part self / part object and going slow; merger and transitional objects (Debbie) and early boundaries; splitting, linguistic polarization, and idealization–devaluation; Kohut's bipolar self; signal signs and symptoms of grandiosity and idealization; complementary shifts (Dale, and asking a teen for help); accepting the pedestal and handling countertransference; and the stable self, with a stage-matched engagement table.",
         "Twelve glossary terms added to Chapter 15 (introjection, holding environment, black/whiting, linguistic polarization, object constancy, bipolar self, grandiose and idealizing imago, mirror transference, mentalization, stable self, nonverbal leakage).",
