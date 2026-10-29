@@ -1,6 +1,6 @@
 # Handoff: Psychiatric Interviewing Trainer (sheatrainer)
 
-Updated 2026-10-29 after the Chapter 15 study guide (trainer 58e5d27; Usap Tayo 1520961, v2.2.4). Study guides now exist for every chapter in Parts I–III (Ch 1–18). The Tagalog phrase review is pending with the user; Part IV (Ch 19–23) waits on her PPTX study guides and her go-ahead.
+Updated 2026-10-29 after the Chapter 15 study guide (trainer 58e5d27; Usap Tayo 1520961, v2.2.4). Baseline reconfirmed clean 2026-10-30 (validate.js, check.py ch15, check-shea-links.js all pass; no content changes since). Study guides now exist for every chapter in Parts I–III (Ch 1–18). The Tagalog phrase review is pending with the user; Part IV (Ch 19–23) waits on her PPTX study guides and her go-ahead.
 
 ## 1. Project and audience
 - Static web app teaching psychiatry residents to interview sensitively and compassionately, built on Shea, *Psychiatric Interviewing: The Art of Understanding*, 3rd ed.
