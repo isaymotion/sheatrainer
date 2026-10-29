@@ -157,8 +157,15 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-29", title: "Chapter 15 study guide: The Psychodynamic Lens",
+      teaser: "New: the Chapter 15 study guide, the last of Parts I to III. Object relations and self psychology made practical: the four stages of the self, merger objects and splitting, Kohut's bipolar self, complementary shifts, accepting the pedestal, and countertransference.",
+      items: [
+        "A full study guide for Chapter 15 in ten sections: safety in the room; the four stages of the self; part self / part object and going slow; merger and transitional objects (Debbie) and early boundaries; splitting, linguistic polarization, and idealization–devaluation; Kohut's bipolar self; signal signs and symptoms of grandiosity and idealization; complementary shifts (Dale, and asking a teen for help); accepting the pedestal and handling countertransference; and the stable self, with a stage-matched engagement table.",
+        "Twelve glossary terms added to Chapter 15 (introjection, holding environment, black/whiting, linguistic polarization, object constancy, bipolar self, grandiose and idealizing imago, mirror transference, mentalization, stable self, nonverbal leakage).",
+        "Sa Tagalog cards on three Chapter 15 sections, with links back from Usap Tayo.",
+        "Study guides now cover every chapter in Parts I to III."
+      ] },
     { date: "2026-10-29", title: "Chapter 14 study guide: Personality Disorders, the Differential Diagnosis",
-      teaser: "New: the Chapter 14 study guide turns personality diagnosis into a bedside method: portraits of the ten disorders in Shea's three groups, the errors to avoid, narrowing the field with signal signs and probe questions, expanding with checks for persistence, state dependency, and severity, and the hidden strengths that dimensional traits reveal.",
       items: [
         "A full study guide for Chapter 14 in nine sections: the anxiety-prone, poorly empathic, and psychotic-prone disorders; label slapping, countertransference, and refusing to diagnose; limiting the field with signal signs and symptoms (Ms. Dole); probe questions, with a composed example for each region; expanding a diagnosis with Mrs. Jacobs; tapping for epiphenomena with Tommy; and dimensions, hidden strengths (Nancy), and prototype systems.",
         "Six glossary terms added to Chapter 14 (Shea's three groups, stable vs unstable narcissism, passive-aggressive personality, process comment, tapping for epiphenomena, the Alternative DSM-5 Model).",

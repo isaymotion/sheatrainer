@@ -841,7 +841,19 @@ window.TRAINER = window.TRAINER || { parts: {} };
         { term: "Selfobject", def: "Kohut: an experience with another that solidifies the self." },
         { term: "Mirroring", def: "Reflecting back a person's sense of greatness; a need of the grandiose pole." },
         { term: "Idealizing transference", def: "Identifying with the clinician as an idealized, powerful figure." },
-        { term: "Complementary shift", def: "Shea: a response that puts the patient one-up on the clinician." }
+        { term: "Complementary shift", def: "Shea: a response that puts the patient one-up on the clinician." },
+        { term: "Introjection", def: "The unconscious taking-in of an image of another person so that it becomes an internal object (an introject); also called internalization." },
+        { term: "Holding environment", def: "Winnicott: the soothing, holding care of a parent that lets an infant feel whole and safe; a way-station in building a self." },
+        { term: "Black/whiting", def: "The cognitive counterpart of splitting: seeing things only at the extremes, without shades of gray." },
+        { term: "Linguistic polarization", def: "Shea: frequent use of extreme words (best, worst, horrible, amazing) during scouting; a signal sign of splitting." },
+        { term: "Object constancy", def: "The ability to hold a steady inner view of important people despite small frustrations; deficient when splitting predominates." },
+        { term: "Bipolar self", def: "Kohut: the two routes to a powerful enough self, the grandiose pole and the idealizing pole. Unrelated to bipolar disorder." },
+        { term: "Grandiose imago", def: "Kohut: the grandiose pole of the bipolar self; feeling safe by feeling powerful, which needs others to mirror it." },
+        { term: "Idealizing imago", def: "Kohut: the idealizing pole of the bipolar self; feeling safe by identifying with a powerful figure, who must stay ideal." },
+        { term: "Mirror transference", def: "In treatment, the patient's need for the clinician to reflect back their grandiosity in order to feel safe." },
+        { term: "Mentalization", def: "The capacity to imagine the thoughts, feelings, and needs of others (and oneself); a step toward empathy." },
+        { term: "Stable self", def: "The fourth stage: a secure self capable of empathy, with grandiosity softened into self-respect and idealization into respect." },
+        { term: "Nonverbal leakage", def: "Feelings, such as disapproval, conveyed unintentionally through face, voice, gesture, or posture." }
       ]
     }
   ];
