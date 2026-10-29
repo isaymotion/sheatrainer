@@ -110,6 +110,24 @@
 
   /* ───────── Theme (light / dark / match device), saved per device ───────── */
   var THEME_KEY = "sheatrainer.theme";
+  /* "Sa Tagalog" overlay for simulations (content/tagalog-sims.js): remembered per device. */
+  var SIM_TL_KEY = "sheatrainer.simTl";
+  var simTl = false;
+  try { simTl = localStorage.getItem(SIM_TL_KEY) === "1"; } catch (e) { simTl = false; }
+  function simOverlay(sim) { var o = TR.tagalogSims; return o && o[sim.id] ? o[sim.id] : null; }
+  function tlNode(sim, nodeId) { var o = simOverlay(sim); return o && o.nodes ? o.nodes[nodeId] : null; }
+  function tlOn(sim) { return simTl && !!simOverlay(sim); }
+  function gloss(en) { return '<span class="gloss">' + esc(en) + "</span>"; }
+  function speechTl(sim, nodeId, en, who) {
+    var n = tlOn(sim) ? tlNode(sim, nodeId) : null;
+    if (!(n && n.p && en)) return speech(en, who);
+    return speech(n.p, who).replace(/<\/p>$/, gloss(en) + "</p>");
+  }
+  function choiceTl(sim, nodeId, i, en) {
+    var n = tlOn(sim) ? tlNode(sim, nodeId) : null;
+    var t = n && n.t && n.t[i];
+    return t ? esc(t) + gloss(en) : esc(en);
+  }
   var THEME_NAMES = { auto: "Match device", light: "Light", dark: "Dark" };
   var THEME_ICONS = {
     light: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
@@ -157,8 +175,15 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-30", title: "Sa Tagalog: play four interviews in Filipino",
+      teaser: "New: a Sa Tagalog switch on four simulated interviews (Watching, Just a few pills, I don't have a problem, The man who won't sit). The patient's lines and your choices appear in Tagalog with the English underneath; the coaching stays in English.",
+      items: [
+        "A Sa Tagalog button at the top of an interview that has Filipino lines. Your choice is remembered on this device, and the whole transcript switches with it.",
+        "Four interviews so far: Watching (the paranoid spiral, Chapters 1 and 5), Just a few pills (the CASE Approach, Chapter 5), I don't have a problem (a guarded adolescent, Chapters 2 and 3), and The man who won't sit (de-escalation, Chapter 8).",
+        "Patient lines are Taglish where a real patient would be; clinician lines keep po and kayo for adults and ikaw for the teenager. Cues, coaching and debriefs stay in English because they teach Shea's reasoning.",
+        "All wording is composed for training and marked draft until reviewed. Usap Tayo links to these interviews from its de-escalation, suicide and delusions sections."
+      ] },
     { date: "2026-10-30", title: "Three Tagalog clinical drills",
-      teaser: "New: three drills for interviewing in Filipino. Idioms of distress (nerbiyos, sumpong, kulam, lutang, bahala na), choosing the right register (po, kayo, ikaw), and Pakinggan: hearing the move in a Tagalog line and answering it.",
       items: [
         "Mga Salitang Pahiwatig (18 items): a patient's line in Tagalog; decide what it most likely signals and which region of the interview to open next.",
         "Po, Kayo, Ikaw (12 items): choose the opening line whose register fits the person in front of you: an elderly widow, a teenager, a colleague, an angry patient, a child, a patient who asks you to drop the po.",
@@ -751,10 +776,12 @@
     var cards = simulations().map(function (s) {
       var rec = store.sims[s.id];
       return '<a class="sim-card" href="#/simulate/' + s.id + '"><h3>' + esc(s.title) + '</h3><span class="muted small">Chapter' + (s.chapters.length > 1 ? "s " : " ") + s.chapters.join(" and ") + ". " + esc(s.setting) + "</span><span>" + esc(s.goal) + "</span>" +
+        (simOverlay(s) ? '<span class="tag-tl">Sa Tagalog</span>' : "") +
         (rec ? '<span class="done">Completed. Best blending ' + rec.best + "</span>" : "") + "</a>";
     }).join("");
     app.innerHTML = "<h1>Simulated interviews</h1><p class=\"lede\">Branching cases with coaching after each choice. Blending tracks engagement; the database tracks how much valid, useful information you have gathered. Good interviews grow both.</p>" +
       '<div class="notice">Cases are composed for teaching and simplified. In real practice, risk assessment, safety planning, and legal obligations follow your supervisor, institution, and local law.</div>' +
+      '<p class="muted small">Interviews marked <b>Sa Tagalog</b> can be played in Filipino: the patient\'s lines and your choices switch to Tagalog with the English underneath, while the coaching stays in English. Draft wording under review.</p>' +
       '<div class="sim-grid section">' + cards + "</div>";
   };
   function startSim(id) {
@@ -769,8 +796,8 @@
     var s = session.sim, sim = s.sim, node = sim.nodes[s.node];
     var transcript = s.log.map(function (l) {
       var db = l.db ? '<span class="delta ' + (l.db > 0 ? "up" : "down") + '">Blending ' + (l.db > 0 ? "+" : "") + l.db + "</span>" : "";
-      return "<div>" + speech(l.p) + cue(l.cue) + "</div>" +
-        '<div class="turn-you"><span class="speech-who">You</span>' + esc(l.t) + '<div class="coach">' + db + " " + esc(l.fb) + "</div></div>";
+      return "<div>" + speechTl(sim, l.node, l.p) + cue(l.cue) + "</div>" +
+        '<div class="turn-you"><span class="speech-who">You</span>' + (l.node != null ? choiceTl(sim, l.node, l.ci, l.t) : esc(l.t)) + '<div class="coach">' + db + " " + esc(l.fb) + "</div></div>";
     }).join("");
 
     var current = "";
@@ -779,18 +806,20 @@
       var rec = store.sims[sim.id] || { best: 0, runs: 0 };
       rec.best = Math.max(rec.best, s.b); rec.runs = (rec.runs || 0) + (s.saved ? 0 : 1); rec.done = true;
       store.sims[sim.id] = rec; s.saved = true; save();
-      current = (node.p ? "<div>" + speech(node.p) + cue(node.cue) + "</div>" : "") +
+      current = (node.p ? "<div>" + speechTl(sim, s.node, node.p) + cue(node.cue) + "</div>" : "") +
         '<div class="panel debrief"><h2>Debrief</h2><p><b>' + rating + ".</b> Final blending " + s.b + ", database " + s.d + ".</p><p>" + esc(node.debrief) + "</p>" +
         '<div class="row"><button class="btn" data-action="sim-restart">Try a different path</button><a class="btn secondary" href="#/simulate">All interviews</a></div></div>';
     } else {
-      current = "<div>" + speech(node.p) + cue(node.cue) + '</div><p class="prompt">What do you say or do?</p><div class="options">' +
+      current = "<div>" + speechTl(sim, s.node, node.p) + cue(node.cue) + '</div><p class="prompt">' + (tlOn(sim) ? "Ano ang sasabihin o gagawin mo?" : "What do you say or do?") + '</p><div class="options">' +
         shuffleStable(node.choices, s.node).map(function (ch) {
-          return '<button class="option" data-action="sim-pick" data-i="' + node.choices.indexOf(ch) + '">' + esc(ch.t) + "</button>";
+          var ci = node.choices.indexOf(ch);
+          return '<button class="option" data-action="sim-pick" data-i="' + ci + '">' + choiceTl(sim, s.node, ci, ch.t) + "</button>";
         }).join("") + "</div>";
     }
 
+    var tlBtn = simOverlay(sim) ? '<span class="spacer"></span><button class="chip" data-action="sim-lang" aria-pressed="' + simTl + '" title="Show the patient\'s lines and your choices in Tagalog, with English underneath">Sa Tagalog</button>' : "";
     app.innerHTML =
-      '<div class="row"><a href="#/simulate" class="small">All interviews</a></div>' +
+      '<div class="row"><a href="#/simulate" class="small">All interviews</a>' + tlBtn + "</div>" +
       "<h1>" + esc(sim.title) + '</h1><p class="lede">' + esc(sim.who) + "</p><p class=\"muted small\">" + esc(sim.setting) + " Goal: " + esc(sim.goal) + "</p>" +
       '<div class="sim-layout section"><div><div class="transcript" aria-live="polite">' + transcript + current + "</div></div>" +
       '<aside class="sim-side">' + flowerSVG(s.b) +
@@ -1068,10 +1097,11 @@
     if (a === "sim-pick") {
       var ss = session.sim, node = ss.sim.nodes[ss.node], ch = node.choices[+el.getAttribute("data-i")];
       var nb = clamp(ss.b + (ch.b || 0)), nd = clamp(ss.d + (ch.d || 0));
-      ss.log.push({ p: node.p, cue: node.cue, t: ch.t, fb: ch.fb, db: nb - ss.b });
+      ss.log.push({ p: node.p, cue: node.cue, t: ch.t, fb: ch.fb, db: nb - ss.b, node: ss.node, ci: node.choices.indexOf(ch) });
       ss.b = nb; ss.d = nd; ss.node = ch.next;
       renderSim(true); return;
     }
+    if (a === "sim-lang") { simTl = !simTl; try { localStorage.setItem(SIM_TL_KEY, simTl ? "1" : "0"); } catch (e) {} renderSim(); return; }
     if (a === "sim-restart") { var sid = session.sim.sim.id; session.sim = null; stableOrders = {}; startSim(sid); window.scrollTo(0, 0); return; }
 
     if (a === "drill-pick") { var d = session.drill; d.answered = el.getAttribute("data-v"); if (d.answered === d.list[d.idx].a) d.correct++; renderDrill(); return; }

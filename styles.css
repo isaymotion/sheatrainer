@@ -520,3 +520,8 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
 .wn-entry ul { margin: 0; padding-left: 1.15rem; }
 .wn-entry li + li { margin-top: 0.3rem; }
 .teaser { font-size: 0.95rem; }
+
+/* "Sa Tagalog" simulations: Tagalog line with the English gloss underneath */
+.gloss { display: block; font-family: var(--sans); font-style: normal; font-size: 0.86rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.4; }
+.option .gloss { font-size: 0.84rem; }
+.tag-tl { display: inline-block; justify-self: start; font: 700 0.72rem var(--sans); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 0.15rem 0.55rem; }
