@@ -117,6 +117,10 @@
   function simOverlay(sim) { var o = TR.tagalogSims; return o && o[sim.id] ? o[sim.id] : null; }
   function tlNode(sim, nodeId) { var o = simOverlay(sim); return o && o.nodes ? o.nodes[nodeId] : null; }
   function tlOn(sim) { return !!sim.tl || (simTl && !!simOverlay(sim)); }
+  var PR_TL_KEY = "sheatrainer.practiceTl";
+  var practiceTl = false;
+  try { practiceTl = localStorage.getItem(PR_TL_KEY) === "1"; } catch (e) { practiceTl = false; }
+  function prOverlay(it) { var o = TR.tagalogPractice; return o && o[it.id] ? o[it.id] : null; }
   function gloss(en) { return '<span class="gloss">' + esc(en) + "</span>"; }
   function speechTl(sim, nodeId, en, who) {
     if (sim.tl) { /* Tagalog-first case: p is Tagalog, node.en is the gloss */
@@ -180,8 +184,14 @@
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-10-30", title: "Sagot sa Tagalog: response practice in Filipino",
+      teaser: "New: a Sagot sa Tagalog switch in Response practice. For Chapters 1, 3, 5 and 9, the patient's line and the three options appear in Tagalog with the English underneath; the explanations stay in English.",
+      items: [
+        "A Sagot sa Tagalog button above the practice card, remembered on this device. Items without a Tagalog version yet say so and show in English.",
+        "Twenty-four items so far: engagement and empathic valence (Chapter 1), the opening and focusing (Chapter 3), validity techniques (Chapter 5), and the mood region (Chapter 9).",
+        "Composed for training; draft wording under review. With the drills, the Sa Tagalog interviews and the three Bataan cases, every part of the trainer now has a Filipino path."
+      ] },
     { date: "2026-10-30", title: "Three interviews written in Filipino: Bataan cases",
-      teaser: "New: three simulated interviews composed in Tagalog first, set in Mariveles. Nasa kuwarto si Nanay (the mother answers for the patient), Nerbiyos daw (a panic and depression picture with a kulam explanation), and Ang kasama (a nephew's reluctant collateral about drinking).",
       items: [
         "Nasa kuwarto si Nanay (Chapters 3 and 7): honour the mother, earn the floor for Liza without shaming either of them, and raise suicide with normalization while the family is in the room.",
         "Nerbiyos daw (Chapters 6 and 10): take the idiom and the chest heaviness seriously, build the verbal video of a panic attack, hear the depression behind it, and ask for the patient's own explanatory model instead of arguing with her sister-in-law's kulam.",
@@ -421,11 +431,12 @@
       else a.removeAttribute("aria-current");
     });
   }
-  function optionHTML(o, idx, state) {
-    // state: undefined (unanswered) or { chosen }
-    if (!state) return '<button class="option" data-action="pick" data-i="' + idx + '">' + esc(o.t) + "</button>";
+  function optionHTML(o, idx, state, tl) {
+    // state: undefined (unanswered) or { chosen }; tl: optional Tagalog wording (English becomes the gloss)
+    var label = tl ? esc(tl) + gloss(o.t) : esc(o.t);
+    if (!state) return '<button class="option" data-action="pick" data-i="' + idx + '">' + label + "</button>";
     var cls = "option " + o.v + (state.chosen === idx ? " chosen" : "");
-    return '<button class="' + cls + '" disabled>' + esc(o.t) +
+    return '<button class="' + cls + '" disabled>' + label +
       '<span class="verdict">' + (state.chosen === idx ? "Your choice: " : "") + VERDICT[o.v] + '</span><span class="why">' + esc(o.w) + "</span></button>";
   }
 
@@ -739,9 +750,12 @@
     }
     var it = s.list[s.idx];
     if (!s.opts) s.opts = shuffle(it.opts);
-    var html = head + '<div class="panel section" aria-live="polite"><div class="row"><div class="skill">' + esc(it.skill) + '</div><span class="spacer"></span><span class="counter">Chapter ' + it._ch.num + ", item " + (s.idx + 1) + " of " + s.list.length + "</span></div>" +
-      '<p class="context">' + esc(it.ctx) + "</p>" + speech(it.p) + cue(it.cue) + '<p class="prompt">What do you say?</p><div class="options">' +
-      s.opts.map(function (o, i) { return optionHTML(o, i, s.answered); }).join("") + "</div>";
+    var anyTl = s.list.some(prOverlay), ov = practiceTl ? prOverlay(it) : null;
+    var tlChip = anyTl ? '<div class="row" style="margin-top:.6rem"><button class="chip" data-action="practice-lang" aria-pressed="' + practiceTl + '" title="Show the patient\'s line and the options in Tagalog, with English underneath">Sagot sa Tagalog</button>' + (practiceTl && !ov ? '<span class="small muted">This item has no Tagalog version yet.</span>' : "") + "</div>" : "";
+    var pHtml = ov && ov.p ? speech(ov.p).replace(/<\/p>$/, gloss(it.p) + "</p>") : speech(it.p);
+    var html = head + tlChip + '<div class="panel section" aria-live="polite"><div class="row"><div class="skill">' + esc(it.skill) + '</div><span class="spacer"></span><span class="counter">Chapter ' + it._ch.num + ", item " + (s.idx + 1) + " of " + s.list.length + "</span></div>" +
+      '<p class="context">' + esc(it.ctx) + "</p>" + pHtml + cue(it.cue) + '<p class="prompt">' + (ov ? "Ano ang sasabihin mo?" : "What do you say?") + '</p><div class="options">' +
+      s.opts.map(function (o, i) { var tl = ov && ov.opts ? ov.opts[it.opts.indexOf(o)] : null; return optionHTML(o, i, s.answered, tl); }).join("") + "</div>";
     if (s.answered) html += '<div class="row" style="margin-top:1.25rem"><button class="btn" data-action="practice-next">' + (s.idx + 1 < s.list.length ? "Next moment" : "Finish set") + "</button></div>";
     app.innerHTML = html + "</div>";
   }
@@ -1113,6 +1127,7 @@
       ss.b = nb; ss.d = nd; ss.node = ch.next;
       renderSim(true); return;
     }
+    if (a === "practice-lang") { practiceTl = !practiceTl; try { localStorage.setItem(PR_TL_KEY, practiceTl ? "1" : "0"); } catch (e) {} renderPractice(); return; }
     if (a === "sim-lang") { simTl = !simTl; try { localStorage.setItem(SIM_TL_KEY, simTl ? "1" : "0"); } catch (e) {} renderSim(); return; }
     if (a === "sim-restart") { var sid = session.sim.sim.id; session.sim = null; stableOrders = {}; startSim(sid); window.scrollTo(0, 0); return; }
 
