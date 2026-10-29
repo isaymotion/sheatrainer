@@ -24,8 +24,9 @@ for (const [k, v] of Object.entries(SHEA_LINKS)) {
   for (const l of [].concat(v)) {
     n++;
     if (l.href) {
-      const m = /^#\/(drills|simulate)\/([\w-]+)$/.exec(l.href);
-      if (!(m && (m[1] === 'drills' ? drillIds : simIds).has(m[2]))) { bad++; console.log('MISSING TRAINER ROUTE', k, '->', l.href); }
+      const m = /^#\/(drills|simulate|practice)\/([\w-]+)$/.exec(l.href);
+      const chIds = new Set([].concat(...Object.values(TRAINER.parts).map((p) => (p.chapters || []).map((c) => c.id))));
+      if (!(m && (m[1] === 'drills' ? drillIds : m[1] === 'simulate' ? simIds : chIds).has(m[2]))) { bad++; console.log('MISSING TRAINER ROUTE', k, '->', l.href); }
       continue;
     }
     const g = TRAINER.guides[l.ch];

@@ -71,5 +71,18 @@ if (fs.existsSync(caseFile)) {
     md += "\n";
   });
 }
+const prFile = path.join(trainer, "content/tagalog-practice.js");
+if (fs.existsSync(prFile)) {
+  const w5 = { TRAINER: { parts: {} } }; new Function("window", fs.readFileSync(prFile, "utf8"))(w5);
+  const pr = w5.TRAINER.tagalogPractice || {};
+  const items = {}; Object.values(w2.TRAINER.parts).forEach((p) => (p.chapters || []).forEach((c) => (c.practice || []).forEach((it) => (items[it.id] = it))));
+  md += `## G. Sagot sa Tagalog overlay for response practice (\`content/tagalog-practice.js\`)\n\nPatient line and the three options (best, workable, poor as in the English item). The English is the original.\n\n`;
+  Object.entries(pr).forEach(([id, o]) => {
+    const it = items[id]; if (!it) return;
+    md += `### ${id}. ${it.skill}\n- **Patient:** ${o.p}\n  - ${it.p}\n`;
+    (o.opts || []).forEach((t, i) => { if (t) md += `- **Option ${i + 1} (${it.opts[i].v}):** ${t}\n  - ${it.opts[i].t}\n`; });
+    md += "\n";
+  });
+}
 fs.writeFileSync(out, md);
 console.log(`${out}: ${sec.phrases.length} phrases, ${d.items.length} drill items, ${extra.reduce((n, x) => n + x.items.length, 0)} extra drill items, ${md.length} chars`);
