@@ -181,9 +181,63 @@
     if (darkMQ) { if (darkMQ.addEventListener) darkMQ.addEventListener("change", onDeviceChange); else if (darkMQ.addListener) darkMQ.addListener(onDeviceChange); }
   })();
 
+  /* ───────── Text size (Aa button): 90 / 100 / 112.5 / 125 % of the root size, saved per device ───────── */
+  var TEXT_SIZE_KEY = "sheatrainer.textSize";
+  var TEXT_SIZES = [["90", "Smaller"], ["100", "Default"], ["112.5", "Larger"], ["125", "Largest"]];
+  function getTextSize() {
+    try {
+      var z = window.localStorage.getItem(TEXT_SIZE_KEY);
+      return z === "90" || z === "112.5" || z === "125" ? z : "100";
+    } catch (e) { return "100"; }
+  }
+  function applyTextSize(v) {
+    var ok = v === "90" || v === "112.5" || v === "125";
+    document.documentElement.style.fontSize = ok ? v + "%" : "";
+  }
+  function setTextSize(v) {
+    if (!(v === "90" || v === "112.5" || v === "125")) v = "100";
+    try {
+      if (v === "100") window.localStorage.removeItem(TEXT_SIZE_KEY); else window.localStorage.setItem(TEXT_SIZE_KEY, v);
+    } catch (e) { /* storage unavailable: applies for this visit only */ }
+    applyTextSize(v);
+  }
+  applyTextSize(getTextSize());
+  (function () {
+    var btn = document.getElementById("textSizeBtn");
+    if (!btn) return;
+    var panel = document.createElement("div");
+    panel.className = "textsize-panel"; panel.id = "textSizePanel"; panel.hidden = true;
+    panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Text size");
+    document.body.appendChild(panel);
+    function place() {
+      var bar = document.querySelector(".topbar");
+      if (bar) panel.style.top = Math.round(bar.getBoundingClientRect().bottom + 6) + "px";
+    }
+    function build() {
+      var cur = getTextSize();
+      panel.innerHTML = '<p class="textsize-title">Text size</p><div class="textsize-seg">' + TEXT_SIZES.map(function (t, i) {
+        return '<label><input type="radio" name="textsize" value="' + t[0] + '"' + (cur === t[0] ? " checked" : "") + '><span style="font-size:' + (0.82 + i * 0.1).toFixed(2) + 'rem">' + t[1] + "</span></label>";
+      }).join("") + "</div>";
+    }
+    function open() { build(); place(); panel.hidden = false; btn.setAttribute("aria-expanded", "true"); var f = panel.querySelector("input:checked"); if (f) f.focus(); }
+    function close() { if (panel.hidden) return; panel.hidden = true; btn.setAttribute("aria-expanded", "false"); }
+    btn.addEventListener("click", function (e) { e.stopPropagation(); if (panel.hidden) open(); else close(); });
+    panel.addEventListener("change", function (e) {
+      if (e.target && e.target.name === "textsize") { setTextSize(e.target.value); place(); }
+    });
+    document.addEventListener("click", function (e) { if (!panel.hidden && !panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) { close(); btn.focus(); } });
+    window.addEventListener("hashchange", close);
+    window.addEventListener("resize", function () { if (!panel.hidden) place(); });
+  })();
+
   /* ───────── What's new ─────────
      Newest first. Add an entry at the top for each release; `teaser` (optional) shows on Home for the newest entry. */
   var WHATS_NEW = [
+    { date: "2026-11-02", title: "Text size",
+      items: [
+        "Text size: tap Aa in the top bar to make text smaller or larger. Your choice is saved on this device."
+      ] },
     { date: "2026-10-30", title: "Sagot sa Tagalog: response practice in Filipino",
       teaser: "New: a Sagot sa Tagalog switch in Response practice. For Chapters 1, 3, 5 and 9, the patient's line and the three options appear in Tagalog with the English underneath; the explanations stay in English.",
       items: [
@@ -1017,7 +1071,7 @@
     try { return window.localStorage.getItem(THEME_KEY); } catch (e) { return null; }
   }
   function exportBackup() {
-    var data = { app: "sheatrainer", version: 1, exported: new Date().toISOString(), theme: storedTheme(), store: store };
+    var data = { app: "sheatrainer", version: 1, exported: new Date().toISOString(), theme: storedTheme(), textSize: getTextSize(), store: store };
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
@@ -1039,7 +1093,8 @@
     });
     normalizeCards(out.cards);
     var theme = Object.prototype.hasOwnProperty.call(d, "theme") ? (d.theme === "light" || d.theme === "dark" ? d.theme : "auto") : null;
-    return { store: out, theme: theme };
+    var ts = Object.prototype.hasOwnProperty.call(d, "textSize") ? (d.textSize === "90" || d.textSize === "112.5" || d.textSize === "125" ? d.textSize : "100") : null;
+    return { store: out, theme: theme, textSize: ts };
   }
   function importBackupFile(file) {
     if (!file) return;
@@ -1050,6 +1105,7 @@
         if (!window.confirm("Replace the progress saved in this browser with this backup?")) return;
         store = b.store; save();
         if (b.theme) setTheme(b.theme);
+        if (b.textSize) setTextSize(b.textSize);
         session.cards = null;
         progressNote = { ok: true, text: "Backup imported. Your progress has been replaced." };
       } catch (err) {

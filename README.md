@@ -17,6 +17,7 @@ This app was created by Isabella Navarro, MD. Last updated October 2026. isaymot
 - **Progress**: saved in each user's own browser (localStorage). Nothing is sent anywhere.
 - **Backup export / import**: on the Progress page, export all progress, bookmarks, and the flashcard schedule to a JSON file, and import it in another browser or device.
 - **Theme**: light, dark, or match device, from the top-bar button or Settings on the Progress page. Saved per device.
+- **Text size**: an Aa button in the top bar makes text smaller or larger (90% to 125%). Saved per device and included in backups.
 - **What's New**: a page (`#/whats-new`, linked from the menu, About, and Home) listing each release in plain language. Add new entries at the top of `WHATS_NEW` in `app.js`.
 
 ## Publish on GitHub Pages
