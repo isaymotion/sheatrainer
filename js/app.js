@@ -324,6 +324,7 @@
 
   /* APP_LINKS minus this app's own entry (matched on the repo slug at the end of the URL). Menu only: never tiles, search or tabs. */
   function otherApps() {
+    if (!window.SHOW_OTHER_APPS) return [];   // off until she is ready to interlink the apps (data/app-meta.js)
     var me = String(META.repo || '').toLowerCase();
     return APP_LINKS.filter(function (a) {
       if (!a || !a.name || !/^https?:\/\//i.test(String(a.href || ''))) return false;

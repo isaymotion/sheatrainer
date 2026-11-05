@@ -12,6 +12,10 @@ window.APP_META = {
    they are not added to the home tiles, search or the tab bar. The entry whose URL ends in this
    app's own repo slug (APP_META.repo) is skipped automatically, so the same list can be copied to every app
    (this app's own entry is left out here anyway). */
+/* Show the "Other apps" group in the menu? Off for now: the apps are not interlinked yet.
+   Set to true when ready; the list below is already in place. */
+window.SHOW_OTHER_APPS = false;
+
 window.APP_LINKS = [
   { name: 'MSE Trainer', href: 'https://isaymotion.github.io/MSEtrainer/' },
   { name: 'Usap Tayo (Tagalog)', href: 'https://isaymotion.github.io/Tagalog/' },

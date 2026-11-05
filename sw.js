@@ -1,7 +1,7 @@
 /* Offline support: network first, cached copy when offline. Bump VERSION on every publish.
    Cache names MUST start with this app's PREFIX: all isaymotion apps share one origin and one cache storage. */
 const PREFIX = 'sheatrainer-';
-const VERSION = PREFIX + '11.0.0';
+const VERSION = PREFIX + '11.0.0-b';
 const CORE = [
   './',
   './index.html',
