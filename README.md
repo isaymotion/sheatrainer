@@ -1,76 +1,76 @@
-# Psychiatric Interviewing Trainer
+# Shea Trainer
 
-A practice space for psychiatry residents learning to interview patients sensitively and with compassion. Content is based on study guides for Shawn Christopher Shea, *Psychiatric Interviewing: The Art of Understanding* (3rd ed.). Part I (Chapters 1–8), Part II (Chapters 9–15), and Part III (Chapters 16–18) are included.
+A practice space for psychiatry residents learning to interview patients sensitively and with compassion, built from Shawn Christopher Shea, *Psychiatric Interviewing: The Art of Understanding* (3rd ed.). Part I (Chapters 1–8), Part II (Chapters 9–15) and Part III (Chapters 16–18) are included. It runs entirely in the browser, works offline after the first visit, and can be installed on phones and desktops.
 
-This app was created by Isabella Navarro, MD. Last updated October 2026. isaymotion@gmail.com
+**Live site:** https://isaymotion.github.io/sheatrainer/
 
-## What's inside
+## Features
 
-- **Study guides**: a full reading guide per chapter (Chapters 1–18, all of Parts I–III), with a high-yield box, clickable glossary terms, section bookmarks, and links into practice. Written in our own words as a companion to the book.
-- **Learn / Quick review**: key ideas, a pocket card of pearls, and vocabulary for each chapter.
-- **Bookmarks**: saved study guide sections, kept in each user's browser.
-- **Response practice**: 87 composed clinical moments, each with three replies explained (best, workable, likely to backfire). A Sagot sa Tagalog switch shows the patient line and options in Filipino (Chapters 1, 3, 5 and 9 so far), English underneath.
-- **Chapter quizzes**: 108 questions.
-- **Simulated interviews**: 19 branching cases. Four can be played in Filipino with a Sa Tagalog switch, and three (Nasa kuwarto si Nanay, Nerbiyos daw, Ang kasama) are written in Tagalog first and set in Mariveles; in both, the English shows under each line. Part I: paranoid patient, angry patient, shut-down veteran, wandering patient, overdose verbal video, reluctant teen, culture and the quiet yes, potential violence. Part II: hidden bipolar history, dysphoric mania before an antidepressant, the window shade, alcohol withdrawal delirium, delusional disorder and dangerousness, command hallucinations, borderline differential, engaging the grandiose pole. A sunflower gauge tracks blending and a bar tracks the database gathered.
-- **Technique drills**: degree of openness, facilic gates, validity techniques, empathic valence, mood presentations, delusional disorder subtypes, first-rank symptoms, personality probes, stages of the self (80 items), plus four Tagalog drills: Sabihin sa Tagalog, idioms of distress, register and respect (po, kayo, ikaw), and Pakinggan (54 items).
-- **Flashcards**: 300 terms, reviewed with spaced repetition (Leitner boxes). Rate each card Again, Good, or Easy; cards return after 1, 3, 7, 14, or 30 days. The Progress page shows cards learned and due today.
-- **Progress**: saved in each user's own browser (localStorage). Nothing is sent anywhere.
-- **Backup export / import**: on the Progress page, export all progress, bookmarks, and the flashcard schedule to a JSON file, and import it in another browser or device.
-- **Theme**: light, dark, or match device, from the top-bar button or Settings on the Progress page. Saved per device.
-- **Text size**: an Aa button in the top bar makes text smaller or larger (90% to 125%). Saved per device and included in backups.
-- **What's New**: a page (`#/whats-new`, linked from the menu, About, and Home) listing each release in plain language. Add new entries at the top of `WHATS_NEW` in `app.js`.
+- **Study guides** for all 18 chapters, with a high-yield box, glossary terms you can tap for a definition, section bookmarks, and links into practice. Written in our own words as a companion to the book.
+- **Quick review** per chapter: key ideas, a pocket card of pearls, and vocabulary.
+- **Response practice**: 87 composed clinical moments, each with three replies explained (best, workable, likely to backfire). A **Sagot sa Tagalog** switch shows the patient's line and the options in Filipino (Chapters 1, 3, 5 and 9 so far), English underneath.
+- **Chapter quizzes**: 108 questions, best score saved per chapter.
+- **Simulated interviews**: 19 branching cases with a sunflower gauge for blending and a bar for the database gathered. Four can be played **Sa Tagalog**; three (Nasa kuwarto si Nanay, Nerbiyos daw, Ang kasama) are written in Tagalog first and set in Mariveles.
+- **Technique drills**: nine English drills (80 items) and four Tagalog drills (54 items).
+- **Flashcards**: 385 terms with spaced repetition (Leitner boxes: Again, Good, Easy; cards return after 1, 3, 7, 14 or 30 days).
+- **Sa Tagalog** page gathering every Filipino path in the trainer, and Sa Tagalog cards in the study guides linking to Usap Tayo.
+- **Bookmarks** and **Progress** (practice, quiz, interview, drill and flashcard progress per chapter).
+- Shared isaymotion shell: menu as a docked sidebar on desktop (with hide/show) and a drawer on phones listing every part and chapter; bottom tab bar on phones (Home, Menu, Practice, Progress); search from the top bar (press `/` or Ctrl/Cmd+K) with suggestions and a full results page at `#/search/<query>`; back and forward buttons, `Alt+Left` / `Alt+Right`, and scroll position restored on back/forward; light / dark / match-device theme; text size (Aa); English / Tagalog interface language on the About page (Tagalog interface strings are a draft); an "Other apps" group in the menu.
+- **Backup** in the footer (and on the Progress page): export progress, bookmarks, flashcard schedule and settings to a file, import it elsewhere, and undo the last import. Backup files from v10 still import.
+- Offline support via a service worker. No accounts, no tracking: progress stays in each user's browser.
+
+## Files to upload
+
+Upload everything in this folder to the root of the `sheatrainer` repository, keeping the folder structure:
+
+```
+.nojekyll               (empty file; tells GitHub Pages not to run Jekyll)
+README.md
+index.html              App shell (top bar, sidebar menu, footer, bottom tabs) and the script list
+css/app.css             Styles (light and dark themes, Shea's screens)
+js/app.js               Router, menu, search, theme, backup, and all Shea screens
+data/app-meta.js        App name, version, attribution (window.APP_META), menu links (window.APP_LINKS)
+data/changelog.js       What's new entries (window.APP_CHANGELOG)
+data/hospital.js        Hospital, program, posts and year levels (window.HOSPITAL), shared across apps
+data/strings.js         Shell UI strings in English and Tagalog (window.STRINGS)
+content/                Chapters, practice, study guides and Tagalog content (window.TRAINER)
+icons/                  icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png, favicon-32.png
+manifest.webmanifest    Install metadata
+sw.js                   Offline cache
+```
 
 ## Publish on GitHub Pages
 
-1. Create a new repository on GitHub (for example `interviewing-trainer`).
-2. Upload everything in this folder to the root of the repository, keeping the folder structure (`index.html`, `app.js`, `styles.css`, `manifest.webmanifest`, `.nojekyll`, `content/`, `icons/`).
-3. In the repository, go to **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, then save.
-4. After a minute or two, the site appears at `https://<your-username>.github.io/<repository-name>/`.
+1. Upload the files above to the `sheatrainer` repository on GitHub (see `UPLOAD.md` for exactly what to add, replace and delete when updating from v10).
+2. In the repository, open **Settings > Pages**.
+3. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, and save.
+4. After a minute the site is live at `https://isaymotion.github.io/sheatrainer/`.
+5. On a phone, open that link, then use **Add to Home Screen** (iPhone Safari) or **Install app** (Android Chrome).
 
-No build step is needed. To test locally, open `index.html` in a browser.
+There is no build step and no dependencies. To preview locally, run `python3 -m http.server` in this folder and visit `http://localhost:8000`.
 
-## Adding later parts
+## Upgrading from v10
 
-Content lives in plain JavaScript files in `content/`. Each file registers itself on `window.TRAINER`.
+- **Progress is kept automatically.** The progress blob (`pit.progress.v1`: practice answers, quiz bests, interviews, drills, flashcard boxes, bookmarks) and the two Tagalog switches (`sheatrainer.simTl`, `sheatrainer.practiceTl`) are read and written under the same names as before. Theme and text size are picked up from the old `sheatrainer.theme` / `sheatrainer.textSize` keys on the first visit and moved under the new prefix.
+- **Old backup files still import.** A v10 backup (`{app:"sheatrainer", version:1, store, theme, textSize}`) is recognised by **Import backup** and restored, and the import can be undone.
+- Old links keep working: `#/learn/ch5`, `#/learn/ch5/<section>`, `#/practice/all`, `#/quiz/ch3`, `#/simulate/<id>`, `#/drills/<id>`, `#/cards/all`, `#/bookmarks`, `#/progress`, `#/whats-new`, `#/about` (Usap Tayo links into these).
+- The old flat `app.js` and `styles.css` are no longer used and should be deleted from the repository.
 
-1. Create `content/part3-chapters.js` (and optionally `content/part3-practice.js`) following the same structure as the existing files, but register under `parts.part3`:
+## Adding content
 
-   ```js
-   window.TRAINER = window.TRAINER || { parts: {} };
-   (function () {
-     var part = (window.TRAINER.parts.part3 = window.TRAINER.parts.part3 || {});
-     part.id = "part3";
-     part.numeral = "III";
-     part.title = "Mastering Complex Interviewing Tasks Demanded in Everyday Clinical Practice";
-     part.blurb = "...";
-     part.chapters = [ { id: "ch16", num: 16, title: "The Mental Status", ... } ];
-   })();
-   ```
+- New part: create `content/partN-chapters.js` (and optionally `content/partN-practice.js`) registering under `window.TRAINER.parts.partN`, as in `content/part3-chapters.js`, and add its `<script>` tag in `index.html` before `js/app.js`. Chapters, practice, quizzes, interviews, drills, flashcards, the menu and search pick it up automatically.
+- New study guide: create `content/guide-chN.js` following the schema at the top of `content/guide-ch1.js` and add its `<script>` tag. Link glossary terms inline with `[[term]]` or `[[glossary term|shown text]]`.
+- Add each new script to `CORE` in `sw.js` so it is available offline.
 
-2. Add the script tags in `index.html`, before `app.js`:
+## Version and What's new
 
-   ```html
-   <script src="content/part3-chapters.js"></script>
-   <script src="content/part3-practice.js"></script>
-   ```
+- The version is a semantic version string. It lives in `data/app-meta.js` (`version`), in the first entry of `data/changelog.js`, and in `sw.js` (`VERSION`); all three must agree.
+- `data/changelog.js` is newest first: `{version, date, title, teaser?, items:[{type, text}]}` with an ISO date and `type` `feature`, `update`, `correction` or `content`. A `teaser` on the newest entry shows on Home.
+- For every release: add the changelog entry at the top, update `version` in `data/app-meta.js`, set `VERSION` in `sw.js` (this makes phones pick up the new files), and update "Latest version" in `index.html`, `data/app-meta.js` and this README.
+- Storage keys start with `sheatrainer:v1:` (plus the v10 keys above) and cache names with `sheatrainer-`. All isaymotion apps share `isaymotion.github.io`, so these must stay unique and must not change after release.
 
-The app picks up new parts automatically: chapters, practice items, quizzes, simulations, drills, and flashcards all appear in their sections, and the "Coming soon" list for that part disappears.
+## Attribution
 
-## Adding a study guide
+App created by Isabella Navarro, MD. Latest version November 2026. isaymotion@gmail.com
 
-Create `content/guide-chN.js` following the schema at the top of `content/guide-ch1.js`, and add its script tag in `index.html` before `app.js`. Link glossary terms inline with `[[term]]` or `[[glossary term|shown text]]`; the term must exist in some chapter's glossary. The chapter's Learn page switches to the study guide automatically, with Quick review one tap away.
-
-## Notes
-
-- A drill set can set `speaker` ("Patient", "Clinician", or "" for a plain case description) and `prompt` to change how its items are framed.
-- All patient statements, cases, and names are composed for teaching; they are not transcripts from the book.
-- This is an educational tool, not clinical guidance. Confidentiality limits, reporting duties, and risk procedures vary by institution and jurisdiction.
-- Fonts (Newsreader, Atkinson Hyperlegible) load from Google Fonts, with system fallbacks if offline.
-
-
-## Navigation
-
-- **Menu (three bars, upper left):** a drawer listing every part and chapter, with a Guide badge where a study guide exists and the current chapter highlighted.
-- **Back / Forward:** arrows in the top bar; greyed out when there is nowhere to go. Going back or forward returns you to where you were on the page.
-- **Keyboard shortcuts:** Alt+Left arrow goes back, Alt+Right arrow goes forward (ignored while typing in a field).
-- **Search:** the Search button, or press `/` (or Ctrl/Cmd+K). It searches chapters, study-guide text, high-yield boxes, glossary terms, practice cases, interviews and drills. Arrow keys and Enter pick a result; Escape closes. The index builds itself from whatever content files are loaded, so new chapters and guides are searchable automatically.
+An independent study aid for psychiatry residents built from Shea, Psychiatric Interviewing: The Art of Understanding, 3rd edition. Not affiliated with or endorsed by the author or publisher. For education only; not clinical guidance. All patient statements, cases and names are composed for teaching; they are not transcripts from the book.
